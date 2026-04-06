@@ -46,18 +46,20 @@
     .ton-inline-lg { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; display: inline-block; }
 
     /* PAGES */
-    .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s; }
-    #pageHome { transform: translateX(0); z-index: 10; }
-    .page.active { transform: translateX(0); z-index: 20; }
+    .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: none; flex-direction: column; }
+    .page.active { display: flex; z-index: 20; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
     .scroll-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--bottom-h) + 10px); }
     .scroll-content::-webkit-scrollbar { display: none; }
 
     /* HEADER & NAV */
     .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; }
     .header-logo-text { font-weight: 800; font-size: 20px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .icon-btn { padding: 10px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; cursor: pointer; }
+    .icon-btn { padding: 8px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; justify-content:center; cursor: pointer; margin-top: 4px; /* AŞAĞI ÇEKİLDİ */ }
     .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; transition: 0.2s; }
     .balance-chip:active { transform: scale(0.95); border-color: var(--accent); }
+    
     .bottom-nav { position:fixed; bottom:0; width: 100%; height: var(--bottom-h); background: rgba(24,24,27,0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 500; }
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; }
     .nav-item.active { color: var(--primary); transform: translateY(-2px); }
@@ -149,7 +151,7 @@
 </div>
 
 <!-- ANA SAYFA -->
-<div id="pageHome" class="page">
+<div id="pageHome" class="page active">
   <div class="header">
     <div class="header-left">
       <button class="icon-btn" onclick="openSidebar()"><span class="material-symbols-rounded">menu</span></button>
@@ -177,8 +179,12 @@
     </select>
   </div>
 
+  <!-- GENİŞLETİLMİŞ KATEGORİLER -->
   <div class="categories">
     <div class="cat-chip active" onclick="setCategory('trending', this)" data-i18n="catAll">Tümü</div>
+    <div class="cat-chip" onclick="setCategory('anime', this)" data-i18n="catAnime">Anime</div>
+    <div class="cat-chip" onclick="setCategory('amv', this)">AMV</div>
+    <div class="cat-chip" onclick="setCategory('comedy', this)" data-i18n="catComedy">Eğlence</div>
     <div class="cat-chip" onclick="setCategory('music', this)" data-i18n="catMusic">Müzik</div>
     <div class="cat-chip" onclick="setCategory('gaming', this)" data-i18n="catGaming">Oyun</div>
     <div class="cat-chip" onclick="setCategory('crypto', this)" data-i18n="catCrypto">Kripto</div>
@@ -275,7 +281,7 @@
   <button class="btn-main" id="cModalBtn"><span class="material-symbols-rounded" style="margin-right:8px;">open_in_new</span> <span data-i18n="visitChannel">YouTube'da Git</span></button>
 </div>
 
-<!-- STATS MODAL -->
+<!-- DETAYLI STATS MODAL -->
 <div class="modal" id="statsModal">
   <div class="modal-header"><span data-i18n="menuStats">İstatistikler</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
@@ -284,8 +290,24 @@
       <div style="font-size:20px; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"><span id="statTotal">0.00</span></div>
     </div>
     <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="menuBalance">Mevcut Bakiye</div>
+      <div style="font-size:20px; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"><span id="statBal">0.00</span></div>
+    </div>
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
       <div style="font-size:11px; color:var(--text-muted);" data-i18n="statRef">Ref Kazancı</div>
       <div style="font-size:20px; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"><span id="statRefEarned">0.00</span></div>
+    </div>
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="refPeople">Davet Edilen</div>
+      <div style="font-size:20px; font-weight:800; color:white; display:flex; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">group</span><span id="statRefCount">0</span></div>
+    </div>
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statVids">İzlenen Video</div>
+      <div style="font-size:20px; font-weight:800; color:white; display:flex; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">play_circle</span><span id="statVids">0</span></div>
+    </div>
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statMins">İzleme Süresi</div>
+      <div style="font-size:20px; font-weight:800; color:white; display:flex; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">timer</span><span id="statMins">0 dk</span></div>
     </div>
   </div>
   <div style="width:100%; height:200px;"><canvas id="chartCanvas"></canvas></div>
@@ -373,25 +395,27 @@ const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_test_user");
 const startParam = tg.initDataUnsafe?.start_param || "";
 const inviterId = startParam.startsWith("ref_") ? startParam.replace("ref_", "") : "";
 
-// DİL SÖZLÜĞÜ (Kanal ve İzlenme eklentileriyle)
+// DİL SÖZLÜĞÜ EKLENTİLERİ
 const i18n = {
   tr: {
     mobileOnly: "Mobil Cihaz Gerekli", searchPlaceholder: "Video ara...", sortRelevance: "Önerilen", sortPopular: "En Popüler", sortNewest: "En Yeni",
-    catAll: "Tümü", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber",
+    catAll: "Tümü", catAnime: "Anime", catComedy: "Eğlence", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber",
     navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusPlaying: "Oynatılıyor...", statusPaused: "Duraklatıldı",
-    menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", menuBalance: "Bakiye",
+    menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", menuBalance: "Mevcut Bakiye",
     channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", viewsText: "izlenme",
-    refOverviewTab: "Özet & Grafik", refHistoryTab: "Davet Geçmişi", refPeople: "Kişi", refEarnedText: "Kazanç", refCopy: "Bağlantıyı Kopyala", refJoined: "Katıldı",
+    statVids: "İzlenen Video", statMins: "İzleme Süresi", adminNoWithdraws: "Bekleyen çekim talebi yok!",
+    refOverviewTab: "Özet & Grafik", refHistoryTab: "Davet Geçmişi", refPeople: "Davet Edilen", refEarnedText: "Kazanç", refCopy: "Bağlantıyı Kopyala", refJoined: "Katıldı",
     wdNew: "Yeni Çekim", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdSend: "Gönder",
     faq1q: "Nasıl kazanırım?", faq1a: "Videoyu 5 dakika kesintisiz izleyin. Süre dolduğunda 0.005 TON kazanırsınız.",
     faq2q: "Çekim limiti nedir?", faq2a: "Minimum 0.10 TON çekebilirsiniz.", faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız."
   },
   en: {
     mobileOnly: "Mobile Device Required", searchPlaceholder: "Search videos...", sortRelevance: "Relevance", sortPopular: "Popular", sortNewest: "Newest",
-    catAll: "All", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News",
+    catAll: "All", catAnime: "Anime", catComedy: "Comedy", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News",
     navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusPlaying: "Playing...", statusPaused: "Paused",
-    menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", menuBalance: "Balance",
+    menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", menuBalance: "Current Balance",
     channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", viewsText: "views",
+    statVids: "Videos Watched", statMins: "Watch Time", adminNoWithdraws: "No pending requests!",
     refOverviewTab: "Overview & Chart", refHistoryTab: "Invite History", refPeople: "Users", refEarnedText: "Earned", refCopy: "Copy Link", refJoined: "Joined",
     wdNew: "New Withdraw", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdSend: "Send",
     faq1q: "How to earn?", faq1a: "Watch a video for 5 minutes without interruption to earn 0.005 TON.",
@@ -399,10 +423,11 @@ const i18n = {
   },
   ru: {
     mobileOnly: "Требуется мобильное", searchPlaceholder: "Поиск видео...", sortRelevance: "Рекомендуемые", sortPopular: "Популярные", sortNewest: "Новые",
-    catAll: "Все", catMusic: "Музыка", catGaming: "Игры", catCrypto: "Крипто", catTech: "Техно", catNews: "Новости",
+    catAll: "Все", catAnime: "Аниме", catComedy: "Комедия", catMusic: "Музыка", catGaming: "Игры", catCrypto: "Крипто", catTech: "Техно", catNews: "Новости",
     navHome: "Главная", navFaq: "FAQ", watchTitle: "Смотреть", nextReward: "След. награда", statusPlaying: "Воспроизведение...", statusPaused: "Пауза",
-    menuStats: "Статистика", menuRef: "Рефералы", menuWithdraw: "Вывод TON", menuBalance: "Баланс",
+    menuStats: "Статистика", menuRef: "Рефералы", menuWithdraw: "Вывод TON", menuBalance: "Текущий Баланс",
     channelInfo: "О канале", visitChannel: "В YouTube", statTotal: "Всего заработано", statRef: "Доход от реф.", viewsText: "просмотров",
+    statVids: "Видео просм.", statMins: "Время просм.", adminNoWithdraws: "Нет ожидающих запросов!",
     refOverviewTab: "Обзор и График", refHistoryTab: "История реф.", refPeople: "Люди", refEarnedText: "Доход", refCopy: "Копировать", refJoined: "Присоединился",
     wdNew: "Новый вывод", wdHistory: "История", wdWallet: "TON Кошелек (EQ...)", wdSend: "Отправить",
     faq1q: "Как заработать?", faq1a: "Смотрите видео 5 минут, чтобы получить 0.005 TON.",
@@ -410,20 +435,22 @@ const i18n = {
   },
   es: {
     mobileOnly: "Móvil Requerido", searchPlaceholder: "Buscar videos...", sortRelevance: "Relevancia", sortPopular: "Popular", sortNewest: "Nuevos",
-    catAll: "Todo", catMusic: "Música", catGaming: "Juegos", catCrypto: "Cripto", catTech: "Tecnología", catNews: "Noticias",
+    catAll: "Todo", catAnime: "Anime", catComedy: "Comedia", catMusic: "Música", catGaming: "Juegos", catCrypto: "Cripto", catTech: "Tecnología", catNews: "Noticias",
     navHome: "Inicio", navFaq: "FAQ", watchTitle: "Ver Video", nextReward: "Sig. Recompensa", statusPlaying: "Reproduciendo...", statusPaused: "Pausado",
-    menuStats: "Estadísticas", menuRef: "Referidos", menuWithdraw: "Retirar TON", menuBalance: "Balance",
+    menuStats: "Estadísticas", menuRef: "Referidos", menuWithdraw: "Retirar TON", menuBalance: "Balance Actual",
     channelInfo: "Info del Canal", visitChannel: "En YouTube", statTotal: "Total Ganado", statRef: "Ganancias Ref", viewsText: "vistas",
+    statVids: "Videos Vistos", statMins: "Tiempo Visto", adminNoWithdraws: "¡No hay retiros pendientes!",
     refOverviewTab: "Resumen y Gráfico", refHistoryTab: "Historial", refPeople: "Usuarios", refEarnedText: "Ganancias", refCopy: "Copiar Enlace", refJoined: "Se unió",
     wdNew: "Nuevo Retiro", wdHistory: "Historia", wdWallet: "Billetera TON (EQ...)", wdSend: "Enviar",
     faq1q: "¿Cómo ganar?", faq1a: "Mira un video durante 5 min para ganar 0.005 TON.", faq2q: "¿Límite?", faq2a: "Mínimo 0.10 TON.", faq3q: "¿Referidos?", faq3a: "10% de ganancias."
   },
   de: {
     mobileOnly: "Mobilgerät Erforderlich", searchPlaceholder: "Videos suchen...", sortRelevance: "Relevanz", sortPopular: "Beliebt", sortNewest: "Neueste",
-    catAll: "Alle", catMusic: "Musik", catGaming: "Spiele", catCrypto: "Krypto", catTech: "Technik", catNews: "News",
+    catAll: "Alle", catAnime: "Anime", catComedy: "Komödie", catMusic: "Musik", catGaming: "Spiele", catCrypto: "Krypto", catTech: "Technik", catNews: "News",
     navHome: "Startseite", navFaq: "FAQ", watchTitle: "Video ansehen", nextReward: "Nächste Belohnung", statusPlaying: "Spielt...", statusPaused: "Pausiert",
     menuStats: "Statistiken", menuRef: "Empfehlungen", menuWithdraw: "Auszahlen", menuBalance: "Guthaben",
     channelInfo: "Kanalinfo", visitChannel: "Auf YouTube", statTotal: "Gesamt", statRef: "Ref-Einnahmen", viewsText: "Aufrufe",
+    statVids: "Videos gesehen", statMins: "Wiedergabezeit", adminNoWithdraws: "Keine offenen Auszahlungen!",
     refOverviewTab: "Übersicht & Chart", refHistoryTab: "Verlauf", refPeople: "Benutzer", refEarnedText: "Verdient", refCopy: "Link kopieren", refJoined: "Beigetreten",
     wdNew: "Neue Auszahlung", wdHistory: "Verlauf", wdWallet: "TON Wallet (EQ...)", wdSend: "Senden",
     faq1q: "Wie verdiene ich?", faq1a: "Schauen Sie ein Video 5 Minuten.", faq2q: "Limit?", faq2a: "Mindestens 0.10 TON.", faq3q: "Referrals?", faq3a: "10% Provision."
@@ -443,16 +470,22 @@ function applyLang(lang) {
 }
 window.changeLang = applyLang;
 
-let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, isAdmin = false;
+let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, uVideos = 0, isAdmin = false;
 let globalWatchSeconds = 0, watchTimerInterval = null, videoProgressInterval = null;
 
 async function loadUserData() {
   try {
     const res = await (await fetch(`${API_URL}/api/user/${telegramId}${inviterId ? `?ref=${inviterId}` : ''}`)).json();
-    uBal = res.balance || 0; uTotal = res.totalEarned || 0; uRefCount = res.refCount || 0; uRefEarned = res.refEarned || 0; isAdmin = res.isAdmin === true;
+    uBal = res.balance || 0; uTotal = res.totalEarned || 0; uRefCount = res.refCount || 0; uRefEarned = res.refEarned || 0; 
+    uVideos = res.videosWatched || Math.floor(uTotal / 0.005); // Eğer backendde yoksa kazançtan hesapla
+    isAdmin = res.isAdmin === true;
     
     document.getElementById('uiBal').innerText = uBal.toFixed(4); document.getElementById('sidebarBal').innerText = uBal.toFixed(4);
     document.getElementById('statTotal').innerText = uTotal.toFixed(4); document.getElementById('statRefEarned').innerText = uRefEarned.toFixed(4);
+    document.getElementById('statBal').innerText = uBal.toFixed(4);
+    document.getElementById('statRefCount').innerText = uRefCount;
+    document.getElementById('statVids').innerText = uVideos;
+    document.getElementById('statMins').innerText = (uVideos * 5) + " dk";
     document.getElementById('rCount').innerText = uRefCount; document.getElementById('rEarned').innerText = uRefEarned.toFixed(4);
     document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
     
@@ -524,10 +557,9 @@ async function fetchVids(q) {
     
     (data.items || []).forEach((item, idx) => {
       const vId = item.id?.videoId; if(!vId) return;
-      
-      const avatar = item.channelInfo?.avatar; // Gerçek Kanal Fotosu
+      const avatar = item.channelInfo?.avatar; 
       const views = formatViews(item.statistics?.viewCount);
-      const viewsText = i18n[currentLang].viewsText; // Örn: 'izlenme'
+      const viewsText = i18n[currentLang].viewsText; 
 
       grid.innerHTML += `<div class="video-card" onclick="openWatch('${vId}')">
         <div class="v-thumb"><img src="${item.snippet.thumbnails?.high?.url}"></div>
@@ -547,13 +579,31 @@ async function fetchVids(q) {
 
 window.setCategory = (cat, el) => { document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); fetchVids(cat); };
 window.searchVideos = () => fetchVids(document.getElementById('searchInput').value);
-window.goBack = id => { document.getElementById(id).classList.remove('active'); window.ytPlayer?.pauseVideo(); };
-window.openWatch = vId => { document.getElementById('pageWatch').classList.add('active'); initPlayer(vId); };
 
-window.openSidebar = () => { document.getElementById('sidebar').classList.add('open'); document.getElementById('mainOverlay').classList.add('active'); };
+// SADECE TEK SAYFA/MODAL AÇILMA KİLİDİ
+window.showPage = id => {
+  closeAllModals(); closeSidebar();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id === 'pageHome' && window.ytPlayer?.pauseVideo) window.ytPlayer.pauseVideo();
+};
+window.goBack = id => { showPage('pageHome'); };
+window.openWatch = vId => { showPage('pageWatch'); initPlayer(vId); };
+
+window.openSidebar = () => { closeAllModals(); document.getElementById('sidebar').classList.add('open'); document.getElementById('mainOverlay').classList.add('active'); };
 window.closeSidebar = () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mainOverlay').classList.remove('active'); };
-window.openModal = id => { closeSidebar(); document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open'); if(id==='statsModal') renderChart(); if(id==='refModal') { switchRefTab('overview'); renderRefChart(); } };
-window.closeAllModals = () => { document.getElementById('modalOverlay').classList.remove('active'); document.querySelectorAll('.modal').forEach(m => m.classList.remove('open')); };
+
+window.openModal = id => { 
+  closeAllModals(); closeSidebar(); 
+  document.getElementById('modalOverlay').classList.add('active'); 
+  document.getElementById(id).classList.add('open'); 
+  if(id==='statsModal') renderChart(); 
+  if(id==='refModal') { switchRefTab('overview'); renderRefChart(); } 
+};
+window.closeAllModals = () => { 
+  document.getElementById('modalOverlay').classList.remove('active'); 
+  document.querySelectorAll('.modal').forEach(m => m.classList.remove('open')); 
+};
 
 window.openChannelModal = (chId, chName, avatar) => {
   document.getElementById('cModalName').innerText = chName; document.getElementById('cModalAvatar').src = avatar;
@@ -561,7 +611,6 @@ window.openChannelModal = (chId, chName, avatar) => {
   openModal('channelModal');
 };
 
-// Çekim Tabları
 window.openWithdrawModal = () => { switchWithdrawTab('new'); openModal('withdrawModal'); };
 window.switchWithdrawTab = (tab, el) => {
   document.getElementById('withdrawModal').querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
@@ -590,7 +639,6 @@ window.reqWithdraw = async () => {
   } catch(e) {}
 };
 
-// Referans Tabları ve Chart
 window.switchRefTab = (tab, el) => {
   document.getElementById('refModal').querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
   if(el) el.classList.add('active'); else document.getElementById('refModal').querySelector('.withdraw-tab').classList.add('active');
@@ -622,7 +670,7 @@ function renderRefChart() {
 
 window.copyRefLink = () => { document.getElementById('refLinkInput').select(); document.execCommand('copy'); tg.showAlert(i18n[currentLang].refCopy); };
 
-window.openAdminPanel = () => { closeSidebar(); if(!isAdmin) return; openModal('adminModal'); loadAdminData(); };
+window.openAdminPanel = () => { if(!isAdmin) return; openModal('adminModal'); loadAdminData(); };
 window.switchAdminTab = (tab, el) => {
   document.querySelectorAll('.admin-page-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
   document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active')); document.getElementById(`adminSection${tab.charAt(0).toUpperCase()+tab.slice(1)}`).classList.add('active');
@@ -633,7 +681,13 @@ window.loadAdminData = async () => {
     const d = await (await fetch(`${API_URL}/api/admin/stats?tgId=${telegramId}`)).json();
     document.getElementById('adminTotalUsers').innerText = d.totalUsers; document.getElementById('adminTotalPaid').innerText = d.totalPaid;
     
-    document.getElementById('adminWithdrawList').innerHTML = d.requests.map(r => `<div class="history-item" style="flex-direction:column; gap:10px; align-items:stretch;"><div>👤 ${r.telegramId} <br>💳 ${r.wallet}</div><div style="color:var(--accent); font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${parseFloat(r.amount).toFixed(4)}</div><div style="display:flex; gap:10px;"><button class="btn-main" style="padding:10px; font-size:12px; background:#10b981; color:#fff;" onclick="adminAction('${r.id}','approved')">Onayla</button><button class="btn-main" style="padding:10px; font-size:12px; background:#ef4444; color:#fff;" onclick="adminAction('${r.id}','rejected')">Reddet</button></div></div>`).join('');
+    const listDiv = document.getElementById('adminWithdrawList');
+    if(d.requests.length === 0) {
+      listDiv.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);"><span class="material-symbols-rounded" style="font-size:48px; margin-bottom:10px; color:#10b981;">task_alt</span><br>${i18n[currentLang].adminNoWithdraws}</div>`;
+    } else {
+      listDiv.innerHTML = d.requests.map(r => `<div class="history-item" style="flex-direction:column; gap:10px; align-items:stretch;"><div>👤 ${r.telegramId} <br>💳 ${r.wallet}</div><div style="color:var(--accent); font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${parseFloat(r.amount).toFixed(4)}</div><div style="display:flex; gap:10px;"><button class="btn-main" style="padding:10px; font-size:12px; background:#10b981; color:#fff;" onclick="adminAction('${r.id}','approved')">Onayla</button><button class="btn-main" style="padding:10px; font-size:12px; background:#ef4444; color:#fff;" onclick="adminAction('${r.id}','rejected')">Reddet</button></div></div>`).join('');
+    }
+    
     document.getElementById('adminUserList').innerHTML = d.users.map(u => `<div class="history-item"><div>👤 ${u.id}<br><span style="font-size:10px; color:#aaa;">Ref: ${u.refCount||0}</span></div><div style="text-align:right; font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${(u.balance||0).toFixed(4)}</div></div>`).join('');
   } catch(e) {}
 };
@@ -652,4 +706,4 @@ function renderChart() {
 window.onload = async () => { applyLang(currentLang); await loadUserData(); await fetchVids(); setTimeout(() => document.getElementById('splashScreen').style.opacity='0', 1400); setTimeout(() => document.getElementById('splashScreen').remove(), 1900); };
 </script>
 </body>
-</html>
+  </html>
