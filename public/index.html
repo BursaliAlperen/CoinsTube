@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>CoinsTube Premium</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+  
+  <!-- REKLAM KODLARI (INTERSTITIAL & POPUNDER) -->
+  <link rel="stylesheet" href="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.css" />
+  <script src="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.js"></script>
+  <script type="text/javascript" src="//cdn.runative-syndicate.com/sdk/v1/p.js" data-ts-spot="d67e6ef15c554c3388497f3f2f52d5b1" data-ts-mode="selective" async defer></script>
+
+  <style>
+    :root { 
+        --bg-body: #080807; 
+        --surface: #131208; 
+        --card: #1e1c0d; 
+        --text-main: #f5f0d8; 
+        --text-muted: #9a9270; 
+        --primary: #d4a017; 
+        --primary-dark: #a37a0e;
+        --primary-glow: rgba(212, 160, 23, 0.35);
+        --primary-bright: #f0c040;
+        --accent: #f5d44a; 
+        --accent-glow: rgba(245, 212, 74, 0.28);
+        --border: #2e2a12; 
+        --header-h: 65px; 
+        --bottom-h: 70px; 
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg-body); color: var(--text-main); overflow: hidden; width: 100vw; height: 100vh; }
+    
+    /* Mobil Kısıtlama */
+    #desktopBlocker { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    @media (min-width: 1024px) { body > * { display: none !important; } #desktopBlocker { display: flex !important; } }
+    
+    #splashScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #1a1800 0%, #080807 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+    .splash-logo { font-size: 64px; color: var(--primary); margin-bottom: 15px; filter: drop-shadow(0 0 15px var(--primary-glow)); }
+    .splash-title { font-size: 32px; font-weight: 800; color: white; letter-spacing: 1px; }
+    .spinner { width: 45px; height: 45px; border: 4px solid rgba(255,255,255,0.05); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-top: 30px;}
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    #pageHome { transform: translateX(0); z-index: 10; }
+    .page.active { transform: translateX(0); z-index: 20; }
+    
+    .scroll-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 30px; width: 100%; }
+    .scroll-content::-webkit-scrollbar { display: none; }
+
+    /* Premium Header */
+    .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; z-index: 500; width: 100%; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .icon-btn { padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 1px solid var(--border); color: white; cursor: pointer; transition: 0.2s; }
+    .icon-btn:active { transform: scale(0.9); }
+    
+    .balance-chip { background: linear-gradient(135deg, rgba(212, 160, 23, 0.18), rgba(212, 160, 23, 0.06)); border: 1px solid rgba(212, 160, 23, 0.4); padding: 8px 16px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #f5f0d8; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); transition: 0.2s; }
+    .balance-chip:active { transform: scale(0.95); }
+    .ton-icon { width: 18px; height: 18px; fill: #ffffff; }
+
+    /* Bottom Nav */
+    .bottom-nav { width: 100%; height: var(--bottom-h); background: rgba(24, 24, 27, 0.9); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-around; align-items: center; flex-shrink: 0; z-index: 500; padding-bottom: env(safe-area-inset-bottom);}
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 60px;}
+    .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+    .nav-item.active .material-symbols-rounded { filter: drop-shadow(0 0 8px var(--primary-glow)); }
+
+    /* Arama ve Kategori */
+    .search-box { display: flex; padding: 20px; gap: 10px; flex-shrink: 0; width: 100%; }
+    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 14px 20px; border-radius: 16px; color: white; outline: none; font-size: 14px; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+    
+    .categories { display: flex; gap: 10px; padding: 0 20px 15px; overflow-x: auto; flex-shrink: 0; border-bottom: 1px solid var(--border); width: 100%; }
+    .categories::-webkit-scrollbar { display: none; }
+    .cat-chip { padding: 8px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: 0.3s;}
+    .cat-chip.active { background: white; color: black; font-weight: 700; border-color: white; }
+
+    /* 728x90 Banner Alanları - Mobilde Taşmaması İçin Scale(0.45) Uygulandı */
+    .ad-728-container { width: 100%; height: 60px; overflow: hidden; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); margin: 15px 0; position: relative; }
+    .ad-728-container::after { content: "Advertisement"; position: absolute; top: 2px; left: 6px; font-size: 9px; color: #666; font-weight: bold; }
+    .ad-728-wrapper { transform: scale(0.45); transform-origin: center; width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; }
+
+    /* Video Feed */
+    .video-grid { display: flex; flex-direction: column; gap: 24px; padding: 20px; width: 100%; }
+    .video-card { cursor: pointer; display: flex; flex-direction: column; gap: 12px; width: 100%; transition: 0.2s;}
+    .video-card:active { transform: scale(0.97); opacity: 0.8; }
+    .v-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface); border-radius: 16px; overflow: hidden; position: relative; border: 1px solid var(--border); }
+    .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .v-info { display: flex; padding: 0 5px; gap: 12px; }
+    .v-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: var(--surface); flex-shrink: 0; border: 1px solid var(--border);}
+    .v-meta { flex: 1; min-width: 0; }
+    .v-title { font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #fff;}
+    .v-sub { font-size: 12px; color: var(--text-muted); font-weight: 500;}
+
+    /* Watch Page */
+    .player-wrapper { display: block; width: 100%; aspect-ratio: 16/9; background: #000; flex-shrink: 0; position: relative; z-index: 5; }
+    #ytPlayerDiv { position: absolute; top:0; left:0; width: 100%; height: 100%; z-index: 1;}
+    .custom-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent); padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; z-index: 15; }
+    .controls-row { display: flex; align-items: center; gap: 16px; }
+    .play-btn { color: white; font-size: 36px; cursor: pointer; }
+    .time-text { color: white; font-size: 13px; font-weight: 600; font-family: monospace; }
+    .progress-bar { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; }
+    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary-bright); box-shadow: 0 0 10px var(--primary-glow); }
+
+    .reward-box { background: var(--surface); padding: 20px; margin: 20px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .reward-header { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700;}
+    .tracker-bar { width: 100%; height: 12px; background: var(--card); border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
+    .tracker-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary-dark), var(--primary)); transition: width 1s linear; box-shadow: 0 0 10px var(--primary-glow);}
+    
+    .watch-meta { padding: 0 20px 20px; width: 100%; }
+    .w-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; line-height: 1.4; }
+    .w-channel { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border);}
+
+    /* Modals & Sidebar */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(4px); }
+    .overlay.active { opacity: 1; pointer-events: all; }
+    .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); border-right: 1px solid var(--border); display: flex; flex-direction: column;}
+    .sidebar.open { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
+    
+    .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 28px 28px 0 0; z-index: 2000; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); padding: 30px 24px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.05); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
+    .modal.open { bottom: 0; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 22px; font-weight: 800; }
+    
+    .input-box { width: 100%; padding: 16px 20px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 16px; color: white; margin-bottom: 16px; outline: none; font-size: 15px; transition: 0.3s;}
+    .input-box:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+    .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 16px; border: none; cursor: pointer; box-shadow: 0 4px 20px var(--primary-glow); transition: 0.2s;}
+    .btn-main:active { transform: scale(0.96); }
+    
+    .perc-row { display: flex; gap: 10px; margin-bottom: 24px; }
+    .perc-btn { flex: 1; background: var(--bg-body); border: 1px solid var(--border); color: white; padding: 12px 0; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;}
+    .perc-btn:active { background: var(--primary); border-color: var(--primary); color: #0a0800; }
+    
+    .ref-box { background: var(--bg-body); padding: 20px; border-radius: 16px; margin-bottom: 16px; text-align: center; border: 1px solid var(--border); }
+    
+    /* FAQ Detayları */
+    .faq-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+    .faq-q { font-weight: 700; color: #fff; margin-bottom: 8px; font-size: 15px; }
+    .faq-a { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Lang Row */
+    .lang-row { display: flex; gap: 12px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto;}
+    .lang-row::-webkit-scrollbar { display: none; }
+    .lang-btn { flex-shrink: 0; width: 48px; height: 48px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 16px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;}
+    .lang-btn.active { background: rgba(255,255,255,0.1); border-color: white; transform: scale(1.1); }
+  </style>
+</head>
+<body>
+
+  <div id="desktopBlocker">
+    <span class="material-symbols-rounded" style="font-size:64px; color:var(--primary); margin-bottom:15px;">mobile_off</span>
+    <h2 style="color:white; margin-bottom:10px; font-weight:800;">Mobil Cihaz Gerekli</h2>
+    <p style="color:#aaa; font-size:14px; max-width:300px;">CoinsTube Premium sadece akıllı telefon ve tabletlerde kullanılmak üzere optimize edilmiştir.</p>
+  </div>
+
+  <div id="splashScreen">
+    <span class="material-symbols-rounded splash-logo">play_circle</span>
+    <div class="splash-title">CoinsTube</div>
+    <div class="spinner"></div>
+  </div>
+
+  <div id="pageHome" class="page">
+    <div class="header">
+      <div class="header-left">
+        <button class="icon-btn" onclick="document.getElementById('sidebar').classList.add('open'); document.getElementById('mainOverlay').classList.add('active');"><span class="material-symbols-rounded">menu</span></button>
+        <div style="font-weight:800; font-size:22px; display:flex; align-items:center; gap:8px;">
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:28px; filter: drop-shadow(0 0 5px var(--primary-glow));">play_circle</span> CoinsTube
+        </div>
+      </div>
+      <div class="balance-chip" onclick="openModal('statsModal')">
+        <svg class="ton-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="white"/><path fill="black" d="M12 4.5C7.86 4.5 4.5 7.86 4.5 12s3.36 7.5 7.5 7.5 7.5-3.36 7.5-7.5S16.14 4.5 12 4.5zm2.828 5.188l-2.05 5.012c-.188.46-.852.46-1.04 0l-2.05-5.012c-.316-.774.256-1.61 1.09-1.61h2.96c.834 0 1.406.836 1.09 1.61z"/></svg>
+        <span id="uiBal">0.0000</span>
+      </div>
+    </div>
+    
+    <div class="search-box">
+      <input type="text" id="searchInput" class="search-input" data-i18n="search" placeholder="Video ara...">
+      <button class="icon-btn" style="background:var(--primary); border:none; border-radius:16px; padding:0 20px; box-shadow: 0 4px 10px var(--primary-glow); color:#0a0800;" onclick="searchVideos()"><span class="material-symbols-rounded">search</span></button>
+    </div>
+    
+    <div class="categories">
+      <div class="cat-chip active" onclick="setCategory('all', this)" data-i18n="catAll">Tümü</div>
+      <div class="cat-chip" onclick="setCategory('anime', this)" data-i18n="catAnime">Anime</div>
+      <div class="cat-chip" onclick="setCategory('music', this)" data-i18n="catMusic">Müzik</div>
+      <div class="cat-chip" onclick="setCategory('gaming', this)" data-i18n="catGame">Oyun</div>
+      <div class="cat-chip" onclick="setCategory('software', this)" data-i18n="catSoft">Yazılım</div>
+      <div class="cat-chip" onclick="setCategory('entertainment', this)" data-i18n="catEnt">Eğlence</div>
+      <div class="cat-chip" onclick="setCategory('sports', this)" data-i18n="catSport">Spor</div>
+    </div>
+
+    <div class="scroll-content" id="homeFeed">
+        <!-- VİDEOLAR VE REKLAMLAR BURAYA GELECEK -->
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="showPage('pageHome')"><span class="material-symbols-rounded" style="font-size:28px;">home</span> <span data-i18n="home">Ana Sayfa</span></div>
+      <div class="nav-item" onclick="openModal('faqModal')"><span class="material-symbols-rounded" style="font-size:28px;">help</span> <span data-i18n="faq">SSS</span></div>
+    </div>
+  </div>
+
+  <div id="pageWatch" class="page">
+    <div class="header">
+      <div class="header-left">
+        <button class="icon-btn" onclick="goBack('pageWatch')"><span class="material-symbols-rounded">arrow_back</span></button>
+        <div style="font-weight:700; font-size:18px;" data-i18n="watchTitle">Video İzle</div>
+      </div>
+    </div>
+    
+    <div class="scroll-content">
+      
+      <div class="player-wrapper" id="playerWrapper">
+        <div id="ytPlayerDiv"></div>
+        <div class="custom-controls">
+          <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0">
+          <div class="controls-row">
+            <span class="material-symbols-rounded play-btn" id="playPauseBtn" onclick="togglePlay()">pause</span>
+            <span class="time-text" id="timeText">0:00 / 0:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- İZLEME EKRANI ALTINDA 728x90 REKLAM -->
+      <div style="padding: 0 20px;">
+          <div class="ad-728-container">
+             <div class="ad-728-wrapper">
+                <iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe>
+             </div>
+          </div>
+      </div>
+
+      <div class="reward-box">
+        <div class="reward-header">
+          <span style="color: var(--primary);" data-i18n="nextReward">Sonraki Ödül (0.005 TON)</span>
+          <span id="trackerText" style="color: var(--text-main);">00:00 / 05:00</span>
+        </div>
+        <div class="tracker-bar"><div class="tracker-fill" id="trackerFill"></div></div>
+        <div style="font-size:13px; color:var(--text-muted); text-align:center; font-weight:500;" id="trackerStatus" data-i18n="playing">Oynatılıyor...</div>
+      </div>
+
+      <div class="watch-meta">
+        <div class="w-title" id="wTitle">...</div>
+        <div class="w-channel">
+          <img src="" id="wAvatar" style="width:50px; height:50px; border-radius:50%; background:var(--bg-body); object-fit:cover; border: 2px solid var(--border);">
+          <div style="font-weight:700; font-size:16px;" id="wChannelName">...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="mainOverlay" onclick="document.getElementById('sidebar').classList.remove('open'); this.classList.remove('active');"></div>
+  <div class="sidebar" id="sidebar">
+    <div style="padding:30px 20px; font-size:24px; font-weight:800; border-bottom:1px solid var(--border); margin-bottom:20px;" data-i18n="menu">Menü</div>
+    
+    <div class="lang-row" id="langContainer">
+      <button class="lang-btn" onclick="changeLang('tr')" id="btnLangTR">🇹🇷</button>
+      <button class="lang-btn" onclick="changeLang('en')" id="btnLangEN">🇬🇧</button>
+      <button class="lang-btn" onclick="changeLang('ru')" id="btnLangRU">🇷🇺</button>
+      <button class="lang-btn" onclick="changeLang('es')" id="btnLangES">🇪🇸</button>
+      <button class="lang-btn" onclick="changeLang('de')" id="btnLangDE">🇩🇪</button>
+    </div>
+
+    <div style="padding:0 20px; display: flex; flex-direction: column; gap: 12px;">
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:var(--bg-body); border-radius: 16px; border:1px solid var(--border); cursor: pointer;" onclick="openModal('statsModal')"><span class="material-symbols-rounded" style="color:var(--accent)">bar_chart</span> <span data-i18n="stats" style="font-weight:600;">İstatistikler</span></div>
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:var(--bg-body); border-radius: 16px; border:1px solid var(--border); cursor: pointer;" onclick="openModal('refModal')"><span class="material-symbols-rounded" style="color:var(--primary)">group_add</span> <span data-i18n="refTitle" style="font-weight:600;">Referans</span></div>
+      <div style="display:flex; align-items:center; gap:16px; padding:16px; background:var(--bg-body); border-radius: 16px; border:1px solid var(--border); cursor: pointer;" onclick="openModal('withdrawModal')"><span class="material-symbols-rounded" style="color:#10b981">account_balance_wallet</span> <span data-i18n="withdraw" style="font-weight:600;">TON Çek</span></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="modalOverlay" onclick="closeAllModals()"></div>
+
+  <!-- SSS Modal (Detaylı) -->
+  <div class="modal" id="faqModal">
+    <div class="modal-header"><span data-i18n="faq">Sıkça Sorulan Sorular</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
+    
+    <div class="faq-item">
+        <div class="faq-q" data-i18n="faqQ1">Nasıl para kazanırım?</div>
+        <div class="faq-a" data-i18n="faqA1">Listeden herhangi bir videoyu açın. Video oynatıldığı sürece sayaç dolar. Tam 5 dakika izlediğinizde bakiyenize otomatik olarak 0.005 TON eklenir. Sınır yoktur!</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q" data-i18n="faqQ2">Nasıl para çekerim?</div>
+        <div class="faq-a" data-i18n="faqA2">Bakiyeniz 0.10 TON'a ulaştığında "TON Çek" menüsünden Telegram Cüzdanınıza (veya Tonkeeper gibi herhangi bir TON cüzdanına) anında çekim talebi gönderebilirsiniz.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q" data-i18n="faqQ3">Referans sistemi nedir?</div>
+        <div class="faq-a" data-i18n="faqA3">Size özel davet linkiyle sisteme katılan her arkadaşınızın izleyip kazandığı TON miktarının %10'u kadar miktar (onlardan kesilmeden) size hediye edilir. Ömür boyu geçerlidir.</div>
+    </div>
+  </div>
+
+  <div class="modal" id="refModal">
+    <div class="modal-header"><span data-i18n="refTitle">Referans Sistemi</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
+    <div style="display: flex; gap:12px; margin-bottom: 20px;">
+        <div class="ref-box" style="flex:1;">
+            <div style="font-size:28px; color:var(--primary); font-weight:800;" id="rCount">0</div>
+            <div style="font-size:12px; color:var(--text-muted); font-weight:600;" data-i18n="refCountStr">Davet Edilen</div>
+        </div>
+        <div class="ref-box" style="flex:1;">
+            <div style="font-size:28px; color:var(--accent); font-weight:800;" id="rEarned">0.00</div>
+            <div style="font-size:12px; color:var(--text-muted); font-weight:600;" data-i18n="refEarnStr">Kazanılan TON</div>
+        </div>
+    </div>
+    <p style="font-size:13px; color:#a1a1aa; margin-bottom:16px; text-align:center; line-height:1.5;" data-i18n="refDesc">Arkadaşlarınızı davet edin, onların kazancından ömür boyu %10 ekstra TON kazanın!</p>
+    <input type="text" id="refLinkInput" class="input-box" readonly style="color:var(--accent); font-weight:700; text-align:center; background:rgba(212,160,23,0.08); border-color:var(--primary);">
+    <button class="btn-main" onclick="copyRefLink()" data-i18n="copyBtn">Bağlantıyı Kopyala</button>
+  </div>
+
+  <div class="modal" id="withdrawModal">
+    <div class="modal-header"><span data-i18n="withdraw">TON Çek</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
+    <div style="font-size:15px; color:#9a9270; margin-bottom:24px; text-align:center;"><span data-i18n="availBal">Mevcut Bakiye:</span> <strong style="color:var(--accent); font-size:22px; display:block; margin-top:6px; text-shadow: 0 0 12px var(--accent-glow);" id="wAvailBal">0.0000 TON</strong></div>
+    
+    <input type="text" id="wWallet" class="input-box" data-i18n="walletPlace" placeholder="TON Cüzdan Adresi (EQ...)">
+    <input type="text" id="wMemo" class="input-box" data-i18n="memoPlace" placeholder="Memo / Tag (İsteğe bağlı)">
+    <input type="number" id="wAmount" class="input-box" data-i18n="amountPlace" placeholder="Miktar (Min 0.10 TON)" step="0.01">
+    
+    <div class="perc-row">
+      <button class="perc-btn" onclick="setAmountPerc(25)">25%</button>
+      <button class="perc-btn" onclick="setAmountPerc(50)">50%</button>
+      <button class="perc-btn" onclick="setAmountPerc(75)">75%</button>
+      <button class="perc-btn" onclick="setAmountPerc(100)">MAX</button>
+    </div>
+    <button class="btn-main" onclick="reqWithdraw()" data-i18n="btnWithdraw">Çekim Talebi Gönder</button>
+  </div>
+
+  <div class="modal" id="statsModal">
+    <div class="modal-header"><span data-i18n="stats">İstatistikler</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
+    <div style="background:var(--bg-body); padding:24px; border-radius:16px; margin-bottom:24px; border:1px solid var(--border);">
+      <h2 style="color:var(--accent); text-align:center; font-size:32px; font-weight:800; text-shadow: 0 0 20px var(--accent-glow);" id="statTotal">0.0000 TON</h2>
+      <p style="text-align:center; color:#a1a1aa; font-size:13px; margin-top:6px; font-weight:600;" data-i18n="statsTotal">Toplam Kazanç</p>
+    </div>
+    <div style="width:100%; height:220px; position:relative;"><canvas id="chartCanvas"></canvas></div>
+  </div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  // ÇOKLU DİL SİSTEMİ (SSS Dahil)
+  const translations = {
+    tr: { search: "Video ara...", home: "Ana Sayfa", faq: "SSS", menu: "Menü", stats: "İstatistikler", statsTotal: "Toplam Kazanç", withdraw: "TON Çek", catAll: "Tümü", catAnime: "Anime", catMusic: "Müzik", catGame: "Oyun", catSoft: "Yazılım", catEnt: "Eğlence", catSport: "Spor", watchTitle: "Video İzle", nextReward: "Sonraki Ödül (0.005 TON)", playing: "Oynatılıyor...", paused: "Video duraklatıldı.", availBal: "Mevcut Bakiye:", walletPlace: "TON Cüzdan Adresi (EQ...)", memoPlace: "Memo / Tag (İsteğe bağlı)", amountPlace: "Miktar (Min 0.10 TON)", btnWithdraw: "Çekim Talebi Gönder", refTitle: "Referans", refCountStr: "Davet Edilen", refEarnStr: "Kazanılan TON", refDesc: "Arkadaşlarınızı davet edin, onların kazancından ömür boyu %10 ekstra TON kazanın!", copyBtn: "Bağlantıyı Kopyala", faqQ1: "Nasıl para kazanırım?", faqA1: "Herhangi bir videoyu açın. Video oynatıldığı sürece sayaç dolar. Tam 5 dakika izlediğinizde bakiyenize 0.005 TON eklenir.", faqQ2: "Nasıl para çekerim?", faqA2: "Bakiyeniz 0.10 TON'a ulaştığında 'TON Çek' menüsünden cüzdanınıza anında çekim talebi gönderebilirsiniz.", faqQ3: "Referans sistemi nedir?", faqA3: "Davet ettiğiniz kişilerin kazancının %10'u kadar miktar (onlardan kesilmeden) size hediye edilir." },
+    en: { search: "Search video...", home: "Home", faq: "FAQ", menu: "Menu", stats: "Statistics", statsTotal: "Total Earned", withdraw: "Withdraw", catAll: "All", catAnime: "Anime", catMusic: "Music", catGame: "Gaming", catSoft: "Software", catEnt: "Entertainment", catSport: "Sports", watchTitle: "Watch Video", nextReward: "Next Reward (0.005 TON)", playing: "Playing...", paused: "Paused.", availBal: "Available Balance:", walletPlace: "TON Wallet Address", memoPlace: "Memo / Tag (Optional)", amountPlace: "Amount", btnWithdraw: "Submit Withdraw", refTitle: "Referral", refCountStr: "Invited", refEarnStr: "Earned TON", refDesc: "Invite friends and earn 10% of their rewards for life!", copyBtn: "Copy Link", faqQ1: "How to earn?", faqA1: "Watch any video. Once the 5-minute timer fills up, you get 0.005 TON.", faqQ2: "How to withdraw?", faqA2: "Reach 0.10 TON and submit your TON wallet address from the Withdraw menu.", faqQ3: "Referral system?", faqA3: "Earn a 10% lifetime bonus based on the earnings of users you invite." }
+  };
+
+  let currentLang = localStorage.getItem('appLang') || 'tr';
+  window.changeLang = function(lang) {
+    if(!translations[lang]) lang = 'en';
+    currentLang = lang; localStorage.setItem('appLang', lang);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(translations[lang][key]) {
+        if(el.tagName === 'INPUT') el.placeholder = translations[lang][key];
+        else el.innerText = translations[lang][key];
+      }
+    });
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    let activeBtn = document.getElementById(`btnLang${lang.toUpperCase()}`);
+    if(activeBtn) {
+      activeBtn.classList.add('active');
+      activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }
+
+  // DİNAMİK API URL (Render Linkini Otomatik Bulur)
+  const API_URL = window.location.origin; 
+  
+  const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+  const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_render_test");
+  
+  let uBal = 0, uTotal = 0;
+  let currentVideoList = []; let currentPlayingIndex = 0;
+  const TARGET_TIME = 300;
+  let globalWatchSeconds = 0;
+  let watchTimerInterval = null;
+
+  async function loadUserData() {
+    try {
+        const res = await fetch(`${API_URL}/api/user/${telegramId}`);
+        const data = await res.json();
+        uBal = data.balance || 0;
+        uTotal = data.totalEarned || 0;
+        
+        document.getElementById('uiBal').innerText = uBal.toFixed(4);
+        document.getElementById('wAvailBal').innerText = uBal.toFixed(4) + " TON";
+        document.getElementById('statTotal').innerText = uTotal.toFixed(4) + " TON";
+        
+        document.getElementById('rCount').innerText = data.refCount || 0;
+        document.getElementById('rEarned').innerText = (data.refEarned || 0).toFixed(4);
+        document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
+    } catch (e) { console.error("API Bağlantı Hatası"); }
+  }
+
+  function formatTime(sec) {
+    const m = Math.floor(sec / 60); const s = sec % 60;
+    return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  function startWatchTracker() {
+    clearInterval(watchTimerInterval); updateTrackerUI(); 
+    watchTimerInterval = setInterval(() => {
+      if (window.ytPlayer && window.ytPlayer.getPlayerState && window.ytPlayer.getPlayerState() === 1) {
+        globalWatchSeconds++; 
+        document.getElementById('trackerStatus').innerText = translations[currentLang].playing;
+        updateTrackerUI(); updateCustomProgress();
+        if(globalWatchSeconds >= TARGET_TIME) triggerAutoReward();
+      } else {
+        if(globalWatchSeconds > 0) document.getElementById('trackerStatus').innerText = translations[currentLang].paused;
+      }
+    }, 1000);
+  }
+
+  function updateTrackerUI() {
+    const fillPercent = (globalWatchSeconds / TARGET_TIME) * 100;
+    document.getElementById('trackerFill').style.width = `${Math.min(fillPercent, 100)}%`;
+    document.getElementById('trackerText').innerText = `${formatTime(globalWatchSeconds)} / 05:00`;
+  }
+
+  async function triggerAutoReward() {
+    globalWatchSeconds = 0; updateTrackerUI();
+    try {
+        const res = await fetch(`${API_URL}/api/reward`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ telegramId })
+        });
+        const data = await res.json();
+        if(data.success) {
+            tg.showAlert(`+${data.reward} TON!`);
+            loadUserData();
+        }
+    } catch(e) { console.error(e); }
+  }
+
+  window.ytPlayer = null;
+  function initPlayer(vId) {
+    if(window.ytPlayer && typeof window.ytPlayer.destroy === 'function') { window.ytPlayer.destroy(); }
+    const wrapper = document.getElementById('playerWrapper');
+    const oldDiv = document.getElementById('ytPlayerDiv');
+    if(oldDiv) oldDiv.remove();
+    const newDiv = document.createElement('div'); newDiv.id = 'ytPlayerDiv';
+    wrapper.insertBefore(newDiv, wrapper.firstChild);
+
+    window.ytPlayer = new YT.Player('ytPlayerDiv', {
+      videoId: vId, height: '100%', width: '100%',
+      playerVars: { 'controls': 0, 'rel': 0, 'modestbranding': 1, 'playsinline': 1, 'autoplay': 1, 'fs': 0 },
+      events: {
+        'onReady': function(event) { event.target.playVideo(); startWatchTracker(); },
+        'onStateChange': function(event) {
+          const btn = document.getElementById('playPauseBtn');
+          if(event.data === 1) btn.innerText = "pause";
+          else btn.innerText = "play_arrow";
+        }
+      }
+    });
+  }
+
+  window.togglePlay = function() {
+    if(!window.ytPlayer || !window.ytPlayer.getPlayerState) return;
+    if(window.ytPlayer.getPlayerState() === 1) window.ytPlayer.pauseVideo();
+    else window.ytPlayer.playVideo();
+  }
+
+  function updateCustomProgress() {
+    if(!window.ytPlayer || !window.ytPlayer.getCurrentTime) return;
+    const curr = window.ytPlayer.getCurrentTime() || 0;
+    const total = window.ytPlayer.getDuration() || 0;
+    document.getElementById('progressBar').value = total > 0 ? (curr / total) * 100 : 0;
+    document.getElementById('timeText').innerText = formatTime(Math.floor(curr)) + " / " + formatTime(Math.floor(total));
+  }
+
+  document.getElementById('progressBar').addEventListener('input', function(e) {
+    if(!window.ytPlayer || !window.ytPlayer.getDuration) return;
+    window.ytPlayer.seekTo((e.target.value / 100) * window.ytPlayer.getDuration(), true);
+  });
+
+  // VİDEO LİSTESİ VE REKLAM ENJEKSİYONU
+  async function fetchVids(query) {
+    const box = document.getElementById("homeFeed");
+    box.innerHTML = `<p style="text-align:center; padding:30px; color:var(--text-muted);">Yükleniyor...</p>`;
+    
+    try {
+      const res = await fetch(`${API_URL}/api/videos?q=${encodeURIComponent(query)}`);
+      const searchData = await res.json();
+      
+      currentVideoList = []; box.innerHTML = "";
+      const grid = document.createElement('div'); grid.className = "video-grid";
+
+      // EN ÜSTE BANNER REKLAM
+      grid.innerHTML += `
+        <div class="ad-728-container" style="margin-top:0;">
+          <div class="ad-728-wrapper">
+             <iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe>
+          </div>
+        </div>`;
+
+      searchData.items.forEach((item, index) => {
+        const vidId = item.id.videoId; const s = item.snippet;
+        const realAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(s.channelTitle)}&background=random&color=fff`;
+        currentVideoList.push({ id: vidId, title: s.title, channelTitle: s.channelTitle, avatar: realAvatar });
+
+        const card = document.createElement('div'); card.className = "video-card";
+        card.onclick = () => openWatch(vidId, s.title, s.channelTitle, realAvatar, index);
+        card.innerHTML = `<div class="v-thumb"><img src="${s.thumbnails?.high?.url || ''}"></div><div class="v-info"><img src="${realAvatar}" class="v-avatar"><div class="v-meta"><div class="v-title">${s.title}</div><div class="v-sub">${s.channelTitle}</div></div></div>`;
+        grid.appendChild(card);
+
+        // HER 4 VİDEODA BİR REKLAM KUTUSU
+        if((index + 1) % 4 === 0) {
+            const adBox = document.createElement('div');
+            adBox.className = "ad-728-container";
+            adBox.innerHTML = `
+              <div class="ad-728-wrapper">
+                 <iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe>
+              </div>`;
+            grid.appendChild(adBox);
+        }
+      });
+      box.appendChild(grid);
+
+    } catch(e) { box.innerHTML = '<p style="text-align:center;color:red;padding:20px;">Bağlantı Hatası!</p>'; }
+  }
+
+  window.showPage = function(pid) {
+    document.querySelectorAll('.page').forEach(p => {
+      if(p.id === pid && pid !== 'pageHome') p.classList.add('active');
+      else if(p.id !== 'pageHome') p.classList.remove('active');
+    });
+  }
+
+  window.goBack = function(pid) {
+    document.getElementById(pid).classList.remove('active');
+    if(pid === 'pageWatch') { 
+      if(window.ytPlayer && window.ytPlayer.pauseVideo) window.ytPlayer.pauseVideo(); 
+      clearInterval(watchTimerInterval); 
+    }
+  }
+
+  window.setCategory = function(cat, el) {
+    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active'); 
+    let q = "trending";
+    if(cat === "anime") q = "anime amv";
+    if(cat === "music") q = "music hits";
+    if(cat === "gaming") q = "gaming gameplay";
+    if(cat === "software") q = "software coding tutorial";
+    if(cat === "entertainment") q = "entertainment funny";
+    if(cat === "sports") q = "sports highlights";
+    fetchVids(q);
+  }
+
+  window.searchVideos = function() { fetchVids(document.getElementById('searchInput').value || "trending"); }
+
+  window.openWatch = function(vId, title, chTitle, avatar, index) {
+    // VİDEOYA TIKLANINCA TAM EKRAN REKLAM (INTERSTITIAL) ÇALIŞIR
+    try { InterstitialTsAd({ spot: "ee58e8b849fc4b0a8b9de4af0e2c4c41", countdown: 15 }); } catch(err) {}
+    
+    showPage('pageWatch'); currentPlayingIndex = index; 
+    document.getElementById('wTitle').innerText = title; 
+    document.getElementById('wChannelName').innerText = chTitle; 
+    document.getElementById('wAvatar').src = avatar;
+    initPlayer(vId);
+  }
+
+  window.openModal = function(id) {
+    document.getElementById('sidebar').classList.remove('open'); document.getElementById('mainOverlay').classList.remove('active');
+    document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open');
+    
+    if(id === 'statsModal') {
+      setTimeout(() => {
+        const ctx = document.getElementById('chartCanvas'); 
+        if(!ctx) return;
+        if(window.myChart) window.myChart.destroy();
+        
+        let gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 220);
+        gradient.addColorStop(0, 'rgba(212, 160, 23, 0.55)'); 
+        gradient.addColorStop(1, 'rgba(212, 160, 23, 0)');
+        
+        const dData = [0, uTotal * 0.15, uTotal * 0.3, uTotal * 0.5, uTotal * 0.7, uTotal * 0.9, uTotal];
+        
+        window.myChart = new Chart(ctx, { 
+            type:'line', 
+            data:{ labels:['6 Gün','5 Gün','4 Gün','3 Gün','2 Gün','Dün','Bugün'], datasets:[{label:'Kazanılan TON', data: dData, borderColor:'#f0c040', backgroundColor: gradient, fill: true, tension:0.4, borderWidth: 4, pointRadius: 5, pointBackgroundColor: '#0a0800', pointBorderColor: '#f0c040', pointBorderWidth: 2}] }, 
+            options:{ responsive: true, maintainAspectRatio: false, plugins:{legend:{display:false}}, scales: { x: { grid: { display: false }, ticks: { color: '#9a9270' } }, y: { grid: { color: '#1e1c0d' }, ticks: { color: '#9a9270' }, beginAtZero: true } }} 
+        });
+      }, 300);
+    }
+  }
+  
+  window.closeAllModals = function() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+  }
+
+  window.setAmountPerc = function(perc) {
+    const val = uBal * (perc / 100); document.getElementById('wAmount').value = val > 0 ? val.toFixed(4) : "";
+  }
+
+  window.reqWithdraw = async function() {
+    const w = document.getElementById('wWallet').value.trim(); 
+    const memo = document.getElementById('wMemo').value.trim();
+    const a = parseFloat(document.getElementById('wAmount').value);
+    
+    if(!w || isNaN(a) || a < 0.10) return tg.showAlert("Min 0.10 TON");
+    if(a > uBal) return tg.showAlert("Bakiye yetersiz.");
+    
+    try {
+        const res = await fetch(`${API_URL}/api/withdraw`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ telegramId, wallet: w, memo: memo, amount: a }) });
+        const data = await res.json();
+        if(data.success) { tg.showAlert("Çekim talebi alındı!"); closeAllModals(); loadUserData(); }
+        else { tg.showAlert(data.error || "Hata!"); }
+    } catch(e) { tg.showAlert("Hata oluştu."); }
+  }
+
+  window.copyRefLink = function() {
+    const copyText = document.getElementById("refLinkInput");
+    copyText.select(); copyText.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(copyText.value);
+    tg.showAlert(translations[currentLang].copyBtn + " başarılı!");
+  }
+
+  window.onload = async () => { 
+    changeLang(currentLang);
+    loadUserData();
+    await fetchVids("trending");
+    setTimeout(() => {
+      const splash = document.getElementById('splashScreen');
+      if(splash) { splash.style.opacity = '0'; setTimeout(() => splash.remove(), 500); }
+    }, 800);
+  };
+</script>
+</body>
+</html>
