@@ -30,7 +30,7 @@ setInterval(() => {
 app.get('/api/ping', (req, res) => res.send('pong'));
 
 // ==========================================
-// 1. KULLANICI GETİR & REFERANS
+// 1. KULLANICI GETİR
 // ==========================================
 app.get('/api/user/:id', async (req, res) => {
     const telegramId = String(req.params.id);
@@ -42,7 +42,11 @@ app.get('/api/user/:id', async (req, res) => {
         let userData;
 
         if (!doc.exists) {
-            userData = { balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, inviter: inviterId, createdAt: admin.firestore.FieldValue.serverTimestamp() };
+            userData = { 
+                balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, 
+                videosWatched: 0, // Yeni İstatistik
+                inviter: inviterId, createdAt: admin.firestore.FieldValue.serverTimestamp() 
+            };
             await userRef.set(userData);
 
             if (inviterId && inviterId !== telegramId) {
@@ -59,7 +63,7 @@ app.get('/api/user/:id', async (req, res) => {
 });
 
 // ==========================================
-// 2. VİDEO ÖDÜLÜ
+// 2. VİDEO ÖDÜLÜ & İSTATİSTİK GÜNCELLEME
 // ==========================================
 app.post('/api/reward', async (req, res) => {
     const { telegramId } = req.body;
@@ -75,9 +79,14 @@ app.post('/api/reward', async (req, res) => {
                 newTotal = (data.totalEarned || 0) + TARGET_REWARD;
                 userInviter = data.inviter || null;
             }
-            t.set(userRef, { balance: newBalance, totalEarned: newTotal }, { merge: true });
+            t.set(userRef, { 
+                balance: newBalance, 
+                totalEarned: newTotal,
+                videosWatched: admin.firestore.FieldValue.increment(1) // İzlenen videoyu artır
+            }, { merge: true });
         });
 
+        // Referans Ödülü
         if (userInviter) {
             const inviterRef = db.collection('users').doc(userInviter);
             const refAmt = TARGET_REWARD * REF_PERCENTAGE;
@@ -144,11 +153,14 @@ app.get('/api/admin/stats', async (req, res) => {
     try {
         const pendingSnap = await db.collection('withdraws').where('status', '==', 'pending').get();
         let requests = []; pendingSnap.forEach(doc => requests.push({ id: doc.id, ...doc.data() }));
+        
         const usersSnap = await db.collection('users').orderBy('totalEarned', 'desc').limit(50).get();
         const totalUsers = (await db.collection('users').count().get()).data().count; 
         let usersList = []; usersSnap.forEach(doc => usersList.push({ id: doc.id, ...doc.data() }));
+        
         const approvedSnap = await db.collection('withdraws').where('status', '==', 'approved').get();
         let totalPaid = 0; approvedSnap.forEach(doc => { totalPaid += Number(doc.data().amount || 0); });
+        
         res.json({ success: true, pendingWithdrawsCount: requests.length, requests, totalUsers, totalPaid: totalPaid.toFixed(4), users: usersList });
     } catch (error) { res.status(500).json({ error: 'Admin paneli hatası' }); }
 });
@@ -173,7 +185,7 @@ app.post('/api/admin/withdraw/:id', async (req, res) => {
 });
 
 // ==========================================
-// 5. YOUTUBE API (Kanal Logosu + İzlenme Sayısı Güçlendirilmiş Modül)
+// 5. YOUTUBE API (Gelişmiş)
 // ==========================================
 app.get('/api/videos', async (req, res) => {
     try {
@@ -181,18 +193,15 @@ app.get('/api/videos', async (req, res) => {
         const query = encodeURIComponent(req.query.q || 'trending');
         const order = req.query.order || 'relevance'; 
         
-        // 1. Videoları ara (Sadece ID, Başlık ve Thumbnail döner)
         const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&order=${order}&key=${apiKey}&q=${query}`;
         const searchRes = await axios.get(searchUrl);
         const items = searchRes.data.items || [];
         
         if (items.length === 0) return res.json({ items: [] });
 
-        // 2. Bulunan videoların ve kanalların ID'lerini topla
         const videoIds = items.map(i => i.id.videoId).filter(Boolean).join(',');
         const channelIds = [...new Set(items.map(i => i.snippet.channelId))].filter(Boolean).join(',');
 
-        // 3. İzlenme sayıları için ekstra istek
         let videoStats = {};
         if (videoIds) {
             const statsUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${apiKey}`;
@@ -200,7 +209,6 @@ app.get('/api/videos', async (req, res) => {
             (statsRes.data.items || []).forEach(v => { videoStats[v.id] = v.statistics?.viewCount || '0'; });
         }
 
-        // 4. Kanal fotoğrafları için ekstra istek
         let channelAvatars = {};
         if (channelIds) {
             const channelsUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelIds}&key=${apiKey}`;
@@ -208,7 +216,6 @@ app.get('/api/videos', async (req, res) => {
             (channelsRes.data.items || []).forEach(c => { channelAvatars[c.id] = c.snippet?.thumbnails?.default?.url || ''; });
         }
 
-        // 5. Bütün verileri birleştir
         const enrichedItems = items.map(item => {
             const vId = item.id.videoId;
             const cId = item.snippet.channelId;
@@ -220,10 +227,7 @@ app.get('/api/videos', async (req, res) => {
         });
 
         res.json({ items: enrichedItems });
-    } catch (error) { 
-        console.error(error?.response?.data || error);
-        res.status(500).json({ error: 'API Hatası' }); 
-    }
+    } catch (error) { res.status(500).json({ error: 'API Hatası' }); }
 });
 
 const PORT = process.env.PORT || 10000;
