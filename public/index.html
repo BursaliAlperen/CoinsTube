@@ -19,6 +19,7 @@
         --bg-body: #080807; --surface: #131208; --card: #1e1c0d; 
         --text-main: #f5f0d8; --text-muted: #9a9270; 
         --primary: #d4a017; --primary-bright: #f0c040; --accent: #f5d44a; 
+        --primary-glow: rgba(245, 212, 74, 0.3);
         --border: #2e2a12; --header-h: 65px; --bottom-h: 65px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -26,6 +27,13 @@
     
     #desktopBlocker { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
     @media (min-width: 1024px) { body > * { display: none !important; } #desktopBlocker { display: flex !important; } }
+
+    /* BUTON EFEKTLERİ */
+    .icon-btn, .cat-chip, .lang-btn, .sidebar-item, .withdraw-tab, .admin-page-tab { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    .icon-btn:active, .cat-chip:active, .lang-btn:active, .withdraw-tab:active, .admin-page-tab:active { background: var(--primary-glow) !important; border-color: var(--accent) !important; color: var(--accent) !important; transform: scale(0.92); }
+    .sidebar-item:active { background: var(--primary-glow); transform: translateX(5px); }
+    .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .btn-main:active { background: #fff !important; color: #000 !important; box-shadow: 0 0 25px rgba(255,255,255,0.7); transform: scale(0.95); }
 
     /* SPLASH */
     #splashScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #1a1800 0%, #080807 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; transition: opacity 0.5s ease; }
@@ -44,18 +52,20 @@
     .scroll-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--bottom-h) + 10px); }
     .scroll-content::-webkit-scrollbar { display: none; }
 
-    /* HEADER & BOTTOM NAV */
+    /* HEADER & NAV */
     .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; }
     .header-logo-text { font-weight: 800; font-size: 20px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .icon-btn { padding: 10px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; cursor: pointer; }
-    .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; }
+    .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; transition: 0.2s; }
+    .balance-chip:active { transform: scale(0.95); border-color: var(--accent); }
     .bottom-nav { position:fixed; bottom:0; width: 100%; height: var(--bottom-h); background: rgba(24,24,27,0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 500; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; }
     .nav-item.active { color: var(--primary); transform: translateY(-2px); }
 
     /* SEARCH & FILTER */
     .search-box { display: flex; padding: 16px 20px 10px; gap: 10px; }
-    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; }
+    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; font-size: 14px; }
+    .search-input:focus { border-color: var(--primary); }
     .sort-box { padding: 0 20px 14px; display:flex; gap:10px; }
     .sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; outline: none; width:100%; }
     .categories { display: flex; gap: 10px; padding: 0 20px 14px; overflow-x: auto; border-bottom: 1px solid var(--border); }
@@ -73,10 +83,11 @@
     .v-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
     .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .v-info { display: flex; padding: 0 4px; gap: 12px; align-items:center; }
-    .v-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); z-index:2; }
+    .v-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); z-index:2; transition:0.2s; }
+    .v-avatar:active { transform: scale(0.9); border-color:var(--accent); }
     .v-meta { flex: 1; min-width: 0; }
     .v-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .v-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .v-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; display:flex; align-items:center; gap:5px; margin-top:2px; }
 
     /* WATCH PAGE */
     .player-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
@@ -98,7 +109,7 @@
     .lang-row { display: flex; gap: 10px; padding: 0 20px 18px; overflow-x: auto; margin-top:20px; }
     .lang-btn { width: 42px; height: 30px; background: transparent; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; flex-shrink:0; }
     .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .lang-btn.active { border: 2px solid var(--primary); transform: scale(1.1); }
+    .lang-btn.active { border: 2px solid var(--primary); transform: scale(1.1); box-shadow: 0 0 10px rgba(212,160,23,0.5); }
 
     .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 28px 28px 0 0; z-index: 2000; transition: 0.5s; padding: 28px 22px; max-height: 90vh; overflow-y: auto; border-top: 1px solid var(--border); }
     .modal.open { bottom: 0; }
@@ -106,11 +117,21 @@
     .close-btn { background: var(--card); padding: 8px; border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor:pointer; }
     
     .input-box { width: 100%; padding: 14px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; }
-    .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .input-box:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--primary-glow); }
+
+    .withdraw-tabs, .admin-page-tabs { display: flex; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); padding: 4px; margin-bottom: 15px; gap: 4px; }
+    .withdraw-tab, .admin-page-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 10px; color: var(--text-muted); }
+    .withdraw-tab.active, .admin-page-tab.active { background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; }
+    .withdraw-panel, .admin-section { display: none; }
+    .withdraw-panel.active, .admin-section.active { display: block; }
+    
+    .history-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
     .faq-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 10px; }
     .faq-q { font-weight: 700; color: #fff; margin-bottom: 7px; font-size: 14px; }
     .faq-a { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+    
+    .modal-spinner { display: flex; justify-content: center; padding: 30px; }
   </style>
 </head>
 <body>
@@ -145,7 +166,7 @@
 
   <div class="search-box">
     <input type="text" id="searchInput" class="search-input" data-i18n-placeholder="searchPlaceholder">
-    <button class="icon-btn" style="background:var(--primary); color:#000;" onclick="searchVideos()"><span class="material-symbols-rounded">search</span></button>
+    <button class="icon-btn" style="background:var(--primary); color:#000; border:none;" onclick="searchVideos()"><span class="material-symbols-rounded">search</span></button>
   </div>
   
   <div class="sort-box">
@@ -230,7 +251,7 @@
   </div>
 
   <div class="sidebar-item" onclick="openModal('statsModal')"><span class="material-symbols-rounded" style="color:var(--accent);">bar_chart</span><span data-i18n="menuStats">İstatistikler</span></div>
-  <div class="sidebar-item" onclick="openModal('refModal')"><span class="material-symbols-rounded" style="color:var(--primary);">group_add</span><span data-i18n="menuRef">Referans</span></div>
+  <div class="sidebar-item" onclick="openModal('refModal')"><span class="material-symbols-rounded" style="color:var(--primary);">group_add</span><span data-i18n="menuRef">Referans Sistemi</span></div>
   <div class="sidebar-item" onclick="openWithdrawModal()"><span class="material-symbols-rounded" style="color:#10b981;">account_balance_wallet</span><span data-i18n="menuWithdraw">TON Çek</span></div>
   <div class="sidebar-item" onclick="openModal('faqModal')"><span class="material-symbols-rounded" style="color:#60a5fa;">help</span><span data-i18n="navFaq">SSS</span></div>
   <div class="sidebar-item" id="adminSidebarItem" style="display:none; border-color:rgba(123,47,247,0.4); background:rgba(123,47,247,0.08);" onclick="openAdminPanel()"><span class="material-symbols-rounded" style="color:#a78bfa;">admin_panel_settings</span><span style="color:#a78bfa;">Admin Panel</span></div>
@@ -270,23 +291,42 @@
   <div style="width:100%; height:200px;"><canvas id="chartCanvas"></canvas></div>
 </div>
 
-<!-- REF MODAL -->
+<!-- REFERRAL MODAL -->
 <div class="modal" id="refModal">
   <div class="modal-header"><span data-i18n="menuRef">Referans Sistemi</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
-  <div style="text-align:center; background:var(--bg-body); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:15px;">
-    <span class="material-symbols-rounded" style="font-size:40px; color:var(--primary);">group</span>
-    <div style="font-size:24px; font-weight:800; color:white; margin:10px 0;"><span id="rCount">0</span> <span data-i18n="refPeople" style="font-size:14px; color:var(--text-muted);">Kişi</span></div>
+  
+  <div class="withdraw-tabs">
+    <div class="withdraw-tab active" onclick="switchRefTab('overview', this)" data-i18n="refOverviewTab">Özet & Grafik</div>
+    <div class="withdraw-tab" onclick="switchRefTab('history', this)" data-i18n="refHistoryTab">Davet Geçmişi</div>
   </div>
-  <input type="text" id="refLinkInput" class="input-box" readonly style="text-align:center; color:var(--accent);">
-  <button class="btn-main" onclick="copyRefLink()" data-i18n="refCopy">Bağlantıyı Kopyala</button>
+
+  <div class="withdraw-panel active" id="refPanelOverview">
+    <div style="display:flex; gap:10px; margin-bottom:15px;">
+      <div style="flex:1; text-align:center; background:var(--bg-body); padding:15px; border-radius:12px; border:1px solid var(--border);">
+        <div style="font-size:26px; color:var(--primary); font-weight:800;" id="rCount">0</div>
+        <div style="font-size:11px; color:var(--text-muted); font-weight:600;" data-i18n="refPeople">Kişi</div>
+      </div>
+      <div style="flex:1; text-align:center; background:var(--bg-body); padding:15px; border-radius:12px; border:1px solid var(--border);">
+        <div style="display:flex; align-items:center; justify-content:center; gap:5px;"><img src="toncoin.png" class="ton-inline"><span style="font-size:26px; color:var(--accent); font-weight:800;" id="rEarned">0.00</span></div>
+        <div style="font-size:11px; color:var(--text-muted); font-weight:600;" data-i18n="refEarnedText">Kazanç</div>
+      </div>
+    </div>
+    <div style="width:100%; height:180px; margin-bottom:15px;"><canvas id="refChartCanvas"></canvas></div>
+    <input type="text" id="refLinkInput" class="input-box" readonly style="text-align:center; color:var(--accent);">
+    <button class="btn-main" onclick="copyRefLink()"><span class="material-symbols-rounded" style="margin-right:8px;">content_copy</span> <span data-i18n="refCopy">Bağlantıyı Kopyala</span></button>
+  </div>
+
+  <div class="withdraw-panel" id="refPanelHistory">
+    <div id="refHistoryList"></div>
+  </div>
 </div>
 
 <!-- WITHDRAW MODAL -->
 <div class="modal" id="withdrawModal">
   <div class="modal-header"><span data-i18n="menuWithdraw">TON Çek</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
-  <div style="display:flex; background:var(--bg-body); border:1px solid var(--border); border-radius:12px; padding:4px; margin-bottom:15px;">
-    <div class="withdraw-tab active" onclick="switchWithdrawTab('new', this)" style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer;" data-i18n="wdNew">Yeni Çekim</div>
-    <div class="withdraw-tab" onclick="switchWithdrawTab('history', this)" style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer;" data-i18n="wdHistory">Geçmiş</div>
+  <div class="withdraw-tabs">
+    <div class="withdraw-tab active" onclick="switchWithdrawTab('new', this)" data-i18n="wdNew">Yeni Çekim</div>
+    <div class="withdraw-tab" onclick="switchWithdrawTab('history', this)" data-i18n="wdHistory">Geçmiş</div>
   </div>
   <div class="withdraw-panel active" id="panelNew">
     <input type="text" id="wWallet" class="input-box" placeholder="TON Cüzdan (EQ...)" data-i18n-placeholder="wdWallet">
@@ -305,10 +345,10 @@
 <!-- ADMIN MODAL -->
 <div class="modal" id="adminModal">
   <div class="modal-header"><span style="color:#a78bfa;">Admin Panel</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
-  <div style="display:flex; background:var(--bg-body); border-radius:12px; border:1px solid var(--border); padding:4px; margin-bottom:15px;">
-    <div class="admin-page-tab active" onclick="switchAdminTab('overview', this)" style="flex:1; padding:8px; text-align:center; cursor:pointer; border-radius:8px;">Genel</div>
-    <div class="admin-page-tab" onclick="switchAdminTab('withdraws', this)" style="flex:1; padding:8px; text-align:center; cursor:pointer; border-radius:8px;">Çekimler</div>
-    <div class="admin-page-tab" onclick="switchAdminTab('users', this)" style="flex:1; padding:8px; text-align:center; cursor:pointer; border-radius:8px;">Kullanıcılar</div>
+  <div class="admin-page-tabs">
+    <div class="admin-page-tab active" onclick="switchAdminTab('overview', this)">Genel</div>
+    <div class="admin-page-tab" onclick="switchAdminTab('withdraws', this)">Çekimler</div>
+    <div class="admin-page-tab" onclick="switchAdminTab('users', this)">Kullanıcılar</div>
   </div>
   <div class="admin-section active" id="adminSectionOverview">
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
@@ -328,64 +368,65 @@
 const API_URL = window.location.origin;
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand();
-const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_test_user");
 
-// ÇOKLU DİL SÖZLÜĞÜ (TAM ÇEVİRİ)
+const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_test_user");
+const startParam = tg.initDataUnsafe?.start_param || "";
+const inviterId = startParam.startsWith("ref_") ? startParam.replace("ref_", "") : "";
+
+// DİL SÖZLÜĞÜ (Kanal ve İzlenme eklentileriyle)
 const i18n = {
   tr: {
     mobileOnly: "Mobil Cihaz Gerekli", searchPlaceholder: "Video ara...", sortRelevance: "Önerilen", sortPopular: "En Popüler", sortNewest: "En Yeni",
     catAll: "Tümü", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber",
     navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusPlaying: "Oynatılıyor...", statusPaused: "Duraklatıldı",
-    menuStats: "İstatistikler", menuRef: "Referans", menuWithdraw: "TON Çek", menuBalance: "Bakiye",
-    channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", refPeople: "Kişi", refCopy: "Bağlantıyı Kopyala",
+    menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", menuBalance: "Bakiye",
+    channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", viewsText: "izlenme",
+    refOverviewTab: "Özet & Grafik", refHistoryTab: "Davet Geçmişi", refPeople: "Kişi", refEarnedText: "Kazanç", refCopy: "Bağlantıyı Kopyala", refJoined: "Katıldı",
     wdNew: "Yeni Çekim", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdSend: "Gönder",
     faq1q: "Nasıl kazanırım?", faq1a: "Videoyu 5 dakika kesintisiz izleyin. Süre dolduğunda 0.005 TON kazanırsınız.",
-    faq2q: "Çekim limiti nedir?", faq2a: "Minimum 0.10 TON çekebilirsiniz.",
-    faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız (onlardan kesilmez)."
+    faq2q: "Çekim limiti nedir?", faq2a: "Minimum 0.10 TON çekebilirsiniz.", faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız."
   },
   en: {
-    mobileOnly: "Mobile Device Required", searchPlaceholder: "Search videos...", sortRelevance: "Relevance", sortPopular: "Most Popular", sortNewest: "Newest",
+    mobileOnly: "Mobile Device Required", searchPlaceholder: "Search videos...", sortRelevance: "Relevance", sortPopular: "Popular", sortNewest: "Newest",
     catAll: "All", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News",
     navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusPlaying: "Playing...", statusPaused: "Paused",
-    menuStats: "Statistics", menuRef: "Referral", menuWithdraw: "Withdraw TON", menuBalance: "Balance",
-    channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", refPeople: "Users", refCopy: "Copy Link",
+    menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", menuBalance: "Balance",
+    channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", viewsText: "views",
+    refOverviewTab: "Overview & Chart", refHistoryTab: "Invite History", refPeople: "Users", refEarnedText: "Earned", refCopy: "Copy Link", refJoined: "Joined",
     wdNew: "New Withdraw", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdSend: "Send",
     faq1q: "How to earn?", faq1a: "Watch a video for 5 minutes without interruption to earn 0.005 TON.",
-    faq2q: "Withdrawal limit?", faq2a: "Minimum withdrawal is 0.10 TON.",
-    faq3q: "Referral system?", faq3a: "You get 10% of your invites' earnings (not deducted from them)."
+    faq2q: "Withdrawal limit?", faq2a: "Minimum withdrawal is 0.10 TON.", faq3q: "Referral system?", faq3a: "You get 10% of your invites' earnings."
   },
   ru: {
-    mobileOnly: "Требуется мобильное устройство", searchPlaceholder: "Поиск видео...", sortRelevance: "Рекомендуемые", sortPopular: "Самые популярные", sortNewest: "Новейшие",
-    catAll: "Все", catMusic: "Музыка", catGaming: "Игры", catCrypto: "Крипто", catTech: "Технологии", catNews: "Новости",
-    navHome: "Главная", navFaq: "FAQ", watchTitle: "Смотреть видео", nextReward: "Следующая награда", statusPlaying: "Воспроизведение...", statusPaused: "Пауза",
+    mobileOnly: "Требуется мобильное", searchPlaceholder: "Поиск видео...", sortRelevance: "Рекомендуемые", sortPopular: "Популярные", sortNewest: "Новые",
+    catAll: "Все", catMusic: "Музыка", catGaming: "Игры", catCrypto: "Крипто", catTech: "Техно", catNews: "Новости",
+    navHome: "Главная", navFaq: "FAQ", watchTitle: "Смотреть", nextReward: "След. награда", statusPlaying: "Воспроизведение...", statusPaused: "Пауза",
     menuStats: "Статистика", menuRef: "Рефералы", menuWithdraw: "Вывод TON", menuBalance: "Баланс",
-    channelInfo: "Информация о канале", visitChannel: "Открыть в YouTube", statTotal: "Всего заработано", statRef: "Доход от реф.", refPeople: "Люди", refCopy: "Копировать ссылку",
+    channelInfo: "О канале", visitChannel: "В YouTube", statTotal: "Всего заработано", statRef: "Доход от реф.", viewsText: "просмотров",
+    refOverviewTab: "Обзор и График", refHistoryTab: "История реф.", refPeople: "Люди", refEarnedText: "Доход", refCopy: "Копировать", refJoined: "Присоединился",
     wdNew: "Новый вывод", wdHistory: "История", wdWallet: "TON Кошелек (EQ...)", wdSend: "Отправить",
-    faq1q: "Как заработать?", faq1a: "Смотрите видео 5 минут без перерыва, чтобы получить 0.005 TON.",
-    faq2q: "Лимит на вывод?", faq2a: "Минимальная сумма вывода 0.10 TON.",
-    faq3q: "Реферальная система?", faq3a: "Вы получаете 10% от заработка приглашенных вами людей."
+    faq1q: "Как заработать?", faq1a: "Смотрите видео 5 минут, чтобы получить 0.005 TON.",
+    faq2q: "Лимит на вывод?", faq2a: "Минимум 0.10 TON.", faq3q: "Рефералы?", faq3a: "Вы получаете 10% от заработка приглашенных."
   },
   es: {
-    mobileOnly: "Dispositivo móvil requerido", searchPlaceholder: "Buscar videos...", sortRelevance: "Relevancia", sortPopular: "Más popular", sortNewest: "Más reciente",
+    mobileOnly: "Móvil Requerido", searchPlaceholder: "Buscar videos...", sortRelevance: "Relevancia", sortPopular: "Popular", sortNewest: "Nuevos",
     catAll: "Todo", catMusic: "Música", catGaming: "Juegos", catCrypto: "Cripto", catTech: "Tecnología", catNews: "Noticias",
-    navHome: "Inicio", navFaq: "FAQ", watchTitle: "Ver Video", nextReward: "Siguiente recompensa", statusPlaying: "Reproduciendo...", statusPaused: "Pausado",
+    navHome: "Inicio", navFaq: "FAQ", watchTitle: "Ver Video", nextReward: "Sig. Recompensa", statusPlaying: "Reproduciendo...", statusPaused: "Pausado",
     menuStats: "Estadísticas", menuRef: "Referidos", menuWithdraw: "Retirar TON", menuBalance: "Balance",
-    channelInfo: "Info del Canal", visitChannel: "Abrir en YouTube", statTotal: "Total Ganado", statRef: "Ganancias Ref", refPeople: "Usuarios", refCopy: "Copiar Enlace",
+    channelInfo: "Info del Canal", visitChannel: "En YouTube", statTotal: "Total Ganado", statRef: "Ganancias Ref", viewsText: "vistas",
+    refOverviewTab: "Resumen y Gráfico", refHistoryTab: "Historial", refPeople: "Usuarios", refEarnedText: "Ganancias", refCopy: "Copiar Enlace", refJoined: "Se unió",
     wdNew: "Nuevo Retiro", wdHistory: "Historia", wdWallet: "Billetera TON (EQ...)", wdSend: "Enviar",
-    faq1q: "¿Cómo ganar?", faq1a: "Mira un video durante 5 minutos para ganar 0.005 TON.",
-    faq2q: "¿Límite de retiro?", faq2a: "El retiro mínimo es de 0.10 TON.",
-    faq3q: "¿Sistema de referidos?", faq3a: "Obtienes el 10% de las ganancias de tus invitados."
+    faq1q: "¿Cómo ganar?", faq1a: "Mira un video durante 5 min para ganar 0.005 TON.", faq2q: "¿Límite?", faq2a: "Mínimo 0.10 TON.", faq3q: "¿Referidos?", faq3a: "10% de ganancias."
   },
   de: {
-    mobileOnly: "Mobilgerät erforderlich", searchPlaceholder: "Videos suchen...", sortRelevance: "Relevanz", sortPopular: "Beliebteste", sortNewest: "Neueste",
+    mobileOnly: "Mobilgerät Erforderlich", searchPlaceholder: "Videos suchen...", sortRelevance: "Relevanz", sortPopular: "Beliebt", sortNewest: "Neueste",
     catAll: "Alle", catMusic: "Musik", catGaming: "Spiele", catCrypto: "Krypto", catTech: "Technik", catNews: "News",
-    navHome: "Startseite", navFaq: "FAQ", watchTitle: "Video Ansehen", nextReward: "Nächste Belohnung", statusPlaying: "Spielt...", statusPaused: "Pausiert",
-    menuStats: "Statistiken", menuRef: "Empfehlungen", menuWithdraw: "TON Auszahlen", menuBalance: "Guthaben",
-    channelInfo: "Kanalinfo", visitChannel: "Auf YouTube öffnen", statTotal: "Gesamt verdient", statRef: "Ref-Einnahmen", refPeople: "Benutzer", refCopy: "Link kopieren",
+    navHome: "Startseite", navFaq: "FAQ", watchTitle: "Video ansehen", nextReward: "Nächste Belohnung", statusPlaying: "Spielt...", statusPaused: "Pausiert",
+    menuStats: "Statistiken", menuRef: "Empfehlungen", menuWithdraw: "Auszahlen", menuBalance: "Guthaben",
+    channelInfo: "Kanalinfo", visitChannel: "Auf YouTube", statTotal: "Gesamt", statRef: "Ref-Einnahmen", viewsText: "Aufrufe",
+    refOverviewTab: "Übersicht & Chart", refHistoryTab: "Verlauf", refPeople: "Benutzer", refEarnedText: "Verdient", refCopy: "Link kopieren", refJoined: "Beigetreten",
     wdNew: "Neue Auszahlung", wdHistory: "Verlauf", wdWallet: "TON Wallet (EQ...)", wdSend: "Senden",
-    faq1q: "Wie verdiene ich?", faq1a: "Schauen Sie ein Video 5 Minuten lang an, um 0.005 TON zu verdienen.",
-    faq2q: "Auszahlungslimit?", faq2a: "Die Mindestauszahlung beträgt 0.10 TON.",
-    faq3q: "Empfehlungssystem?", faq3a: "Sie erhalten 10% der Einnahmen Ihrer Eingeladenen."
+    faq1q: "Wie verdiene ich?", faq1a: "Schauen Sie ein Video 5 Minuten.", faq2q: "Limit?", faq2a: "Mindestens 0.10 TON.", faq3q: "Referrals?", faq3a: "10% Provision."
   }
 };
 
@@ -398,12 +439,7 @@ function applyLang(lang) {
   const d = i18n[lang] || i18n['en'];
   document.querySelectorAll('[data-i18n]').forEach(el => el.innerText = d[el.getAttribute('data-i18n')] || el.innerText);
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => el.placeholder = d[el.getAttribute('data-i18n-placeholder')] || el.placeholder);
-  
-  // FAQ İçeriğini oluştur
-  document.getElementById('faqContent').innerHTML = `
-    <div class="faq-item"><div class="faq-q">${d.faq1q}</div><div class="faq-a">${d.faq1a}</div></div>
-    <div class="faq-item"><div class="faq-q">${d.faq2q}</div><div class="faq-a">${d.faq2a}</div></div>
-    <div class="faq-item"><div class="faq-q">${d.faq3q}</div><div class="faq-a">${d.faq3a}</div></div>`;
+  document.getElementById('faqContent').innerHTML = `<div class="faq-item"><div class="faq-q">${d.faq1q}</div><div class="faq-a">${d.faq1a}</div></div><div class="faq-item"><div class="faq-q">${d.faq2q}</div><div class="faq-a">${d.faq2a}</div></div><div class="faq-item"><div class="faq-q">${d.faq3q}</div><div class="faq-a">${d.faq3a}</div></div>`;
 }
 window.changeLang = applyLang;
 
@@ -412,16 +448,27 @@ let globalWatchSeconds = 0, watchTimerInterval = null, videoProgressInterval = n
 
 async function loadUserData() {
   try {
-    const res = await (await fetch(`${API_URL}/api/user/${telegramId}`)).json();
+    const res = await (await fetch(`${API_URL}/api/user/${telegramId}${inviterId ? `?ref=${inviterId}` : ''}`)).json();
     uBal = res.balance || 0; uTotal = res.totalEarned || 0; uRefCount = res.refCount || 0; uRefEarned = res.refEarned || 0; isAdmin = res.isAdmin === true;
+    
     document.getElementById('uiBal').innerText = uBal.toFixed(4); document.getElementById('sidebarBal').innerText = uBal.toFixed(4);
     document.getElementById('statTotal').innerText = uTotal.toFixed(4); document.getElementById('statRefEarned').innerText = uRefEarned.toFixed(4);
-    document.getElementById('rCount').innerText = uRefCount; document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
+    document.getElementById('rCount').innerText = uRefCount; document.getElementById('rEarned').innerText = uRefEarned.toFixed(4);
+    document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
+    
     if(isAdmin) document.getElementById('adminSidebarItem').style.display = 'flex';
   } catch(e) {}
 }
 
 function formatTime(sec) { const m = Math.floor(sec/60), s = Math.floor(sec%60); return `${m}:${s<10?'0':''}${s}`; }
+function formatViews(views) {
+  if (!views) return '0';
+  const num = parseInt(views);
+  if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+  if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+  if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+  return num.toString();
+}
 
 function startWatchTracker() {
   clearInterval(watchTimerInterval); clearInterval(videoProgressInterval);
@@ -433,7 +480,6 @@ function startWatchTracker() {
       if(globalWatchSeconds >= 300) triggerAutoReward();
     } else { document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPaused; }
   }, 1000);
-
   videoProgressInterval = setInterval(() => {
     if(window.ytPlayer?.getCurrentTime) {
       const c = window.ytPlayer.getCurrentTime()||0, t = window.ytPlayer.getDuration()||0;
@@ -478,12 +524,19 @@ async function fetchVids(q) {
     
     (data.items || []).forEach((item, idx) => {
       const vId = item.id?.videoId; if(!vId) return;
-      const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.snippet.channelTitle)}&background=random`;
+      
+      const avatar = item.channelInfo?.avatar; // Gerçek Kanal Fotosu
+      const views = formatViews(item.statistics?.viewCount);
+      const viewsText = i18n[currentLang].viewsText; // Örn: 'izlenme'
+
       grid.innerHTML += `<div class="video-card" onclick="openWatch('${vId}')">
         <div class="v-thumb"><img src="${item.snippet.thumbnails?.high?.url}"></div>
         <div class="v-info">
           <img src="${avatar}" class="v-avatar" onclick="event.stopPropagation(); openChannelModal('${item.snippet.channelId}', '${item.snippet.channelTitle.replace(/'/g, "\\'")}', '${avatar}')">
-          <div class="v-meta"><div class="v-title">${item.snippet.title}</div><div class="v-sub">${item.snippet.channelTitle}</div></div>
+          <div class="v-meta">
+            <div class="v-title">${item.snippet.title}</div>
+            <div class="v-sub"><span class="material-symbols-rounded" style="font-size:14px;">visibility</span> ${views} ${viewsText} • ${item.snippet.channelTitle}</div>
+          </div>
         </div>
       </div>`;
       if((idx+1)%4===0) grid.innerHTML += `<div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div>`;
@@ -499,20 +552,20 @@ window.openWatch = vId => { document.getElementById('pageWatch').classList.add('
 
 window.openSidebar = () => { document.getElementById('sidebar').classList.add('open'); document.getElementById('mainOverlay').classList.add('active'); };
 window.closeSidebar = () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mainOverlay').classList.remove('active'); };
-window.openModal = id => { closeSidebar(); document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open'); if(id==='statsModal') renderChart(); };
+window.openModal = id => { closeSidebar(); document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open'); if(id==='statsModal') renderChart(); if(id==='refModal') { switchRefTab('overview'); renderRefChart(); } };
 window.closeAllModals = () => { document.getElementById('modalOverlay').classList.remove('active'); document.querySelectorAll('.modal').forEach(m => m.classList.remove('open')); };
 
 window.openChannelModal = (chId, chName, avatar) => {
-  document.getElementById('cModalName').innerText = chName;
-  document.getElementById('cModalAvatar').src = avatar;
+  document.getElementById('cModalName').innerText = chName; document.getElementById('cModalAvatar').src = avatar;
   document.getElementById('cModalBtn').onclick = () => window.open(`https://www.youtube.com/channel/${chId}`, '_blank');
   openModal('channelModal');
 };
 
+// Çekim Tabları
 window.openWithdrawModal = () => { switchWithdrawTab('new'); openModal('withdrawModal'); };
 window.switchWithdrawTab = (tab, el) => {
-  document.querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
-  if(el) el.classList.add('active'); else document.querySelector('.withdraw-tab').classList.add('active');
+  document.getElementById('withdrawModal').querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active'); else document.getElementById('withdrawModal').querySelector('.withdraw-tab').classList.add('active');
   document.querySelectorAll('.withdraw-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(tab==='new' ? 'panelNew' : 'panelHistory').classList.add('active');
   if(tab==='history') loadWithdrawHistory();
@@ -523,7 +576,7 @@ async function loadWithdrawHistory() {
   try {
     const res = await (await fetch(`${API_URL}/api/withdraw/history/${telegramId}`)).json();
     if(!res.history?.length) return list.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa;">Geçmiş yok</div>`;
-    list.innerHTML = res.history.map(i => `<div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between;"><div style="font-size:12px; color:#aaa;">${i.wallet.substring(0,8)}... <br><span style="color:#fff;">${i.status}</span></div><div style="font-weight:bold; color:var(--accent);"><img src="toncoin.png" class="ton-inline"> ${parseFloat(i.amount).toFixed(4)}</div></div>`).join('');
+    list.innerHTML = res.history.map(i => `<div class="history-item"><div><div style="font-size:12px; color:#aaa;">${i.wallet.substring(0,8)}...</div><span style="font-size:10px; color:white;">${i.status}</span></div><div style="font-weight:bold; color:var(--accent);"><img src="toncoin.png" class="ton-inline"> ${parseFloat(i.amount).toFixed(4)}</div></div>`).join('');
   } catch(e) {}
 }
 
@@ -536,6 +589,36 @@ window.reqWithdraw = async () => {
     }
   } catch(e) {}
 };
+
+// Referans Tabları ve Chart
+window.switchRefTab = (tab, el) => {
+  document.getElementById('refModal').querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active'); else document.getElementById('refModal').querySelector('.withdraw-tab').classList.add('active');
+  document.getElementById('refPanelOverview').classList.remove('active'); document.getElementById('refPanelHistory').classList.remove('active');
+  document.getElementById(tab==='overview' ? 'refPanelOverview' : 'refPanelHistory').classList.add('active');
+  if(tab==='history') loadRefHistory(); else renderRefChart();
+};
+
+async function loadRefHistory() {
+  const list = document.getElementById('refHistoryList'); list.innerHTML = `<div class="modal-spinner"><div class="spinner"></div></div>`;
+  try {
+    const res = await (await fetch(`${API_URL}/api/referrals/${telegramId}`)).json();
+    if(!res.referrals?.length) return list.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa;">Geçmiş yok</div>`;
+    list.innerHTML = res.referrals.map(i => `<div class="history-item"><div>👤 ID: ${i.id}</div><div style="font-size:11px; color:#10b981;">✅ ${i18n[currentLang].refJoined}</div></div>`).join('');
+  } catch(e) {}
+}
+
+function renderRefChart() {
+  const ctx = document.getElementById('refChartCanvas'); if(!ctx || window.myRefChart) return;
+  window.myRefChart = new Chart(ctx, { 
+    type: 'line', 
+    data: { 
+      labels: ['Oca','Şub','Mar','Nis','May','Haz'], 
+      datasets: [{ data: [0, uRefEarned*0.15, uRefEarned*0.35, uRefEarned*0.55, uRefEarned*0.80, uRefEarned], borderColor: '#10b981', backgroundColor:'rgba(16,185,129,0.1)', fill:true, pointBackgroundColor: '#0a0800', tension:0.4 }] 
+    }, 
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: true }, y: { display: false } } } 
+  });
+}
 
 window.copyRefLink = () => { document.getElementById('refLinkInput').select(); document.execCommand('copy'); tg.showAlert(i18n[currentLang].refCopy); };
 
@@ -550,18 +633,8 @@ window.loadAdminData = async () => {
     const d = await (await fetch(`${API_URL}/api/admin/stats?tgId=${telegramId}`)).json();
     document.getElementById('adminTotalUsers').innerText = d.totalUsers; document.getElementById('adminTotalPaid').innerText = d.totalPaid;
     
-    document.getElementById('adminWithdrawList').innerHTML = d.requests.map(r => `
-      <div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:10px; margin-bottom:10px;">
-        <div>👤 ${r.telegramId} <br>💳 ${r.wallet}</div>
-        <div style="color:var(--accent); font-weight:bold; margin:5px 0;"><img src="toncoin.png" class="ton-inline"> ${parseFloat(r.amount).toFixed(4)}</div>
-        <div style="display:flex; gap:10px;"><button style="flex:1; padding:8px; background:rgba(16,185,129,0.2); color:#10b981; border:none; border-radius:6px;" onclick="adminAction('${r.id}','approved')">Onayla</button><button style="flex:1; padding:8px; background:rgba(239,68,68,0.2); color:#ef4444; border:none; border-radius:6px;" onclick="adminAction('${r.id}','rejected')">Reddet</button></div>
-      </div>`).join('');
-
-    document.getElementById('adminUserList').innerHTML = d.users.map(u => `
-      <div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between;">
-        <div>👤 ${u.id}<br><span style="font-size:10px; color:#aaa;">Ref: ${u.refCount||0}</span></div>
-        <div style="text-align:right; font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${(u.balance||0).toFixed(4)}</div>
-      </div>`).join('');
+    document.getElementById('adminWithdrawList').innerHTML = d.requests.map(r => `<div class="history-item" style="flex-direction:column; gap:10px; align-items:stretch;"><div>👤 ${r.telegramId} <br>💳 ${r.wallet}</div><div style="color:var(--accent); font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${parseFloat(r.amount).toFixed(4)}</div><div style="display:flex; gap:10px;"><button class="btn-main" style="padding:10px; font-size:12px; background:#10b981; color:#fff;" onclick="adminAction('${r.id}','approved')">Onayla</button><button class="btn-main" style="padding:10px; font-size:12px; background:#ef4444; color:#fff;" onclick="adminAction('${r.id}','rejected')">Reddet</button></div></div>`).join('');
+    document.getElementById('adminUserList').innerHTML = d.users.map(u => `<div class="history-item"><div>👤 ${u.id}<br><span style="font-size:10px; color:#aaa;">Ref: ${u.refCount||0}</span></div><div style="text-align:right; font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${(u.balance||0).toFixed(4)}</div></div>`).join('');
   } catch(e) {}
 };
 
@@ -573,10 +646,10 @@ window.adminAction = async (reqId, action) => {
 
 function renderChart() {
   const ctx = document.getElementById('chartCanvas'); if(!ctx || window.myChart) return;
-  window.myChart = new Chart(ctx, { type: 'line', data: { labels: ['6G','5G','4G','3G','2G','Dün','Bugün'], datasets: [{ data: [0,uTotal*0.1,uTotal*0.3,uTotal*0.5,uTotal*0.7,uTotal*0.9,uTotal], borderColor: '#f0c040', pointBackgroundColor: '#0a0800' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+  window.myChart = new Chart(ctx, { type: 'line', data: { labels: ['6G','5G','4G','3G','2G','Dün','Bugün'], datasets: [{ data: [0,uTotal*0.1,uTotal*0.3,uTotal*0.5,uTotal*0.7,uTotal*0.9,uTotal], borderColor: '#f0c040', pointBackgroundColor: '#0a0800', tension:0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales:{x:{display:false},y:{display:false}} } });
 }
 
 window.onload = async () => { applyLang(currentLang); await loadUserData(); await fetchVids(); setTimeout(() => document.getElementById('splashScreen').style.opacity='0', 1400); setTimeout(() => document.getElementById('splashScreen').remove(), 1900); };
 </script>
 </body>
-                                                                </html>
+</html>
