@@ -6,13 +6,10 @@
   <title>CoinsTube Earn</title>
   
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- CHART.JS KÜTÜPHANESİ BURADA YÜKLÜ -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
   
-  <!-- REKLAM KODLARI -->
   <link rel="stylesheet" href="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.css" />
   <script src="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.js"></script>
   <script type="text/javascript" src="//cdn.runative-syndicate.com/sdk/v1/p.js" data-ts-spot="d67e6ef15c554c3388497f3f2f52d5b1" data-ts-mode="selective" async defer></script>
@@ -21,46 +18,35 @@
     :root { --bg-body: #0f0f0f; --surface: #1c1c1c; --card: #282828; --text-main: #ffffff; --text-muted: #aaaaaa; --primary: #ff0000; --primary-dark: #cc0000; --accent: #0098EA; --border: #3a3a3a; --header-h: 60px; --bottom-h: 65px; }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg-body); color: var(--text-main); overflow: hidden; width: 100vw; height: 100vh; }
-
-    /* Mobil Cihaz Kısıtlama Ekranı */
     #desktopBlocker { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
     @media (min-width: 1024px) { body > * { display: none !important; } #desktopBlocker { display: flex !important; } }
-
     #splashScreen { position: fixed; inset: 0; background: var(--bg-body); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.4s ease; }
     .splash-logo { font-size: 50px; color: var(--primary); margin-bottom: 10px; }
     .splash-title { font-size: 28px; font-weight: 700; color: white; letter-spacing: 1px; }
     .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-top: 30px;}
     @keyframes spin { 100% { transform: rotate(360deg); } }
-
     .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
     #pageHome { transform: translateX(0); z-index: 10; }
     .page.active { transform: translateX(0); z-index: 20; }
     .scroll-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 20px; width: 100%; }
     .scroll-content::-webkit-scrollbar { display: none; }
-
     .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; width: 100%; }
     .header-left { display: flex; align-items: center; gap: 12px; }
     .icon-btn { padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: white; cursor: pointer; transition: 0.2s; }
     .balance-chip { background: rgba(0, 152, 234, 0.1); border: 1px solid rgba(0, 152, 234, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; color: var(--accent); cursor: pointer; }
     .ton-icon { width: 16px; height: 16px; fill: var(--accent); }
-
     .bottom-nav { width: 100%; height: var(--bottom-h); background: rgba(15,15,15,0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; flex-shrink: 0; z-index: 500;}
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 500; cursor: pointer; transition: 0.2s;}
     .nav-item.active { color: var(--text-main); }
     .nav-item.active .material-symbols-rounded { color: var(--primary); }
-
     .search-box { display: flex; padding: 16px; gap: 8px; flex-shrink: 0; width: 100%; z-index: 50; }
     .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 10px 16px; border-radius: 30px; color: white; outline: none; font-size: 14px; }
-    
     .categories { display: flex; gap: 8px; padding: 0 16px 12px; overflow-x: auto; flex-shrink: 0; border-bottom: 1px solid var(--border); width: 100%; }
     .categories::-webkit-scrollbar { display: none; }
     .cat-chip { padding: 6px 16px; background: var(--surface); border: 1px solid transparent; border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: 0.2s;}
     .cat-chip.active { background: white; color: black; font-weight: 600; }
-
-    /* ÖLÇEKLENDİRİLMİŞ 728x90 REKLAM */
     .ad-728-container { width: 100%; height: 60px; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #121212; border-bottom: 1px solid var(--border); margin-bottom: 10px; position: relative; }
     .ad-728-wrapper { transform: scale(0.5); transform-origin: center; width: 728px; height: 90px; }
-
     .video-grid { display: flex; flex-direction: column; gap: 20px; padding: 16px 0; width: 100%; }
     .video-card { cursor: pointer; display: flex; flex-direction: column; gap: 12px; width: 100%; transition: 0.2s;}
     .v-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface); position: relative; }
@@ -70,7 +56,6 @@
     .v-meta { flex: 1; min-width: 0; }
     .v-title { font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #fff;}
     .v-sub { font-size: 13px; color: var(--text-muted); }
-
     .player-wrapper { display: block; width: 100%; aspect-ratio: 16/9; background: #000; flex-shrink: 0; position: relative; z-index: 5; }
     #ytPlayerDiv { position: absolute; top:0; left:0; width: 100%; height: 100%; z-index: 1;}
     .custom-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent); padding: 10px 16px; display: flex; flex-direction: column; gap: 5px; z-index: 15; }
@@ -79,43 +64,34 @@
     .time-text { color: white; font-size: 13px; font-weight: 500; font-family: monospace; }
     .progress-bar { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; }
     .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); }
-
     .reward-box { background: var(--surface); padding: 20px 16px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; width: 100%; }
     .reward-header { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600;}
     .tracker-bar { width: 100%; height: 10px; background: var(--card); border-radius: 5px; overflow: hidden; }
     .tracker-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary-dark), var(--primary)); transition: width 1s linear; }
-
     .watch-meta { padding: 16px; width: 100%; }
     .w-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; line-height: 1.4; }
     .w-channel { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface); border-radius: 50px; border: 1px solid var(--border);}
-
-    /* ÇOKLU DİL & MODAL & SIDEBAR */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 900; opacity: 0; pointer-events: none; transition: 0.3s; }
     .overlay.active { opacity: 1; pointer-events: all; }
     .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.3s; border-right: 1px solid var(--border); display: flex; flex-direction: column;}
     .sidebar.open { left: 0; }
-    
     .lang-row { display: flex; gap: 12px; padding: 0 16px 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px; overflow-x: auto; white-space: nowrap; flex-wrap: nowrap; -webkit-overflow-scrolling: touch;}
     .lang-row::-webkit-scrollbar { display: none; }
     .lang-btn { flex-shrink: 0; width: 50px; height: 44px; background: var(--bg-body); border: 1px solid var(--border); color: white; border-radius: 12px; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
     .lang-btn.active { background: rgba(255,255,255,0.15); border-color: white; transform: scale(1.05); }
-
     .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 24px 24px 0 0; z-index: 2000; transition: 0.4s; padding: 24px; max-height: 90vh; overflow-y: auto;}
     .modal.open { bottom: 0; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 20px; font-weight: 700; }
-    
     .input-box { width: 100%; padding: 16px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 16px; color: white; margin-bottom: 16px; outline: none; font-size: 15px;}
     .btn-main { width: 100%; background: var(--primary); color: white; padding: 16px; border-radius: 16px; font-weight: 600; font-size: 16px; border: none; cursor: pointer; }
     .perc-row { display: flex; gap: 10px; margin-bottom: 20px; }
     .perc-btn { flex: 1; background: var(--bg-body); border: 1px solid var(--border); color: white; padding: 12px 0; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;}
     .perc-btn:active { background: var(--primary); border-color: var(--primary); }
-    
     .ref-box { background: var(--bg-body); padding: 16px; border-radius: 16px; margin-bottom: 16px; text-align: center; border: 1px solid var(--border); }
   </style>
 </head>
 <body>
 
-  <!-- DESKTOP ENGELLEYİCİ -->
   <div id="desktopBlocker">
     <span class="material-symbols-rounded" style="font-size:64px; color:var(--primary); margin-bottom:10px;">mobile_off</span>
     <h2 style="color:white; margin-bottom:10px;">Mobil Cihaz Gerekli</h2>
@@ -210,12 +186,10 @@
     </div>
   </div>
 
-  <!-- YAN MENÜ -->
   <div class="overlay" id="mainOverlay" onclick="document.getElementById('sidebar').classList.remove('open'); this.classList.remove('active');"></div>
   <div class="sidebar" id="sidebar">
     <div style="padding:24px 16px; font-size:22px; font-weight:700; border-bottom:1px solid var(--border); margin-bottom:16px;" data-i18n="menu">Menü</div>
     
-    <!-- ÇOKLU DİL SEÇİMİ -->
     <div class="lang-row" id="langContainer">
       <button class="lang-btn" onclick="changeLang('tr')" id="btnLangTR">🇹🇷</button>
       <button class="lang-btn" onclick="changeLang('en')" id="btnLangEN">🇬🇧</button>
@@ -237,16 +211,13 @@
 
   <div class="overlay" id="modalOverlay" onclick="closeAllModals()"></div>
 
-  <!-- SSS Modal -->
   <div class="modal" id="faqModal">
     <div class="modal-header"><span data-i18n="faq">SSS</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
     <div style="background:var(--bg-body); padding:20px; border-radius:16px;"><p style="font-size:14px; color:#ccc; line-height:1.6;" data-i18n="faqDesc">Videoları izledikçe sayacınız dolar. 5 dakika dolduğunda bakiyenize eklenir.</p></div>
   </div>
 
-  <!-- Referans Modal -->
   <div class="modal" id="refModal">
     <div class="modal-header"><span data-i18n="refTitle">Referans Sistemi</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
-    
     <div style="display: flex; gap:10px; margin-bottom: 16px;">
         <div class="ref-box" style="flex:1;">
             <div style="font-size:24px; color:var(--primary); font-weight:700;" id="rCount">0</div>
@@ -257,22 +228,16 @@
             <div style="font-size:12px; color:var(--text-muted);" data-i18n="refEarnStr">Kazanılan TON</div>
         </div>
     </div>
-    
     <p style="font-size:13px; color:#aaa; margin-bottom:10px; text-align:center;" data-i18n="refDesc">Arkadaşlarınızı davet edin, onların kazancından ömür boyu %10 ekstra TON kazanın!</p>
-    
     <input type="text" id="refLinkInput" class="input-box" readonly style="color:var(--accent); font-weight:600; text-align:center;">
     <button class="btn-main" onclick="copyRefLink()" data-i18n="copyBtn">Bağlantıyı Kopyala</button>
   </div>
 
-  <!-- Çekim Modal -->
   <div class="modal" id="withdrawModal">
     <div class="modal-header"><span data-i18n="withdraw">TON Çek</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
-    
     <div style="font-size:14px; color:#aaa; margin-bottom:20px; text-align:center;"><span data-i18n="availBal">Mevcut Bakiye:</span> <strong style="color:var(--accent); font-size:18px; display:block; margin-top:4px;" id="wAvailBal">0.0000 TON</strong></div>
-    
     <input type="text" id="wWallet" class="input-box" data-i18n="walletPlace" placeholder="TON Cüzdan Adresi (EQ...)">
     <input type="text" id="wMemo" class="input-box" data-i18n="memoPlace" placeholder="Memo / Tag (İsteğe bağlı)">
-    
     <input type="number" id="wAmount" class="input-box" data-i18n="amountPlace" placeholder="Miktar (Min 0.10 TON)" step="0.01">
     <div class="perc-row">
       <button class="perc-btn" onclick="setAmountPerc(25)">25%</button>
@@ -280,28 +245,23 @@
       <button class="perc-btn" onclick="setAmountPerc(75)">75%</button>
       <button class="perc-btn" onclick="setAmountPerc(100)">MAX</button>
     </div>
-
     <button class="btn-main" onclick="reqWithdraw()" data-i18n="btnWithdraw">Çekim Talebi Gönder</button>
   </div>
 
-  <!-- İstatistik Modal (CHART.JS EKLENDİ) -->
   <div class="modal" id="statsModal">
     <div class="modal-header"><span data-i18n="stats">İstatistikler</span> <span class="material-symbols-rounded" onclick="closeAllModals()" style="cursor:pointer; background:var(--card); padding:8px; border-radius:50%;">close</span></div>
     <div style="background:var(--bg-body); padding:20px; border-radius:16px; margin-bottom:20px;">
       <h2 style="color:var(--accent); text-align:center; font-size:28px;" id="statTotal">0.0000 TON</h2>
       <p style="text-align:center; color:#aaa; font-size:12px; margin-top:4px;" data-i18n="statsTotal">Toplam Kazanç</p>
     </div>
-    <!-- CHART.JS CANVAS KUTUSU -->
     <div style="width:100%; height:200px; position:relative;"><canvas id="chartCanvas"></canvas></div>
   </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-  // ÇOKLU DİL SİSTEMİ
   const translations = {
     tr: { search: "Video ara...", home: "Ana Sayfa", faq: "SSS", faqDesc: "Videoları izledikçe sayacınız dolar. 5 dakika dolduğunda bakiyenize eklenir.", menu: "Menü", stats: "İstatistikler", statsTotal: "Toplam Kazanç", withdraw: "TON Çek", catAll: "Tümü", catAnime: "Anime", catMusic: "Müzik", catGame: "Oyun", catSoft: "Yazılım", catEnt: "Eğlence", catSport: "Spor", watchTitle: "Video İzle", nextReward: "Sonraki Ödül (0.005 TON)", playing: "Oynatılıyor...", paused: "Video duraklatıldı.", availBal: "Mevcut Bakiye:", walletPlace: "TON Cüzdan Adresi (EQ...)", memoPlace: "Memo / Tag (İsteğe bağlı)", amountPlace: "Miktar (Min 0.10 TON)", btnWithdraw: "Çekim Talebi Gönder", refTitle: "Referans", refCountStr: "Davet Edilen", refEarnStr: "Kazanılan TON", refDesc: "Arkadaşlarınızı davet edin, onların kazancından ömür boyu %10 ekstra TON kazanın!", copyBtn: "Bağlantıyı Kopyala" },
-    en: { search: "Search video...", home: "Home", faq: "FAQ", faqDesc: "Watch videos to fill your timer. Rewards are added every 5 mins.", menu: "Menu", stats: "Statistics", statsTotal: "Total Earned", withdraw: "Withdraw", catAll: "All", catAnime: "Anime", catMusic: "Music", catGame: "Gaming", catSoft: "Software", catEnt: "Entertainment", catSport: "Sports", watchTitle: "Watch Video", nextReward: "Next Reward (0.005 TON)", playing: "Playing...", paused: "Paused.", availBal: "Available Balance:", walletPlace: "TON Wallet Address", memoPlace: "Memo / Tag (Optional)", amountPlace: "Amount", btnWithdraw: "Submit Withdraw", refTitle: "Referral", refCountStr: "Invited Users", refEarnStr: "Earned TON", refDesc: "Invite friends and earn 10% of their rewards for life!", copyBtn: "Copy Link" },
-    ru: { search: "Поиск...", home: "Главная", faq: "ЧАВО", faqDesc: "Смотрите видео, чтобы заполнить таймер.", menu: "Меню", stats: "Статистика", statsTotal: "Всего заработано", withdraw: "Вывод", catAll: "Все", catAnime: "Аниме", catMusic: "Музыка", catGame: "Игры", catSoft: "ПО", catEnt: "Развлечения", catSport: "Спорт", watchTitle: "Смотреть", nextReward: "Награда (0.005 TON)", playing: "Воспроизведение...", paused: "Пауза.", availBal: "Баланс:", walletPlace: "Адрес TON", memoPlace: "Memo (Необязательно)", amountPlace: "Сумма", btnWithdraw: "Вывести", refTitle: "Рефералы", refCountStr: "Приглашено", refEarnStr: "Заработано TON", refDesc: "Приглашайте друзей и получайте 10% от их дохода!", copyBtn: "Копировать ссылку" },
+    en: { search: "Search video...", home: "Home", faq: "FAQ", faqDesc: "Watch videos to fill your timer. Rewards are added every 5 mins.", menu: "Menu", stats: "Statistics", statsTotal: "Total Earned", withdraw: "Withdraw", catAll: "All", catAnime: "Anime", catMusic: "Music", catGame: "Gaming", catSoft: "Software", catEnt: "Entertainment", catSport: "Sports", watchTitle: "Watch Video", nextReward: "Next Reward (0.005 TON)", playing: "Playing...", paused: "Paused.", availBal: "Available Balance:", walletPlace: "TON Wallet Address", memoPlace: "Memo / Tag (Optional)", amountPlace: "Amount", btnWithdraw: "Submit Withdraw", refTitle: "Referral", refCountStr: "Invited Users", refEarnStr: "Earned TON", refDesc: "Invite friends and earn 10% of their rewards for life!", copyBtn: "Copy Link" }
   };
 
   let currentLang = localStorage.getItem('appLang') || 'tr';
@@ -323,9 +283,11 @@
     }
   }
 
-  const API_URL = 'http://localhost:3000'; // CANLIDA KENDİ DOMAİNİNİ YAZ
+  // SÜPER GÜNCELLEME: Linki elle yazmana gerek yok. Kendi sunucu adresini bulur!
+  const API_URL = window.location.origin; 
+  
   const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
-  const telegramId = String(tg.initDataUnsafe?.user?.id || "demo123");
+  const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_render_test");
   
   let uBal = 0, uTotal = 0;
   let currentVideoList = []; let currentPlayingIndex = 0;
@@ -347,7 +309,7 @@
         document.getElementById('rCount').innerText = data.refCount || 0;
         document.getElementById('rEarned').innerText = (data.refEarned || 0).toFixed(4);
         document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
-    } catch (e) { console.error("Kullanıcı verisi alınamadı"); }
+    } catch (e) { console.error("API Bağlantı Hatası"); }
   }
 
   function formatTime(sec) {
@@ -477,7 +439,6 @@
   window.setCategory = function(cat, el) {
     document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
     el.classList.add('active'); 
-    
     let q = "trending";
     if(cat === "anime") q = "anime amv";
     if(cat === "music") q = "music hits";
@@ -485,7 +446,6 @@
     if(cat === "software") q = "software coding tutorial";
     if(cat === "entertainment") q = "entertainment funny";
     if(cat === "sports") q = "sports highlights";
-    
     fetchVids(q);
   }
 
@@ -493,7 +453,6 @@
 
   window.openWatch = function(vId, title, chTitle, avatar, index) {
     try { InterstitialTsAd({ spot: "ee58e8b849fc4b0a8b9de4af0e2c4c41", countdown: 15 }); } catch(err) {}
-
     showPage('pageWatch'); currentPlayingIndex = index; 
     document.getElementById('wTitle').innerText = title; 
     document.getElementById('wChannelName').innerText = chTitle; 
@@ -501,53 +460,24 @@
     initPlayer(vId);
   }
 
-  // MODAL AÇILMA FONKSİYONU VE CHART.JS ENTEGRASYONU
   window.openModal = function(id) {
     document.getElementById('sidebar').classList.remove('open'); document.getElementById('mainOverlay').classList.remove('active');
     document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open');
-    
-    // Eğer açılan modal "İstatistikler" ise Chart.js'i çiz
     if(id === 'statsModal') {
       setTimeout(() => {
         const ctx = document.getElementById('chartCanvas'); 
         if(!ctx) return;
-        
         if(window.myChart) window.myChart.destroy();
-        
         let gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 200);
-        gradient.addColorStop(0, 'rgba(0, 152, 234, 0.4)'); // TON Mavisi Saydam
+        gradient.addColorStop(0, 'rgba(0, 152, 234, 0.4)'); 
         gradient.addColorStop(1, 'rgba(0, 152, 234, 0)');
-        
-        // Backend'den gelen gerçek bakiyeye göre dinamik artan sahte tarihçe verisi
         const dData = [0, uTotal * 0.2, uTotal * 0.4, uTotal * 0.6, uTotal * 0.8, uTotal * 0.95, uTotal];
-        
         window.myChart = new Chart(ctx, { 
             type:'line', 
-            data:{ 
-                labels:['6 Gün','5 Gün','4 Gün','3 Gün','2 Gün','Dün','Bugün'], 
-                datasets:[{
-                    label:'Kazanılan TON', 
-                    data: dData, 
-                    borderColor:'#0098EA', // TON Mavisi
-                    backgroundColor: gradient, 
-                    fill: true, 
-                    tension:0.4, 
-                    borderWidth: 3, 
-                    pointRadius: 4, 
-                    pointBackgroundColor: '#fff'
-                }] 
-            }, 
-            options:{
-                responsive: true, 
-                maintainAspectRatio: false, 
-                plugins:{legend:{display:false}}, 
-                scales: { 
-                    x: { grid: { display: false }, ticks: { color: '#888' } }, 
-                    y: { grid: { color: '#333' }, ticks: { color: '#888' } } 
-                }
-            } 
+            data:{ labels:['6 Gün','5 Gün','4 Gün','3 Gün','2 Gün','Dün','Bugün'], datasets:[{label:'Kazanılan TON', data: dData, borderColor:'#0098EA', backgroundColor: gradient, fill: true, tension:0.4, borderWidth: 3, pointRadius: 4, pointBackgroundColor: '#fff'}] }, 
+            options:{ responsive: true, maintainAspectRatio: false, plugins:{legend:{display:false}}, scales: { x: { grid: { display: false }, ticks: { color: '#888' } }, y: { grid: { color: '#333' }, ticks: { color: '#888' } } }} 
         });
-      }, 150); // Modal animasyonu bitince çiz
+      }, 150);
     }
   }
   
@@ -557,8 +487,7 @@
   }
 
   window.setAmountPerc = function(perc) {
-    const val = uBal * (perc / 100); 
-    document.getElementById('wAmount').value = val > 0 ? val.toFixed(4) : "";
+    const val = uBal * (perc / 100); document.getElementById('wAmount').value = val > 0 ? val.toFixed(4) : "";
   }
 
   window.reqWithdraw = async function() {
@@ -570,17 +499,10 @@
     if(a > uBal) return tg.showAlert("Bakiye yetersiz.");
     
     try {
-        const res = await fetch(`${API_URL}/api/withdraw`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ telegramId, wallet: w, memo: memo, amount: a })
-        });
+        const res = await fetch(`${API_URL}/api/withdraw`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ telegramId, wallet: w, memo: memo, amount: a }) });
         const data = await res.json();
-        if(data.success) {
-            tg.showAlert("Çekim talebi başarıyla alındı!"); 
-            closeAllModals();
-            loadUserData();
-        }
+        if(data.success) { tg.showAlert("Çekim talebi alındı!"); closeAllModals(); loadUserData(); }
+        else { tg.showAlert(data.error || "Hata!"); }
     } catch(e) { tg.showAlert("Hata oluştu."); }
   }
 
