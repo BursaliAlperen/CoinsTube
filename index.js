@@ -30,7 +30,7 @@ setInterval(() => {
 app.get('/api/ping', (req, res) => res.send('pong'));
 
 // ==========================================
-// 1. KULLANICI GETİR
+// 1. KULLANICI GETİR & REFERANS
 // ==========================================
 app.get('/api/user/:id', async (req, res) => {
     const telegramId = String(req.params.id);
@@ -44,8 +44,8 @@ app.get('/api/user/:id', async (req, res) => {
         if (!doc.exists) {
             userData = { 
                 balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, 
-                videosWatched: 0, // Yeni İstatistik
-                inviter: inviterId, createdAt: admin.firestore.FieldValue.serverTimestamp() 
+                videosWatched: 0, inviter: inviterId, 
+                createdAt: admin.firestore.FieldValue.serverTimestamp() 
             };
             await userRef.set(userData);
 
@@ -63,7 +63,7 @@ app.get('/api/user/:id', async (req, res) => {
 });
 
 // ==========================================
-// 2. VİDEO ÖDÜLÜ & İSTATİSTİK GÜNCELLEME
+// 2. VİDEO ÖDÜLÜ & İSTATİSTİK
 // ==========================================
 app.post('/api/reward', async (req, res) => {
     const { telegramId } = req.body;
@@ -82,11 +82,10 @@ app.post('/api/reward', async (req, res) => {
             t.set(userRef, { 
                 balance: newBalance, 
                 totalEarned: newTotal,
-                videosWatched: admin.firestore.FieldValue.increment(1) // İzlenen videoyu artır
+                videosWatched: admin.firestore.FieldValue.increment(1)
             }, { merge: true });
         });
 
-        // Referans Ödülü
         if (userInviter) {
             const inviterRef = db.collection('users').doc(userInviter);
             const refAmt = TARGET_REWARD * REF_PERCENTAGE;
@@ -185,15 +184,15 @@ app.post('/api/admin/withdraw/:id', async (req, res) => {
 });
 
 // ==========================================
-// 5. YOUTUBE API (Gelişmiş)
+// 5. YOUTUBE API (Filtreleme kaldırıldı, Hata yakalama güçlendirildi)
 // ==========================================
 app.get('/api/videos', async (req, res) => {
     try {
         const apiKey = process.env.YOUTUBE_API_KEY;
         const query = encodeURIComponent(req.query.q || 'trending');
-        const order = req.query.order || 'relevance'; 
         
-        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&order=${order}&key=${apiKey}&q=${query}`;
+        // Sıralama (order) kaldırıldı, YouTube standart algoritması kullanılıyor
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&key=${apiKey}&q=${query}`;
         const searchRes = await axios.get(searchUrl);
         const items = searchRes.data.items || [];
         
@@ -227,7 +226,10 @@ app.get('/api/videos', async (req, res) => {
         });
 
         res.json({ items: enrichedItems });
-    } catch (error) { res.status(500).json({ error: 'API Hatası' }); }
+    } catch (error) { 
+        console.error("YouTube API Hatası:", error?.response?.data || error.message);
+        res.status(500).json({ error: 'API Hatası veya Kota Doldu', details: error.message }); 
+    }
 });
 
 const PORT = process.env.PORT || 10000;
