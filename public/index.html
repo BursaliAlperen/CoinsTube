@@ -55,10 +55,11 @@
 
     .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .header-right { display: flex; align-items: center; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
     .header-logo-text { font-weight: 800; font-size: 20px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
-    .icon-btn { width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; justify-content:center; cursor: pointer; }
+    /* MENÜ BUTONU (|||) TAŞMA VE KARELEŞME ÇÖZÜMÜ: min-width ve min-height eklendi */
+    .icon-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; justify-content:center; cursor: pointer; }
     
     .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
     .balance-chip:active { transform: scale(0.95); border-color: var(--accent); }
@@ -522,36 +523,31 @@ async function triggerAutoReward() {
   } catch(e) {}
 }
 
+// YOUTUBE PLAYER - ESKİ V2 KODUNDAKİ HATASIZ AYARLARLA BİREBİR AYNI YAPILDI
 function initPlayer(vId) {
-  if(window.ytPlayer?.destroy) window.ytPlayer.destroy();
-  const oldDiv = document.getElementById('ytPlayerDiv'); if(oldDiv) oldDiv.remove();
+  if(window.ytPlayer && typeof window.ytPlayer.destroy === 'function') window.ytPlayer.destroy();
+  const wrapper = document.getElementById('playerWrapper');
+  const oldDiv = document.getElementById('ytPlayerDiv');
+  if(oldDiv) oldDiv.remove();
   const newDiv = document.createElement('div'); newDiv.id = 'ytPlayerDiv';
-  document.getElementById('playerWrapper').prepend(newDiv);
-  
-  const siteOrigin = window.location.origin;
+  wrapper.insertBefore(newDiv, wrapper.firstChild);
 
   window.ytPlayer = new YT.Player('ytPlayerDiv', {
     videoId: vId, 
+    height: '100%', 
+    width: '100%',
     playerVars: { 
       controls: 0, 
-      autoplay: 1, 
+      rel: 0, 
+      modestbranding: 1, 
       playsinline: 1, 
-      rel: 0,
-      modestbranding: 1,
-      enablejsapi: 1,
-      origin: siteOrigin,
-      widget_referrer: siteOrigin
+      autoplay: 1, 
+      fs: 0 
     },
-    events: { 
-      onReady: e => { 
-        e.target.playVideo(); 
-        startWatchTracker(); 
-      },
-      onStateChange: e => { 
-        document.getElementById('playPauseBtn').innerText = (e.data === 1) ? 'pause' : 'play_arrow'; 
-      },
-      onError: e => {
-        console.warn("YouTube Player Hatası:", e.data);
+    events: {
+      onReady: e => { e.target.playVideo(); startWatchTracker(); },
+      onStateChange: e => {
+        document.getElementById('playPauseBtn').innerText = e.data === 1 ? 'pause' : 'play_arrow';
       }
     }
   });
