@@ -16,140 +16,101 @@
 
   <style>
     :root { 
-        --bg-body: #080807; 
-        --surface: #131208; 
-        --card: #1e1c0d; 
-        --text-main: #f5f0d8; 
-        --text-muted: #9a9270; 
-        --primary: #d4a017; 
-        --primary-bright: #f0c040;
-        --accent: #f5d44a; 
-        --border: #2e2a12; 
-        --header-h: 65px; 
+        --bg-body: #080807; --surface: #131208; --card: #1e1c0d; 
+        --text-main: #f5f0d8; --text-muted: #9a9270; 
+        --primary: #d4a017; --primary-bright: #f0c040; --accent: #f5d44a; 
+        --border: #2e2a12; --header-h: 65px; --bottom-h: 65px;
     }
-    
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg-body); color: var(--text-main); overflow: hidden; width: 100vw; height: 100vh; }
     
     #desktopBlocker { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
     @media (min-width: 1024px) { body > * { display: none !important; } #desktopBlocker { display: flex !important; } }
 
-    /* ─── SPLASH SCREEN ─── */
+    /* SPLASH */
     #splashScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #1a1800 0%, #080807 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; transition: opacity 0.5s ease; }
-    .splash-logo-img { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 0 40px rgba(212,160,23,0.5); object-fit: cover; }
+    .splash-logo-img { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 0 40px rgba(212,160,23,0.5); }
     .splash-title { font-size: 32px; font-weight: 800; color: white; }
-    .splash-ton-row { display: flex; align-items: center; gap: 10px; background: rgba(0,152,234,0.12); border: 1px solid rgba(0,152,234,0.3); padding: 10px 20px; border-radius: 30px; }
-    .splash-ton-row img { width: 28px; height: 28px; border-radius: 50%; }
-    .splash-ton-row span { font-size: 14px; font-weight: 700; color: #60c8ff; }
     .spinner { width: 45px; height: 45px; border: 4px solid rgba(255,255,255,0.05); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    /* ─── TON COIN ICONS ─── */
-    .ton-inline { width: 18px; height: 18px; border-radius: 50%; vertical-align: middle; display: inline-block; flex-shrink: 0; }
-    .ton-inline-lg { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; display: inline-block; flex-shrink: 0; }
+    .ton-inline { width: 18px; height: 18px; border-radius: 50%; vertical-align: middle; display: inline-block; }
+    .ton-inline-lg { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; display: inline-block; }
 
-    /* ─── PAGES ─── */
-    .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    /* PAGES */
+    .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s; }
     #pageHome { transform: translateX(0); z-index: 10; }
     .page.active { transform: translateX(0); z-index: 20; }
-    .scroll-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 30px; width: 100%; }
+    .scroll-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--bottom-h) + 10px); }
     .scroll-content::-webkit-scrollbar { display: none; }
 
-    /* ─── HEADER ─── */
-    .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; z-index: 500; width: 100%; gap: 8px; }
-    .header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-    .header-logo-img { width: 34px; height: 34px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+    /* HEADER & BOTTOM NAV */
+    .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; }
     .header-logo-text { font-weight: 800; font-size: 20px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .icon-btn { padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 1px solid var(--border); color: white; cursor: pointer; transition: 0.2s; }
-    .icon-btn:active { transform: scale(0.9); }
+    .icon-btn { padding: 10px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; cursor: pointer; }
     .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; }
+    .bottom-nav { position:fixed; bottom:0; width: 100%; height: var(--bottom-h); background: rgba(24,24,27,0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 500; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; }
+    .nav-item.active { color: var(--primary); transform: translateY(-2px); }
 
-    /* ─── SEARCH & CATEGORIES ─── */
-    .search-box { display: flex; padding: 16px 20px; gap: 10px; flex-shrink: 0; width: 100%; }
-    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; font-size: 14px; transition: 0.3s; }
-    .search-input:focus { border-color: var(--primary); }
-    .categories { display: flex; gap: 10px; padding: 0 20px 14px; overflow-x: auto; flex-shrink: 0; border-bottom: 1px solid var(--border); width: 100%; }
+    /* SEARCH & FILTER */
+    .search-box { display: flex; padding: 16px 20px 10px; gap: 10px; }
+    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; }
+    .sort-box { padding: 0 20px 14px; display:flex; gap:10px; }
+    .sort-select { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; outline: none; width:100%; }
+    .categories { display: flex; gap: 10px; padding: 0 20px 14px; overflow-x: auto; border-bottom: 1px solid var(--border); }
     .categories::-webkit-scrollbar { display: none; }
-    .cat-chip { padding: 8px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+    .cat-chip { padding: 8px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
     .cat-chip.active { background: white; color: black; font-weight: 700; border-color: white; }
 
-    /* ─── ADS ─── */
+    /* VIDEOS & ADS */
     .ad-728-container { width: 100%; height: 60px; overflow: hidden; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); position: relative; margin-bottom:15px; }
     .ad-728-container::after { content: "Advertisement"; position: absolute; top: 2px; left: 6px; font-size: 9px; color: #555; font-weight: bold; }
     .ad-728-wrapper { transform: scale(0.45); transform-origin: center; width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; }
-
-    /* ─── VIDEO GRID ─── */
-    .video-grid { display: flex; flex-direction: column; gap: 22px; padding: 18px 20px; width: 100%; }
-    .video-card { cursor: pointer; display: flex; flex-direction: column; gap: 10px; width: 100%; transition: 0.2s; }
+    
+    .video-grid { display: flex; flex-direction: column; gap: 22px; padding: 18px 20px; }
+    .video-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
     .v-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
     .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .v-info { display: flex; padding: 0 4px; gap: 12px; }
-    .v-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: var(--surface); flex-shrink: 0; border: 1px solid var(--border); }
+    .v-info { display: flex; padding: 0 4px; gap: 12px; align-items:center; }
+    .v-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); z-index:2; }
     .v-meta { flex: 1; min-width: 0; }
-    .v-title { font-size: 14px; font-weight: 600; line-height: 1.4; margin-bottom: 3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #fff; }
+    .v-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .v-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 
-    /* ─── WATCH PAGE & PLAYER ─── */
-    .player-wrapper { display: block; width: 100%; aspect-ratio: 16/9; background: #000; flex-shrink: 0; position: relative; z-index: 5; }
-    #ytPlayerDiv { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+    /* WATCH PAGE */
+    .player-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
+    #ytPlayerDiv { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .custom-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent); padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; z-index: 15; }
-    .controls-row { display: flex; align-items: center; gap: 16px; }
-    .play-btn { color: white; font-size: 34px; cursor: pointer; }
-    .time-text { color: white; font-size: 12px; font-weight: 600; font-family: monospace; }
     .progress-bar { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; }
-    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary-bright); box-shadow: 0 0 10px rgba(240,192,64,0.5); }
+    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary-bright); }
     .reward-box { background: var(--surface); padding: 18px; margin: 16px 18px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
-    .reward-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
     .tracker-bar { width: 100%; height: 11px; background: var(--card); border-radius: 6px; overflow: hidden; }
     .tracker-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--primary-bright)); transition: width 1s linear; }
 
-    /* ─── OVERLAY & SIDEBAR ─── */
+    /* SIDEBAR & MODALS */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(4px); }
     .overlay.active { opacity: 1; pointer-events: all; }
-    .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-    .sidebar::-webkit-scrollbar { display: none; }
+    .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.4s; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
     .sidebar.open { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
-    .sidebar-menu { padding: 0 18px; display: flex; flex-direction: column; gap: 10px; }
-    .sidebar-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-    .sidebar-item-text { font-weight: 600; font-size: 14px; }
+    .sidebar-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); cursor: pointer; margin:0 18px 10px; }
     
-    /* ─── MULTI-LANG BAYRAKLAR ─── */
     .lang-row { display: flex; gap: 10px; padding: 0 20px 18px; overflow-x: auto; margin-top:20px; }
-    .lang-row::-webkit-scrollbar { display: none; }
-    .lang-btn { width: 42px; height: 30px; background: transparent; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; padding:0; transition: 0.3s; flex-shrink:0; }
+    .lang-btn { width: 42px; height: 30px; background: transparent; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; flex-shrink:0; }
     .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .lang-btn.active { border: 2px solid var(--primary); transform: scale(1.1); box-shadow: 0 0 10px var(--primary-glow); }
+    .lang-btn.active { border: 2px solid var(--primary); transform: scale(1.1); }
 
-    /* ─── MODAL ─── */
-    .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 28px 28px 0 0; z-index: 2000; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); padding: 28px 22px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.05); }
-    .modal::-webkit-scrollbar { display: none; }
+    .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 28px 28px 0 0; z-index: 2000; transition: 0.5s; padding: 28px 22px; max-height: 90vh; overflow-y: auto; border-top: 1px solid var(--border); }
     .modal.open { bottom: 0; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: 20px; font-weight: 800; }
-    .close-btn { cursor: pointer; background: var(--card); padding: 8px; border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
-    .input-box { width: 100%; padding: 14px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; font-size: 14px; }
+    .close-btn { background: var(--card); padding: 8px; border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor:pointer; }
+    
+    .input-box { width: 100%; padding: 14px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; }
     .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
-    .stat-card { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 16px 14px; display: flex; flex-direction: column; gap: 6px; }
-    .stat-card-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-    .stat-card-value { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
-    
-    .withdraw-tabs, .admin-page-tabs { display: flex; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); padding: 4px; margin-bottom: 20px; gap: 4px; }
-    .withdraw-tab, .admin-page-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 10px; color: var(--text-muted); display:flex; align-items:center; justify-content:center; gap:6px; }
-    .withdraw-tab.active, .admin-page-tab.active { background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; }
-    .withdraw-panel, .admin-section { display: none; }
-    .withdraw-panel.active, .admin-section.active { display: block; }
-    
-    .history-item, .admin-request-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
-    .admin-req-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    
-    /* Kullanıcı Listesi UI */
-    .admin-user-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .admin-user-top { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: bold; color: var(--text-main); }
-    .admin-user-stats { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
-    .admin-user-stats span { display: flex; align-items: center; gap: 4px; }
-
-    .modal-spinner { display: flex; justify-content: center; padding: 30px; }
+    .faq-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 10px; }
+    .faq-q { font-weight: 700; color: #fff; margin-bottom: 7px; font-size: 14px; }
+    .faq-a { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -159,61 +120,69 @@
   <h2 style="color:white; margin-bottom:10px; font-weight:800;" data-i18n="mobileOnly">Mobil Cihaz Gerekli</h2>
 </div>
 
-<!-- SPLASH SCREEN -->
+<!-- SPLASH -->
 <div id="splashScreen">
-  <img src="cointube.png" class="splash-logo-img" alt="CoinsTube">
+  <img src="cointube.png" class="splash-logo-img">
   <div class="splash-title">CoinsTube</div>
-  <div class="splash-ton-row">
-    <img src="toncoin.png" alt="TON">
-    <span data-i18n="poweredByTon">TON Network üzerinde çalışır</span>
-  </div>
   <div class="spinner"></div>
 </div>
 
-<!-- HOME PAGE -->
+<!-- ANA SAYFA -->
 <div id="pageHome" class="page">
   <div class="header">
     <div class="header-left">
       <button class="icon-btn" onclick="openSidebar()"><span class="material-symbols-rounded">menu</span></button>
-      <img src="cointube.png" class="header-logo-img" alt="CoinsTube">
+      <img src="cointube.png" style="width:34px; border-radius:10px;">
       <span class="header-logo-text">CoinsTube</span>
     </div>
     <div class="header-right">
       <div class="balance-chip" onclick="openModal('statsModal')">
-        <img src="toncoin.png" class="ton-inline" alt="TON">
+        <img src="toncoin.png" class="ton-inline">
         <span id="uiBal">0.0000</span>
       </div>
     </div>
   </div>
 
   <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="Video ara..." data-i18n-placeholder="searchPlaceholder">
-    <button class="icon-btn" style="background:var(--primary); border:none; border-radius:14px; padding:0 18px; color:#0a0800;" onclick="searchVideos()">
-      <span class="material-symbols-rounded">search</span>
-    </button>
+    <input type="text" id="searchInput" class="search-input" data-i18n-placeholder="searchPlaceholder">
+    <button class="icon-btn" style="background:var(--primary); color:#000;" onclick="searchVideos()"><span class="material-symbols-rounded">search</span></button>
+  </div>
+  
+  <div class="sort-box">
+    <select id="sortSelect" class="sort-select" onchange="searchVideos()">
+      <option value="relevance" data-i18n="sortRelevance">Önerilen</option>
+      <option value="viewCount" data-i18n="sortPopular">En Popüler</option>
+      <option value="date" data-i18n="sortNewest">En Yeni</option>
+    </select>
   </div>
 
   <div class="categories">
-    <div class="cat-chip active" onclick="setCategory('trending', this)" data-i18n="catTrending">Tümü</div>
-    <div class="cat-chip" onclick="setCategory('music hits', this)" data-i18n="catMusic">Müzik</div>
-    <div class="cat-chip" onclick="setCategory('gaming gameplay', this)" data-i18n="catGaming">Oyun</div>
-    <div class="cat-chip" onclick="setCategory('crypto bitcoin', this)" data-i18n="catCrypto">Kripto</div>
-    <div class="cat-chip" onclick="setCategory('technology gadgets', this)" data-i18n="catTech">Teknoloji</div>
-    <div class="cat-chip" onclick="setCategory('news world', this)" data-i18n="catNews">Haber</div>
-    <div class="cat-chip" onclick="setCategory('sports highlights', this)" data-i18n="catSports">Spor</div>
-    <div class="cat-chip" onclick="setCategory('anime amv', this)" data-i18n="catAnime">Anime</div>
-    <div class="cat-chip" onclick="setCategory('vlog lifestyle', this)">Vlog</div>
+    <div class="cat-chip active" onclick="setCategory('trending', this)" data-i18n="catAll">Tümü</div>
+    <div class="cat-chip" onclick="setCategory('music', this)" data-i18n="catMusic">Müzik</div>
+    <div class="cat-chip" onclick="setCategory('gaming', this)" data-i18n="catGaming">Oyun</div>
+    <div class="cat-chip" onclick="setCategory('crypto', this)" data-i18n="catCrypto">Kripto</div>
+    <div class="cat-chip" onclick="setCategory('technology', this)" data-i18n="catTech">Teknoloji</div>
+    <div class="cat-chip" onclick="setCategory('news', this)" data-i18n="catNews">Haber</div>
   </div>
 
   <div class="scroll-content" id="homeFeed"></div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showPage('pageHome')">
+      <span class="material-symbols-rounded">home</span><span data-i18n="navHome">Ana Sayfa</span>
+    </div>
+    <div class="nav-item" onclick="openModal('faqModal')">
+      <span class="material-symbols-rounded">help</span><span data-i18n="navFaq">SSS</span>
+    </div>
+  </div>
 </div>
 
-<!-- WATCH PAGE -->
+<!-- IZLEME SAYFASI -->
 <div id="pageWatch" class="page">
   <div class="header">
     <div class="header-left">
       <button class="icon-btn" onclick="goBack('pageWatch')"><span class="material-symbols-rounded">arrow_back</span></button>
-      <span style="font-weight:700; font-size:17px;" data-i18n="watchVideoTitle">Video İzle</span>
+      <span style="font-weight:700; font-size:17px;" data-i18n="watchTitle">Video İzle</span>
     </div>
   </div>
 
@@ -222,30 +191,22 @@
       <div id="ytPlayerDiv"></div>
       <div class="custom-controls">
         <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0">
-        <div class="controls-row">
-          <span class="material-symbols-rounded play-btn" id="playPauseBtn" onclick="togglePlay()">pause</span>
-          <span class="time-text" id="timeText">0:00 / 0:00</span>
+        <div style="display:flex; gap:16px; align-items:center;">
+          <span class="material-symbols-rounded" style="color:#fff; font-size:32px; cursor:pointer;" id="playPauseBtn" onclick="togglePlay()">pause</span>
+          <span style="color:#fff; font-size:12px; font-family:monospace;" id="timeText">0:00 / 0:00</span>
         </div>
       </div>
     </div>
 
-    <!-- İzleme Sayfası Reklamı -->
-    <div style="padding: 0 18px; margin-top: 15px;">
-      <div class="ad-728-container">
-        <div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div>
-      </div>
-    </div>
+    <div style="padding:15px;"><div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div></div>
 
     <div class="reward-box">
-      <div class="reward-header">
+      <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700;">
         <span style="color:var(--primary);" data-i18n="nextReward">Sonraki Ödül</span>
-        <span style="display:flex; align-items:center; gap:5px;">
-          <img src="toncoin.png" class="ton-inline" alt="TON">
-          <span id="trackerRewardText">0.005 TON</span>
-        </span>
+        <span style="display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"> 0.005 TON</span>
       </div>
       <div class="tracker-bar"><div class="tracker-fill" id="trackerFill"></div></div>
-      <div style="font-size:12px; color:var(--text-muted); text-align:center;" id="trackerStatus" data-i18n="statusPlaying">Oynatılıyor...</div>
+      <div style="font-size:12px; text-align:center; color:var(--text-muted);" id="trackerStatus" data-i18n="statusPlaying">Oynatılıyor...</div>
     </div>
   </div>
 </div>
@@ -256,193 +217,176 @@
 
 <div class="sidebar" id="sidebar">
   <div style="padding:24px 20px 18px; display:flex; align-items:center; gap:12px; border-bottom:1px solid var(--border);">
-    <img src="cointube.png" style="width:36px; height:36px; border-radius:10px; object-fit:cover;" alt="CoinsTube">
+    <img src="cointube.png" style="width:36px; border-radius:10px;">
     <span style="font-size:20px; font-weight:800;">CoinsTube</span>
   </div>
 
-  <!-- Bayraklı Dil Seçimi -->
   <div class="lang-row">
-    <button class="lang-btn active" onclick="changeLang('tr')" id="btnLangTR"><img src="https://flagcdn.com/w40/tr.png" alt="TR"></button>
-    <button class="lang-btn" onclick="changeLang('en')" id="btnLangEN"><img src="https://flagcdn.com/w40/us.png" alt="EN"></button>
-    <button class="lang-btn" onclick="changeLang('ru')" id="btnLangRU"><img src="https://flagcdn.com/w40/ru.png" alt="RU"></button>
-    <button class="lang-btn" onclick="changeLang('es')" id="btnLangES"><img src="https://flagcdn.com/w40/es.png" alt="ES"></button>
-    <button class="lang-btn" onclick="changeLang('de')" id="btnLangDE"><img src="https://flagcdn.com/w40/de.png" alt="DE"></button>
+    <button class="lang-btn active" onclick="changeLang('tr')" id="btnLangTR"><img src="https://flagcdn.com/w40/tr.png"></button>
+    <button class="lang-btn" onclick="changeLang('en')" id="btnLangEN"><img src="https://flagcdn.com/w40/us.png"></button>
+    <button class="lang-btn" onclick="changeLang('ru')" id="btnLangRU"><img src="https://flagcdn.com/w40/ru.png"></button>
+    <button class="lang-btn" onclick="changeLang('es')" id="btnLangES"><img src="https://flagcdn.com/w40/es.png"></button>
+    <button class="lang-btn" onclick="changeLang('de')" id="btnLangDE"><img src="https://flagcdn.com/w40/de.png"></button>
   </div>
 
-  <div class="sidebar-menu" style="margin-top:10px;">
-    <div class="sidebar-item" onclick="openModal('statsModal')">
-      <span class="material-symbols-rounded" style="color:var(--accent);">bar_chart</span>
-      <span class="sidebar-item-text" data-i18n="menuStats">İstatistikler</span>
-    </div>
-    <div class="sidebar-item" onclick="openModal('refModal')">
-      <span class="material-symbols-rounded" style="color:var(--primary);">group_add</span>
-      <span class="sidebar-item-text" data-i18n="menuRef">Referans</span>
-    </div>
-    <div class="sidebar-item" onclick="openWithdrawModal()">
-      <span class="material-symbols-rounded" style="color:#10b981;">account_balance_wallet</span>
-      <span class="sidebar-item-text" data-i18n="menuWithdraw">TON Çek</span>
-    </div>
-    <!-- Admin Butonu -->
-    <div class="sidebar-item" id="adminSidebarItem" style="display:none; border-color:rgba(123,47,247,0.4); background:rgba(123,47,247,0.08);" onclick="openAdminPanel()">
-      <span class="material-symbols-rounded" style="color:#a78bfa;">admin_panel_settings</span>
-      <span class="sidebar-item-text" style="color:#a78bfa;">Admin Panel</span>
-    </div>
-  </div>
+  <div class="sidebar-item" onclick="openModal('statsModal')"><span class="material-symbols-rounded" style="color:var(--accent);">bar_chart</span><span data-i18n="menuStats">İstatistikler</span></div>
+  <div class="sidebar-item" onclick="openModal('refModal')"><span class="material-symbols-rounded" style="color:var(--primary);">group_add</span><span data-i18n="menuRef">Referans</span></div>
+  <div class="sidebar-item" onclick="openWithdrawModal()"><span class="material-symbols-rounded" style="color:#10b981;">account_balance_wallet</span><span data-i18n="menuWithdraw">TON Çek</span></div>
+  <div class="sidebar-item" onclick="openModal('faqModal')"><span class="material-symbols-rounded" style="color:#60a5fa;">help</span><span data-i18n="navFaq">SSS</span></div>
+  <div class="sidebar-item" id="adminSidebarItem" style="display:none; border-color:rgba(123,47,247,0.4); background:rgba(123,47,247,0.08);" onclick="openAdminPanel()"><span class="material-symbols-rounded" style="color:#a78bfa;">admin_panel_settings</span><span style="color:#a78bfa;">Admin Panel</span></div>
 
-  <div style="margin-top: auto; padding:18px 20px; border-top:1px solid var(--border);">
-    <div style="font-size:12px; color:var(--text-muted); font-weight:500; margin-bottom:4px;" data-i18n="sidebarBalance">Bakiye</div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <img src="toncoin.png" class="ton-inline-lg" alt="TON">
-      <span id="sidebarBal" style="font-size:22px; font-weight:800; color:var(--accent);">0.0000</span>
-    </div>
+  <div style="margin-top:auto; padding:18px 20px; border-top:1px solid var(--border);">
+    <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;" data-i18n="menuBalance">Bakiye</div>
+    <div style="display:flex; align-items:center; gap:8px;"><img src="toncoin.png" class="ton-inline-lg"><span id="sidebarBal" style="font-size:22px; font-weight:800; color:var(--accent);">0.0000</span></div>
   </div>
 </div>
 
-<!-- MODAL: STATS -->
-<div class="modal" id="statsModal">
+<!-- KANAL MODALI -->
+<div class="modal" id="channelModal">
   <div class="modal-header">
-    <span data-i18n="menuStats">İstatistikler</span>
+    <span data-i18n="channelInfo">Kanal Bilgisi</span>
     <span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span>
   </div>
-  <div class="stat-grid">
-    <div class="stat-card">
-      <div class="stat-card-label" data-i18n="statTotalEarned">Toplam Kazanç</div>
-      <div class="stat-card-value"><img src="toncoin.png" class="ton-inline" alt="TON"> <span id="statTotal">0.0000</span></div>
+  <div style="text-align:center; margin-bottom:20px;">
+    <img id="cModalAvatar" src="" style="width:80px; height:80px; border-radius:50%; border:2px solid var(--primary); margin-bottom:10px;">
+    <h3 id="cModalName" style="color:white;">Kanal Adı</h3>
+  </div>
+  <button class="btn-main" id="cModalBtn"><span class="material-symbols-rounded" style="margin-right:8px;">open_in_new</span> <span data-i18n="visitChannel">YouTube'da Git</span></button>
+</div>
+
+<!-- STATS MODAL -->
+<div class="modal" id="statsModal">
+  <div class="modal-header"><span data-i18n="menuStats">İstatistikler</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statTotal">Toplam Kazanç</div>
+      <div style="font-size:20px; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"><span id="statTotal">0.00</span></div>
     </div>
-    <div class="stat-card">
-      <div class="stat-card-label" data-i18n="sidebarBalance">Mevcut Bakiye</div>
-      <div class="stat-card-value"><img src="toncoin.png" class="ton-inline" alt="TON"> <span id="statBal">0.0000</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label" data-i18n="statRefEarned">Ref. Kazancı</div>
-      <div class="stat-card-value"><img src="toncoin.png" class="ton-inline" alt="TON"> <span id="statRefEarned">0.0000</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label" data-i18n="statRefInvited">Davet Edilen</div>
-      <div class="stat-card-value"><span class="material-symbols-rounded" style="color:var(--primary);">group</span> <span id="statRefCount">0</span></div>
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statRef">Ref Kazancı</div>
+      <div style="font-size:20px; font-weight:800; color:var(--accent); display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"><span id="statRefEarned">0.00</span></div>
     </div>
   </div>
   <div style="width:100%; height:200px;"><canvas id="chartCanvas"></canvas></div>
 </div>
 
-<!-- MODAL: REF -->
+<!-- REF MODAL -->
 <div class="modal" id="refModal">
-  <div class="modal-header">
-    <span data-i18n="menuRef">Referans Sistemi</span>
-    <span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span>
-  </div>
-  <div style="display:flex; gap:10px; margin-bottom:18px;">
-    <div style="flex:1; text-align:center; background:var(--bg-body); padding:15px; border-radius:12px; border:1px solid var(--border);">
-      <div style="font-size:26px; color:var(--primary); font-weight:800;" id="rCount">0</div>
-      <div style="font-size:11px; color:var(--text-muted); font-weight:600;" data-i18n="refPeople">Kişi</div>
-    </div>
-    <div style="flex:1; text-align:center; background:var(--bg-body); padding:15px; border-radius:12px; border:1px solid var(--border);">
-      <div style="display:flex; align-items:center; justify-content:center; gap:5px;">
-        <img src="toncoin.png" class="ton-inline" alt="TON">
-        <span style="font-size:26px; color:var(--accent); font-weight:800;" id="rEarned">0.00</span>
-      </div>
-      <div style="font-size:11px; color:var(--text-muted); font-weight:600;" data-i18n="refEarned">Kazanılan</div>
-    </div>
+  <div class="modal-header"><span data-i18n="menuRef">Referans Sistemi</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
+  <div style="text-align:center; background:var(--bg-body); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:15px;">
+    <span class="material-symbols-rounded" style="font-size:40px; color:var(--primary);">group</span>
+    <div style="font-size:24px; font-weight:800; color:white; margin:10px 0;"><span id="rCount">0</span> <span data-i18n="refPeople" style="font-size:14px; color:var(--text-muted);">Kişi</span></div>
   </div>
   <input type="text" id="refLinkInput" class="input-box" readonly style="text-align:center; color:var(--accent);">
-  <button class="btn-main" onclick="copyRefLink()" data-i18n="refCopyBtn">Bağlantıyı Kopyala</button>
+  <button class="btn-main" onclick="copyRefLink()" data-i18n="refCopy">Bağlantıyı Kopyala</button>
 </div>
 
-<!-- MODAL: WITHDRAW -->
+<!-- WITHDRAW MODAL -->
 <div class="modal" id="withdrawModal">
-  <div class="modal-header">
-    <span data-i18n="menuWithdraw">TON Çek</span>
-    <span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span>
+  <div class="modal-header"><span data-i18n="menuWithdraw">TON Çek</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
+  <div style="display:flex; background:var(--bg-body); border:1px solid var(--border); border-radius:12px; padding:4px; margin-bottom:15px;">
+    <div class="withdraw-tab active" onclick="switchWithdrawTab('new', this)" style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer;" data-i18n="wdNew">Yeni Çekim</div>
+    <div class="withdraw-tab" onclick="switchWithdrawTab('history', this)" style="flex:1; text-align:center; padding:10px; border-radius:8px; cursor:pointer;" data-i18n="wdHistory">Geçmiş</div>
   </div>
-
-  <div class="withdraw-tabs">
-    <div class="withdraw-tab active" onclick="switchWithdrawTab('new', this)">
-      <span class="material-symbols-rounded">add</span> <span data-i18n="wdNew">Yeni Çekim</span>
-    </div>
-    <div class="withdraw-tab" onclick="switchWithdrawTab('history', this)">
-      <span class="material-symbols-rounded">history</span> <span data-i18n="wdHistory">Çekim Geçmişi</span>
-    </div>
-  </div>
-
   <div class="withdraw-panel active" id="panelNew">
-    <input type="text" id="wWallet" class="input-box" placeholder="TON Cüzdan Adresi (EQ...)" data-i18n-placeholder="wdWalletPlaceholder">
-    <div style="position:relative; margin-bottom:14px;">
-      <input type="number" id="wAmount" class="input-box" placeholder="Miktar (Min 0.10)" step="0.01">
-      <div style="position:absolute; right:14px; top:50%; transform:translateY(-50%);">
-        <img src="toncoin.png" class="ton-inline" alt="TON">
+    <input type="text" id="wWallet" class="input-box" placeholder="TON Cüzdan (EQ...)" data-i18n-placeholder="wdWallet">
+    <input type="number" id="wAmount" class="input-box" placeholder="Miktar (Min 0.10)">
+    <button class="btn-main" onclick="reqWithdraw()"><span class="material-symbols-rounded" style="margin-right:8px;">send</span> <span data-i18n="wdSend">Gönder</span></button>
+  </div>
+  <div class="withdraw-panel" id="panelHistory"><div id="withdrawHistoryList"></div></div>
+</div>
+
+<!-- FAQ MODAL -->
+<div class="modal" id="faqModal">
+  <div class="modal-header"><span data-i18n="navFaq">SSS</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
+  <div id="faqContent"></div>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="modal" id="adminModal">
+  <div class="modal-header"><span style="color:#a78bfa;">Admin Panel</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
+  <div style="display:flex; background:var(--bg-body); border-radius:12px; border:1px solid var(--border); padding:4px; margin-bottom:15px;">
+    <div class="admin-page-tab active" onclick="switchAdminTab('overview', this)" style="flex:1; padding:8px; text-align:center; cursor:pointer; border-radius:8px;">Genel</div>
+    <div class="admin-page-tab" onclick="switchAdminTab('withdraws', this)" style="flex:1; padding:8px; text-align:center; cursor:pointer; border-radius:8px;">Çekimler</div>
+    <div class="admin-page-tab" onclick="switchAdminTab('users', this)" style="flex:1; padding:8px; text-align:center; cursor:pointer; border-radius:8px;">Kullanıcılar</div>
+  </div>
+  <div class="admin-section active" id="adminSectionOverview">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px; text-align:center;">
+        <div style="font-size:24px; color:#10b981; font-weight:bold;" id="adminTotalUsers">0</div><div style="font-size:10px; color:var(--text-muted);">Kullanıcı</div>
+      </div>
+      <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px; text-align:center;">
+        <div style="font-size:24px; color:var(--accent); font-weight:bold;" id="adminTotalPaid">0</div><div style="font-size:10px; color:var(--text-muted);">Ödenen TON</div>
       </div>
     </div>
-    <button class="btn-main" onclick="reqWithdraw()">
-      <span class="material-symbols-rounded" style="margin-right:8px; font-size:22px;">add_circle</span>
-      <span data-i18n="wdSendBtn">Talebi Gönder</span>
-    </button>
   </div>
-
-  <div class="withdraw-panel" id="panelHistory">
-    <div id="withdrawHistoryList"></div>
-  </div>
+  <div class="admin-section" id="adminSectionWithdraws"><div id="adminWithdrawList"></div></div>
+  <div class="admin-section" id="adminSectionUsers"><div id="adminUserList"></div></div>
 </div>
 
-<!-- MODAL: ADMIN -->
-<div class="modal" id="adminModal">
-  <div class="modal-header">
-    <span style="display:flex; align-items:center; gap:8px;">
-      <span class="material-symbols-rounded" style="color:#a78bfa;">admin_panel_settings</span> Admin Panel
-    </span>
-    <span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span>
-  </div>
-
-  <div class="admin-page-tabs">
-    <div class="admin-page-tab active" onclick="switchAdminTab('overview', this)">📊 Genel Stats</div>
-    <div class="admin-page-tab" onclick="switchAdminTab('withdraws', this)">💸 Çekimler</div>
-    <div class="admin-page-tab" onclick="switchAdminTab('users', this)">👥 Kullanıcılar</div>
-  </div>
-
-  <div class="admin-section active" id="adminSectionOverview">
-    <div class="admin-stat-grid">
-      <div class="admin-stat-card"><div class="admin-stat-number" style="color:#f59e0b;" id="adminPendingCount">-</div><div class="admin-stat-label">Bekleyen</div></div>
-      <div class="admin-stat-card"><div class="admin-stat-number" style="color:#10b981;" id="adminTotalUsers">-</div><div class="admin-stat-label">Kullanıcı</div></div>
-      <div class="admin-stat-card"><div class="admin-stat-number" style="color:var(--accent);" id="adminTotalPaid">-</div><div class="admin-stat-label">Ödenen (TON)</div></div>
-    </div>
-  </div>
-
-  <div class="admin-section" id="adminSectionWithdraws">
-    <div id="adminWithdrawList"></div>
-  </div>
-
-  <div class="admin-section" id="adminSectionUsers">
-    <div id="adminUserList"></div>
-  </div>
-</div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const API_URL = window.location.origin;
 const tg = window.Telegram.WebApp;
 tg.ready(); tg.expand();
 const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_test_user");
 
-// ÇOKLU DİL SÖZLÜĞÜ (i18n)
+// ÇOKLU DİL SÖZLÜĞÜ (TAM ÇEVİRİ)
 const i18n = {
   tr: {
-    mobileOnly: "Mobil Cihaz Gerekli", poweredByTon: "TON Network üzerinde çalışır", searchPlaceholder: "Video ara...",
-    catTrending: "Tümü", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber", catSports: "Spor", catAnime: "Anime",
-    watchVideoTitle: "Video İzle", nextReward: "Sonraki Ödül", statusPlaying: "Oynatılıyor...", statusPaused: "Duraklatıldı",
-    menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", sidebarBalance: "Mevcut Bakiye",
-    statTotalEarned: "Toplam Kazanç", statRefEarned: "Ref. Kazancı", statRefInvited: "Davet Edilen",
-    refPeople: "Kişi", refEarned: "Kazanılan", refCopyBtn: "Bağlantıyı Kopyala",
-    wdNew: "Yeni Çekim", wdHistory: "Çekim Geçmişi", wdWalletPlaceholder: "TON Cüzdan Adresi (EQ...)", wdSendBtn: "Talebi Gönder"
+    mobileOnly: "Mobil Cihaz Gerekli", searchPlaceholder: "Video ara...", sortRelevance: "Önerilen", sortPopular: "En Popüler", sortNewest: "En Yeni",
+    catAll: "Tümü", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber",
+    navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusPlaying: "Oynatılıyor...", statusPaused: "Duraklatıldı",
+    menuStats: "İstatistikler", menuRef: "Referans", menuWithdraw: "TON Çek", menuBalance: "Bakiye",
+    channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", refPeople: "Kişi", refCopy: "Bağlantıyı Kopyala",
+    wdNew: "Yeni Çekim", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdSend: "Gönder",
+    faq1q: "Nasıl kazanırım?", faq1a: "Videoyu 5 dakika kesintisiz izleyin. Süre dolduğunda 0.005 TON kazanırsınız.",
+    faq2q: "Çekim limiti nedir?", faq2a: "Minimum 0.10 TON çekebilirsiniz.",
+    faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız (onlardan kesilmez)."
   },
   en: {
-    mobileOnly: "Mobile Device Required", poweredByTon: "Powered by TON Network", searchPlaceholder: "Search videos...",
-    catTrending: "All", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News", catSports: "Sports", catAnime: "Anime",
-    watchVideoTitle: "Watch Video", nextReward: "Next Reward", statusPlaying: "Playing...", statusPaused: "Paused",
-    menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", sidebarBalance: "Current Balance",
-    statTotalEarned: "Total Earned", statRefEarned: "Ref. Earnings", statRefInvited: "Invited",
-    refPeople: "Users", refEarned: "Earned", refCopyBtn: "Copy Link",
-    wdNew: "New Withdraw", wdHistory: "History", wdWalletPlaceholder: "TON Wallet Address (EQ...)", wdSendBtn: "Send Request"
+    mobileOnly: "Mobile Device Required", searchPlaceholder: "Search videos...", sortRelevance: "Relevance", sortPopular: "Most Popular", sortNewest: "Newest",
+    catAll: "All", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News",
+    navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusPlaying: "Playing...", statusPaused: "Paused",
+    menuStats: "Statistics", menuRef: "Referral", menuWithdraw: "Withdraw TON", menuBalance: "Balance",
+    channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", refPeople: "Users", refCopy: "Copy Link",
+    wdNew: "New Withdraw", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdSend: "Send",
+    faq1q: "How to earn?", faq1a: "Watch a video for 5 minutes without interruption to earn 0.005 TON.",
+    faq2q: "Withdrawal limit?", faq2a: "Minimum withdrawal is 0.10 TON.",
+    faq3q: "Referral system?", faq3a: "You get 10% of your invites' earnings (not deducted from them)."
+  },
+  ru: {
+    mobileOnly: "Требуется мобильное устройство", searchPlaceholder: "Поиск видео...", sortRelevance: "Рекомендуемые", sortPopular: "Самые популярные", sortNewest: "Новейшие",
+    catAll: "Все", catMusic: "Музыка", catGaming: "Игры", catCrypto: "Крипто", catTech: "Технологии", catNews: "Новости",
+    navHome: "Главная", navFaq: "FAQ", watchTitle: "Смотреть видео", nextReward: "Следующая награда", statusPlaying: "Воспроизведение...", statusPaused: "Пауза",
+    menuStats: "Статистика", menuRef: "Рефералы", menuWithdraw: "Вывод TON", menuBalance: "Баланс",
+    channelInfo: "Информация о канале", visitChannel: "Открыть в YouTube", statTotal: "Всего заработано", statRef: "Доход от реф.", refPeople: "Люди", refCopy: "Копировать ссылку",
+    wdNew: "Новый вывод", wdHistory: "История", wdWallet: "TON Кошелек (EQ...)", wdSend: "Отправить",
+    faq1q: "Как заработать?", faq1a: "Смотрите видео 5 минут без перерыва, чтобы получить 0.005 TON.",
+    faq2q: "Лимит на вывод?", faq2a: "Минимальная сумма вывода 0.10 TON.",
+    faq3q: "Реферальная система?", faq3a: "Вы получаете 10% от заработка приглашенных вами людей."
+  },
+  es: {
+    mobileOnly: "Dispositivo móvil requerido", searchPlaceholder: "Buscar videos...", sortRelevance: "Relevancia", sortPopular: "Más popular", sortNewest: "Más reciente",
+    catAll: "Todo", catMusic: "Música", catGaming: "Juegos", catCrypto: "Cripto", catTech: "Tecnología", catNews: "Noticias",
+    navHome: "Inicio", navFaq: "FAQ", watchTitle: "Ver Video", nextReward: "Siguiente recompensa", statusPlaying: "Reproduciendo...", statusPaused: "Pausado",
+    menuStats: "Estadísticas", menuRef: "Referidos", menuWithdraw: "Retirar TON", menuBalance: "Balance",
+    channelInfo: "Info del Canal", visitChannel: "Abrir en YouTube", statTotal: "Total Ganado", statRef: "Ganancias Ref", refPeople: "Usuarios", refCopy: "Copiar Enlace",
+    wdNew: "Nuevo Retiro", wdHistory: "Historia", wdWallet: "Billetera TON (EQ...)", wdSend: "Enviar",
+    faq1q: "¿Cómo ganar?", faq1a: "Mira un video durante 5 minutos para ganar 0.005 TON.",
+    faq2q: "¿Límite de retiro?", faq2a: "El retiro mínimo es de 0.10 TON.",
+    faq3q: "¿Sistema de referidos?", faq3a: "Obtienes el 10% de las ganancias de tus invitados."
+  },
+  de: {
+    mobileOnly: "Mobilgerät erforderlich", searchPlaceholder: "Videos suchen...", sortRelevance: "Relevanz", sortPopular: "Beliebteste", sortNewest: "Neueste",
+    catAll: "Alle", catMusic: "Musik", catGaming: "Spiele", catCrypto: "Krypto", catTech: "Technik", catNews: "News",
+    navHome: "Startseite", navFaq: "FAQ", watchTitle: "Video Ansehen", nextReward: "Nächste Belohnung", statusPlaying: "Spielt...", statusPaused: "Pausiert",
+    menuStats: "Statistiken", menuRef: "Empfehlungen", menuWithdraw: "TON Auszahlen", menuBalance: "Guthaben",
+    channelInfo: "Kanalinfo", visitChannel: "Auf YouTube öffnen", statTotal: "Gesamt verdient", statRef: "Ref-Einnahmen", refPeople: "Benutzer", refCopy: "Link kopieren",
+    wdNew: "Neue Auszahlung", wdHistory: "Verlauf", wdWallet: "TON Wallet (EQ...)", wdSend: "Senden",
+    faq1q: "Wie verdiene ich?", faq1a: "Schauen Sie ein Video 5 Minuten lang an, um 0.005 TON zu verdienen.",
+    faq2q: "Auszahlungslimit?", faq2a: "Die Mindestauszahlung beträgt 0.10 TON.",
+    faq3q: "Empfehlungssystem?", faq3a: "Sie erhalten 10% der Einnahmen Ihrer Eingeladenen."
   }
-  // ru, es, de eklenebilir. Kod uzamaması için TR ve EN tam eklendi.
 };
 
 let currentLang = localStorage.getItem('appLang') || 'tr';
@@ -451,11 +395,16 @@ function applyLang(lang) {
   currentLang = lang; localStorage.setItem('appLang', lang);
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`btnLang${lang.toUpperCase()}`)?.classList.add('active');
-  const dict = i18n[lang] || i18n['en'];
-  document.querySelectorAll('[data-i18n]').forEach(el => el.innerText = dict[el.getAttribute('data-i18n')] || el.innerText);
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => el.placeholder = dict[el.getAttribute('data-i18n-placeholder')] || el.placeholder);
+  const d = i18n[lang] || i18n['en'];
+  document.querySelectorAll('[data-i18n]').forEach(el => el.innerText = d[el.getAttribute('data-i18n')] || el.innerText);
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => el.placeholder = d[el.getAttribute('data-i18n-placeholder')] || el.placeholder);
+  
+  // FAQ İçeriğini oluştur
+  document.getElementById('faqContent').innerHTML = `
+    <div class="faq-item"><div class="faq-q">${d.faq1q}</div><div class="faq-a">${d.faq1a}</div></div>
+    <div class="faq-item"><div class="faq-q">${d.faq2q}</div><div class="faq-a">${d.faq2a}</div></div>
+    <div class="faq-item"><div class="faq-q">${d.faq3q}</div><div class="faq-a">${d.faq3a}</div></div>`;
 }
-
 window.changeLang = applyLang;
 
 let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, isAdmin = false;
@@ -466,11 +415,8 @@ async function loadUserData() {
     const res = await (await fetch(`${API_URL}/api/user/${telegramId}`)).json();
     uBal = res.balance || 0; uTotal = res.totalEarned || 0; uRefCount = res.refCount || 0; uRefEarned = res.refEarned || 0; isAdmin = res.isAdmin === true;
     document.getElementById('uiBal').innerText = uBal.toFixed(4); document.getElementById('sidebarBal').innerText = uBal.toFixed(4);
-    document.getElementById('wAvailBal').innerText = uBal.toFixed(4); document.getElementById('statTotal').innerText = uTotal.toFixed(4);
-    document.getElementById('statBal').innerText = uBal.toFixed(4); document.getElementById('statRefEarned').innerText = uRefEarned.toFixed(4);
-    document.getElementById('statRefCount').innerText = uRefCount; document.getElementById('rCount').innerText = uRefCount;
-    document.getElementById('rEarned').innerText = uRefEarned.toFixed(4);
-    document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
+    document.getElementById('statTotal').innerText = uTotal.toFixed(4); document.getElementById('statRefEarned').innerText = uRefEarned.toFixed(4);
+    document.getElementById('rCount').innerText = uRefCount; document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
     if(isAdmin) document.getElementById('adminSidebarItem').style.display = 'flex';
   } catch(e) {}
 }
@@ -479,35 +425,24 @@ function formatTime(sec) { const m = Math.floor(sec/60), s = Math.floor(sec%60);
 
 function startWatchTracker() {
   clearInterval(watchTimerInterval); clearInterval(videoProgressInterval);
-  
-  // Ödül sayacı (5 dk = 300 sn)
   watchTimerInterval = setInterval(() => {
     if(window.ytPlayer && window.ytPlayer.getPlayerState() === 1) {
       globalWatchSeconds++;
       document.getElementById('trackerFill').style.width = `${Math.min((globalWatchSeconds/300)*100, 100)}%`;
-      document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPlaying || "Oynatılıyor...";
+      document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPlaying;
       if(globalWatchSeconds >= 300) triggerAutoReward();
-    } else {
-      document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPaused || "Duraklatıldı";
-    }
+    } else { document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPaused; }
   }, 1000);
 
-  // Video Süresi & İlerleme Çubuğu Güncelleyici
   videoProgressInterval = setInterval(() => {
-    if(window.ytPlayer && window.ytPlayer.getCurrentTime) {
-      const curr = window.ytPlayer.getCurrentTime() || 0, tot = window.ytPlayer.getDuration() || 0;
-      if(tot > 0) {
-        document.getElementById('timeText').innerText = `${formatTime(curr)} / ${formatTime(tot)}`;
-        document.getElementById('progressBar').value = (curr/tot)*100;
-      }
+    if(window.ytPlayer?.getCurrentTime) {
+      const c = window.ytPlayer.getCurrentTime()||0, t = window.ytPlayer.getDuration()||0;
+      if(t>0){ document.getElementById('timeText').innerText = `${formatTime(c)} / ${formatTime(t)}`; document.getElementById('progressBar').value = (c/t)*100; }
     }
   }, 1000);
 }
 
-// Progress Bar Manuel İlerletme
-document.getElementById('progressBar').addEventListener('input', e => {
-  if(window.ytPlayer?.seekTo) window.ytPlayer.seekTo((e.target.value/100) * window.ytPlayer.getDuration(), true);
-});
+document.getElementById('progressBar').addEventListener('input', e => { if(window.ytPlayer?.seekTo) window.ytPlayer.seekTo((e.target.value/100) * window.ytPlayer.getDuration(), true); });
 
 async function triggerAutoReward() {
   globalWatchSeconds = 0; document.getElementById('trackerFill').style.width = '0%';
@@ -530,49 +465,54 @@ function initPlayer(vId) {
     }
   });
 }
-
 window.togglePlay = function() { window.ytPlayer.getPlayerState() === 1 ? window.ytPlayer.pauseVideo() : window.ytPlayer.playVideo(); };
 
 async function fetchVids(q) {
   const box = document.getElementById('homeFeed');
-  box.innerHTML = `<div class="modal-spinner"><div class="spinner"></div></div>`;
+  box.innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner" style="margin:0 auto;"></div></div>`;
+  const order = document.getElementById('sortSelect').value || 'relevance';
   try {
-    const data = await (await fetch(`${API_URL}/api/videos?q=${encodeURIComponent(q)}`)).json();
+    const data = await (await fetch(`${API_URL}/api/videos?q=${encodeURIComponent(q||'trending')}&order=${order}`)).json();
     box.innerHTML = ''; const grid = document.createElement('div'); grid.className = 'video-grid';
-    
-    // Top Reklam
     grid.innerHTML += `<div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div>`;
     
-    (data.items || []).forEach((item, index) => {
+    (data.items || []).forEach((item, idx) => {
       const vId = item.id?.videoId; if(!vId) return;
+      const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.snippet.channelTitle)}&background=random`;
       grid.innerHTML += `<div class="video-card" onclick="openWatch('${vId}')">
         <div class="v-thumb"><img src="${item.snippet.thumbnails?.high?.url}"></div>
         <div class="v-info">
-          <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(item.snippet.channelTitle)}&background=random" class="v-avatar">
+          <img src="${avatar}" class="v-avatar" onclick="event.stopPropagation(); openChannelModal('${item.snippet.channelId}', '${item.snippet.channelTitle.replace(/'/g, "\\'")}', '${avatar}')">
           <div class="v-meta"><div class="v-title">${item.snippet.title}</div><div class="v-sub">${item.snippet.channelTitle}</div></div>
         </div>
       </div>`;
-      // Her 4 videoda bir reklam
-      if((index+1)%4===0) grid.innerHTML += `<div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div>`;
+      if((idx+1)%4===0) grid.innerHTML += `<div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div>`;
     });
     box.appendChild(grid);
   } catch(e) {}
 }
 
 window.setCategory = (cat, el) => { document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); fetchVids(cat); };
-window.searchVideos = () => fetchVids(document.getElementById('searchInput').value || 'trending');
+window.searchVideos = () => fetchVids(document.getElementById('searchInput').value);
 window.goBack = id => { document.getElementById(id).classList.remove('active'); window.ytPlayer?.pauseVideo(); };
 window.openWatch = vId => { document.getElementById('pageWatch').classList.add('active'); initPlayer(vId); };
 
 window.openSidebar = () => { document.getElementById('sidebar').classList.add('open'); document.getElementById('mainOverlay').classList.add('active'); };
 window.closeSidebar = () => { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mainOverlay').classList.remove('active'); };
-window.openModal = id => { closeSidebar(); document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open'); };
+window.openModal = id => { closeSidebar(); document.getElementById('modalOverlay').classList.add('active'); document.getElementById(id).classList.add('open'); if(id==='statsModal') renderChart(); };
 window.closeAllModals = () => { document.getElementById('modalOverlay').classList.remove('active'); document.querySelectorAll('.modal').forEach(m => m.classList.remove('open')); };
+
+window.openChannelModal = (chId, chName, avatar) => {
+  document.getElementById('cModalName').innerText = chName;
+  document.getElementById('cModalAvatar').src = avatar;
+  document.getElementById('cModalBtn').onclick = () => window.open(`https://www.youtube.com/channel/${chId}`, '_blank');
+  openModal('channelModal');
+};
 
 window.openWithdrawModal = () => { switchWithdrawTab('new'); openModal('withdrawModal'); };
 window.switchWithdrawTab = (tab, el) => {
   document.querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
-  if(el) el.classList.add('active'); else document.querySelector(tab==='new'?'.withdraw-tab':'.withdraw-tab:nth-child(2)').classList.add('active');
+  if(el) el.classList.add('active'); else document.querySelector('.withdraw-tab').classList.add('active');
   document.querySelectorAll('.withdraw-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(tab==='new' ? 'panelNew' : 'panelHistory').classList.add('active');
   if(tab==='history') loadWithdrawHistory();
@@ -583,14 +523,7 @@ async function loadWithdrawHistory() {
   try {
     const res = await (await fetch(`${API_URL}/api/withdraw/history/${telegramId}`)).json();
     if(!res.history?.length) return list.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa;">Geçmiş yok</div>`;
-    list.innerHTML = res.history.map(i => `
-      <div class="history-item" style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-size:12px; color:#aaa;">${i.wallet.substring(0,8)}...</div>
-          <span style="font-size:10px; padding:3px 8px; border-radius:10px; background:rgba(255,255,255,0.1);">${i.status}</span>
-        </div>
-        <div style="font-size:16px; font-weight:800; color:var(--accent);"><img src="toncoin.png" class="ton-inline" alt="TON"> ${parseFloat(i.amount).toFixed(4)}</div>
-      </div>`).join('');
+    list.innerHTML = res.history.map(i => `<div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between;"><div style="font-size:12px; color:#aaa;">${i.wallet.substring(0,8)}... <br><span style="color:#fff;">${i.status}</span></div><div style="font-weight:bold; color:var(--accent);"><img src="toncoin.png" class="ton-inline"> ${parseFloat(i.amount).toFixed(4)}</div></div>`).join('');
   } catch(e) {}
 }
 
@@ -604,7 +537,7 @@ window.reqWithdraw = async () => {
   } catch(e) {}
 };
 
-window.copyRefLink = () => { document.getElementById('refLinkInput').select(); document.execCommand('copy'); tg.showAlert('Kopyalandı!'); };
+window.copyRefLink = () => { document.getElementById('refLinkInput').select(); document.execCommand('copy'); tg.showAlert(i18n[currentLang].refCopy); };
 
 window.openAdminPanel = () => { closeSidebar(); if(!isAdmin) return; openModal('adminModal'); loadAdminData(); };
 window.switchAdminTab = (tab, el) => {
@@ -615,40 +548,35 @@ window.switchAdminTab = (tab, el) => {
 window.loadAdminData = async () => {
   try {
     const d = await (await fetch(`${API_URL}/api/admin/stats?tgId=${telegramId}`)).json();
-    document.getElementById('adminPendingCount').innerText = d.pendingWithdrawsCount;
-    document.getElementById('adminTotalUsers').innerText = d.totalUsers;
-    document.getElementById('adminTotalPaid').innerText = d.totalPaid;
+    document.getElementById('adminTotalUsers').innerText = d.totalUsers; document.getElementById('adminTotalPaid').innerText = d.totalPaid;
     
-    // Çekim Talepleri
     document.getElementById('adminWithdrawList').innerHTML = d.requests.map(r => `
-      <div class="admin-request-item" id="req_${r.id}">
-        <div class="admin-req-top"><span>👤 ID: ${r.telegramId}</span> <span style="color:var(--accent); font-weight:bold;"><img src="toncoin.png" class="ton-inline" alt="TON"> ${parseFloat(r.amount).toFixed(4)}</span></div>
-        <div style="font-size:12px; color:#aaa; margin-bottom:8px;">💳 ${r.wallet}</div>
-        <div style="display:flex; gap:10px;">
-          <button style="flex:1; padding:8px; border-radius:8px; background:rgba(16,185,129,0.2); color:#10b981; border:none; cursor:pointer;" onclick="adminAction('${r.id}','approved')">Onayla</button>
-          <button style="flex:1; padding:8px; border-radius:8px; background:rgba(239,68,68,0.2); color:#ef4444; border:none; cursor:pointer;" onclick="adminAction('${r.id}','rejected')">Reddet</button>
-        </div>
+      <div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:10px; margin-bottom:10px;">
+        <div>👤 ${r.telegramId} <br>💳 ${r.wallet}</div>
+        <div style="color:var(--accent); font-weight:bold; margin:5px 0;"><img src="toncoin.png" class="ton-inline"> ${parseFloat(r.amount).toFixed(4)}</div>
+        <div style="display:flex; gap:10px;"><button style="flex:1; padding:8px; background:rgba(16,185,129,0.2); color:#10b981; border:none; border-radius:6px;" onclick="adminAction('${r.id}','approved')">Onayla</button><button style="flex:1; padding:8px; background:rgba(239,68,68,0.2); color:#ef4444; border:none; border-radius:6px;" onclick="adminAction('${r.id}','rejected')">Reddet</button></div>
       </div>`).join('');
 
-    // Kullanıcı Listesi
     document.getElementById('adminUserList').innerHTML = d.users.map(u => `
-      <div class="admin-user-item">
-        <div class="admin-user-top"><span>👤 ${u.id}</span> <span><img src="toncoin.png" class="ton-inline" alt="TON"> ${parseFloat(u.balance||0).toFixed(4)}</span></div>
-        <div class="admin-user-stats">
-          <span>Total Kazanç: ${(u.totalEarned||0).toFixed(4)}</span>
-          <span><span class="material-symbols-rounded" style="font-size:14px;">group</span> ${u.refCount||0} Ref</span>
-        </div>
+      <div style="background:var(--surface); border:1px solid var(--border); padding:10px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between;">
+        <div>👤 ${u.id}<br><span style="font-size:10px; color:#aaa;">Ref: ${u.refCount||0}</span></div>
+        <div style="text-align:right; font-weight:bold;"><img src="toncoin.png" class="ton-inline"> ${(u.balance||0).toFixed(4)}</div>
       </div>`).join('');
   } catch(e) {}
 };
 
 window.adminAction = async (reqId, action) => {
   if((await (await fetch(`${API_URL}/api/admin/withdraw/${reqId}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({tgId:telegramId, status:action}) })).json()).success) {
-    tg.showAlert(action==='approved'?'Onaylandı':'Reddedildi (Bakiye iade edildi)'); document.getElementById(`req_${reqId}`).remove(); loadAdminData();
+    tg.showAlert(action==='approved'?'Onaylandı':'Reddedildi (İade Edildi)'); loadAdminData();
   }
 };
 
-window.onload = async () => { applyLang(currentLang); await loadUserData(); await fetchVids('trending'); setTimeout(() => document.getElementById('splashScreen').style.opacity='0', 1400); setTimeout(() => document.getElementById('splashScreen').remove(), 1900); };
+function renderChart() {
+  const ctx = document.getElementById('chartCanvas'); if(!ctx || window.myChart) return;
+  window.myChart = new Chart(ctx, { type: 'line', data: { labels: ['6G','5G','4G','3G','2G','Dün','Bugün'], datasets: [{ data: [0,uTotal*0.1,uTotal*0.3,uTotal*0.5,uTotal*0.7,uTotal*0.9,uTotal], borderColor: '#f0c040', pointBackgroundColor: '#0a0800' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } } });
+}
+
+window.onload = async () => { applyLang(currentLang); await loadUserData(); await fetchVids(); setTimeout(() => document.getElementById('splashScreen').style.opacity='0', 1400); setTimeout(() => document.getElementById('splashScreen').remove(), 1900); };
 </script>
 </body>
-</html>
+                                                                </html>
