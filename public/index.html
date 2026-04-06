@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>CoinsTube Premium</title>
   
+  <!-- Gerekli Scriptler -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- YOUTUBE IFRAME API (Siyah ekran sorununu çözen kod) -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
   
+  <!-- Reklam Scriptleri -->
   <link rel="stylesheet" href="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.css" />
   <script src="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.js"></script>
   <script type="text/javascript" src="//cdn.runative-syndicate.com/sdk/v1/p.js" data-ts-spot="d67e6ef15c554c3388497f3f2f52d5b1" data-ts-mode="selective" async defer></script>
@@ -28,14 +33,12 @@
     #desktopBlocker { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
     @media (min-width: 1024px) { body > * { display: none !important; } #desktopBlocker { display: flex !important; } }
 
-    /* BUTON EFEKTLERİ */
     .icon-btn, .cat-chip, .lang-btn, .sidebar-item, .withdraw-tab, .admin-page-tab, .perc-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
     .icon-btn:active, .cat-chip:active, .lang-btn:active, .withdraw-tab:active, .admin-page-tab:active { background: var(--primary-glow) !important; border-color: var(--accent) !important; color: var(--accent) !important; transform: scale(0.92); }
     .sidebar-item:active { background: var(--primary-glow); transform: translateX(5px); }
     .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .btn-main:active { background: #fff !important; color: #000 !important; box-shadow: 0 0 25px rgba(255,255,255,0.7); transform: scale(0.95); }
 
-    /* SPLASH */
     #splashScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #1a1800 0%, #080807 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; transition: opacity 0.5s ease; }
     .splash-logo-img { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 0 40px rgba(212,160,23,0.5); }
     .splash-title { font-size: 32px; font-weight: 800; color: white; }
@@ -45,7 +48,6 @@
     .ton-inline { width: 18px; height: 18px; border-radius: 50%; vertical-align: middle; display: inline-block; flex-shrink: 0; }
     .ton-inline-lg { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; display: inline-block; flex-shrink: 0; }
 
-    /* PAGES */
     .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: none; flex-direction: column; }
     .page.active { display: flex; z-index: 20; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -53,11 +55,9 @@
     .scroll-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--bottom-h) + 10px); }
     .scroll-content::-webkit-scrollbar { display: none; }
 
-    /* HEADER & NAV */
     .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; }
     .header-logo-text { font-weight: 800; font-size: 20px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
-    /* TAŞMA DÜZELTMESİ (width/height eklendi, flex-shrink eklendi) */
     .icon-btn { width: 38px; height: 38px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; justify-content:center; cursor: pointer; }
     
     .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
@@ -67,7 +67,6 @@
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; }
     .nav-item.active { color: var(--primary); transform: translateY(-2px); }
 
-    /* SEARCH & FILTER */
     .search-box { display: flex; padding: 16px 20px 10px; gap: 10px; }
     .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; font-size: 14px; }
     .search-input:focus { border-color: var(--primary); }
@@ -77,7 +76,6 @@
     .cat-chip { padding: 8px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
     .cat-chip.active { background: white; color: black; font-weight: 700; border-color: white; }
 
-    /* VIDEOS & ADS */
     .ad-728-container { width: 100%; height: 60px; overflow: hidden; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); position: relative; margin-bottom:15px; }
     .ad-728-container::after { content: "Advertisement"; position: absolute; top: 2px; left: 6px; font-size: 9px; color: #555; font-weight: bold; }
     .ad-728-wrapper { transform: scale(0.45); transform-origin: center; width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; }
@@ -93,7 +91,6 @@
     .v-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .v-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; display:flex; align-items:center; gap:5px; margin-top:2px; }
 
-    /* WATCH PAGE */
     .player-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
     #ytPlayerDiv { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .custom-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent); padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; z-index: 15; }
@@ -103,7 +100,6 @@
     .tracker-bar { width: 100%; height: 11px; background: var(--card); border-radius: 6px; overflow: hidden; }
     .tracker-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--primary-bright)); transition: width 1s linear; }
 
-    /* SIDEBAR & MODALS */
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(4px); }
     .overlay.active { opacity: 1; pointer-events: all; }
     .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.4s; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
@@ -123,7 +119,6 @@
     .input-box { width: 100%; padding: 14px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; }
     .input-box:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--primary-glow); }
 
-    /* PERCENTAGE BUTTONS (ÇEKİM) */
     .perc-row { display: flex; gap: 8px; margin-bottom: 15px; }
     .perc-btn { flex: 1; background: var(--bg-body); border: 1px solid var(--border); color: white; padding: 10px 0; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .perc-btn:active { background: var(--primary); border-color: var(--primary); color: #000; }
@@ -285,12 +280,6 @@
 <!-- DETAYLI STATS MODAL -->
 <div class="modal" id="statsModal">
   <div class="modal-header"><span data-i18n="menuStats">İstatistikler</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
-  
-  <!-- GÜNLÜK KOTA KARTI -->
-  <div style="background:var(--bg-body); border:1px solid var(--primary); padding:15px; border-radius:12px; margin-bottom:15px; text-align:center;">
-    <div style="font-size:11px; color:var(--primary); font-weight:bold; margin-bottom:5px;" data-i18n="statDailyLimit">GÜNLÜK KOTA</div>
-    <div style="font-size:24px; font-weight:800; color:white;"><span id="statDailyWatched">0</span> <span style="color:var(--text-muted); font-size:18px;">/ 15</span></div>
-  </div>
 
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
     <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
@@ -413,7 +402,6 @@ const telegramId = String(tg.initDataUnsafe?.user?.id || "demo_test_user");
 const startParam = tg.initDataUnsafe?.start_param || "";
 const inviterId = startParam.startsWith("ref_") ? startParam.replace("ref_", "") : "";
 
-// DİL SÖZLÜĞÜ (Memo ve Limit Bildirimleri Eklendi)
 const i18n = {
   tr: {
     mobileOnly: "Mobil Cihaz Gerekli", searchPlaceholder: "Video ara...", 
@@ -421,8 +409,7 @@ const i18n = {
     navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusPlaying: "Oynatılıyor...", statusPaused: "Duraklatıldı",
     menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", menuBalance: "Mevcut Bakiye",
     channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", viewsText: "izlenme",
-    statVids: "İzlenen Video", statMins: "İzleme Süresi", statDailyLimit: "GÜNLÜK KOTA", adminNoWithdraws: "Bekleyen çekim talebi yok!", apiError: "Video bulunamadı veya API limiti doldu.",
-    limitReachedMsg: "Günlük izleme limitine ulaştınız. Lütfen yarın tekrar gelin!",
+    statVids: "İzlenen Video", statMins: "İzleme Süresi", adminNoWithdraws: "Bekleyen çekim talebi yok!", apiError: "Video bulunamadı veya API limiti doldu.",
     refOverviewTab: "Özet & Grafik", refHistoryTab: "Davet Geçmişi", refPeople: "Davet Edilen", refEarnedText: "Kazanç", refCopy: "Bağlantıyı Kopyala", refJoined: "Katıldı",
     wdNew: "Yeni Çekim", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdMemo: "Memo / Tag (İsteğe Bağlı)", wdSend: "Gönder",
     faq1q: "Nasıl kazanırım?", faq1a: "Videoyu 5 dakika kesintisiz izleyin. Süre dolduğunda 0.005 TON kazanırsınız.",
@@ -434,8 +421,7 @@ const i18n = {
     navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusPlaying: "Playing...", statusPaused: "Paused",
     menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", menuBalance: "Current Balance",
     channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", viewsText: "views",
-    statVids: "Videos Watched", statMins: "Watch Time", statDailyLimit: "DAILY QUOTA", adminNoWithdraws: "No pending requests!", apiError: "No videos found or API limit reached.",
-    limitReachedMsg: "You have reached your daily watch limit. Please come back tomorrow!",
+    statVids: "Videos Watched", statMins: "Watch Time", adminNoWithdraws: "No pending requests!", apiError: "No videos found or API limit reached.",
     refOverviewTab: "Overview & Chart", refHistoryTab: "Invite History", refPeople: "Invited", refEarnedText: "Earned", refCopy: "Copy Link", refJoined: "Joined",
     wdNew: "New Withdraw", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdMemo: "Memo / Tag (Optional)", wdSend: "Send",
     faq1q: "How to earn?", faq1a: "Watch a video for 5 minutes without interruption to earn 0.005 TON.",
@@ -447,8 +433,7 @@ const i18n = {
     navHome: "Главная", navFaq: "FAQ", watchTitle: "Смотреть", nextReward: "След. награда", statusPlaying: "Воспроизведение...", statusPaused: "Пауза",
     menuStats: "Статистика", menuRef: "Рефералы", menuWithdraw: "Вывод TON", menuBalance: "Текущий Баланс",
     channelInfo: "О канале", visitChannel: "В YouTube", statTotal: "Всего заработано", statRef: "Доход от реф.", viewsText: "просмотров",
-    statVids: "Видео просм.", statMins: "Время просм.", statDailyLimit: "ДНЕВНОЙ ЛИМИТ", adminNoWithdraws: "Нет ожидающих запросов!", apiError: "Видео не найдено или лимит API исчерпан.",
-    limitReachedMsg: "Вы достигли дневного лимита просмотров. Возвращайтесь завтра!",
+    statVids: "Видео просм.", statMins: "Время просм.", adminNoWithdraws: "Нет ожидающих запросов!", apiError: "Видео не найдено или лимит API исчерпан.",
     refOverviewTab: "Обзор и График", refHistoryTab: "История реф.", refPeople: "Приглашенные", refEarnedText: "Доход", refCopy: "Копировать", refJoined: "Присоединился",
     wdNew: "Новый вывод", wdHistory: "История", wdWallet: "TON Кошелек (EQ...)", wdMemo: "Memo / Тег (Необяз.)", wdSend: "Отправить",
     faq1q: "Как заработать?", faq1a: "Смотрите видео 5 минут, чтобы получить 0.005 TON.",
@@ -460,8 +445,7 @@ const i18n = {
     navHome: "Inicio", navFaq: "FAQ", watchTitle: "Ver Video", nextReward: "Sig. Recompensa", statusPlaying: "Reproduciendo...", statusPaused: "Pausado",
     menuStats: "Estadísticas", menuRef: "Referidos", menuWithdraw: "Retirar TON", menuBalance: "Balance Actual",
     channelInfo: "Info del Canal", visitChannel: "En YouTube", statTotal: "Total Ganado", statRef: "Ganancias Ref", viewsText: "vistas",
-    statVids: "Videos Vistos", statMins: "Tiempo Visto", statDailyLimit: "CUOTA DIARIA", adminNoWithdraws: "¡No hay retiros pendientes!", apiError: "No se encontraron videos o límite de API.",
-    limitReachedMsg: "Has alcanzado tu límite de visualización diario. ¡Vuelve mañana!",
+    statVids: "Videos Vistos", statMins: "Tiempo Visto", adminNoWithdraws: "¡No hay retiros pendientes!", apiError: "No se encontraron videos o límite de API.",
     refOverviewTab: "Resumen y Gráfico", refHistoryTab: "Historial", refPeople: "Invitados", refEarnedText: "Ganancias", refCopy: "Copiar Enlace", refJoined: "Se unió",
     wdNew: "Nuevo Retiro", wdHistory: "Historia", wdWallet: "Billetera TON (EQ...)", wdMemo: "Memo / Tag (Opcional)", wdSend: "Enviar",
     faq1q: "¿Cómo ganar?", faq1a: "Mira un video durante 5 min para ganar 0.005 TON.", faq2q: "¿Límite?", faq2a: "Mínimo 0.10 TON.", faq3q: "¿Referidos?", faq3a: "10% de ganancias."
@@ -472,8 +456,7 @@ const i18n = {
     navHome: "Startseite", navFaq: "FAQ", watchTitle: "Video ansehen", nextReward: "Nächste Belohnung", statusPlaying: "Spielt...", statusPaused: "Pausiert",
     menuStats: "Statistiken", menuRef: "Empfehlungen", menuWithdraw: "Auszahlen", menuBalance: "Guthaben",
     channelInfo: "Kanalinfo", visitChannel: "Auf YouTube", statTotal: "Gesamt", statRef: "Ref-Einnahmen", viewsText: "Aufrufe",
-    statVids: "Videos gesehen", statMins: "Wiedergabezeit", statDailyLimit: "TAGESKONTINGENT", adminNoWithdraws: "Keine offenen Auszahlungen!", apiError: "Keine Videos gefunden oder API-Limit.",
-    limitReachedMsg: "Sie haben Ihr tägliches Wiedergabelimit erreicht. Kommen Sie morgen wieder!",
+    statVids: "Videos gesehen", statMins: "Wiedergabezeit", adminNoWithdraws: "Keine offenen Auszahlungen!", apiError: "Keine Videos gefunden oder API-Limit.",
     refOverviewTab: "Übersicht & Chart", refHistoryTab: "Verlauf", refPeople: "Eingeladene", refEarnedText: "Verdient", refCopy: "Link kopieren", refJoined: "Beigetreten",
     wdNew: "Neue Auszahlung", wdHistory: "Verlauf", wdWallet: "TON Wallet (EQ...)", wdMemo: "Memo / Tag (Optional)", wdSend: "Senden",
     faq1q: "Wie verdiene ich?", faq1a: "Schauen Sie ein Video 5 Minuten.", faq2q: "Limit?", faq2a: "Mindestens 0.10 TON.", faq3q: "Referrals?", faq3a: "10% Provision."
@@ -494,7 +477,6 @@ function applyLang(lang) {
 window.changeLang = applyLang;
 
 let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, uVideos = 0, isAdmin = false;
-let uDailyWatched = 0, uDailyLimit = 15;
 let globalWatchSeconds = 0, watchTimerInterval = null, videoProgressInterval = null;
 
 async function loadUserData() {
@@ -502,8 +484,6 @@ async function loadUserData() {
     const res = await (await fetch(`${API_URL}/api/user/${telegramId}${inviterId ? `?ref=${inviterId}` : ''}`)).json();
     uBal = res.balance || 0; uTotal = res.totalEarned || 0; uRefCount = res.refCount || 0; uRefEarned = res.refEarned || 0; 
     uVideos = res.videosWatched || Math.floor(uTotal / 0.005); 
-    uDailyWatched = res.dailyWatched || 0;
-    uDailyLimit = res.dailyLimit || 15;
     isAdmin = res.isAdmin === true;
     
     document.getElementById('uiBal').innerText = uBal.toFixed(4); document.getElementById('sidebarBal').innerText = uBal.toFixed(4);
@@ -512,7 +492,6 @@ async function loadUserData() {
     document.getElementById('statRefCount').innerText = uRefCount;
     document.getElementById('statVids').innerText = uVideos;
     document.getElementById('statMins').innerText = (uVideos * 5) + " dk";
-    document.getElementById('statDailyWatched').innerText = uDailyWatched;
     
     document.getElementById('rCount').innerText = uRefCount; document.getElementById('rEarned').innerText = uRefEarned.toFixed(4);
     document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
@@ -558,11 +537,6 @@ async function triggerAutoReward() {
     if(res.success) { 
         tg.showAlert(`🎉 +0.005 TON!`); 
         await loadUserData(); 
-        if(uDailyWatched >= uDailyLimit) { goBack('pageWatch'); fetchVids(); } // Limit dolduysa anasayfaya at ve gizle
-    }
-    if(res.error === 'limit_reached') {
-        tg.showAlert(i18n[currentLang].limitReachedMsg);
-        goBack('pageWatch'); fetchVids();
     }
   } catch(e) {}
 }
@@ -572,6 +546,8 @@ function initPlayer(vId) {
   const oldDiv = document.getElementById('ytPlayerDiv'); if(oldDiv) oldDiv.remove();
   const newDiv = document.createElement('div'); newDiv.id = 'ytPlayerDiv';
   document.getElementById('playerWrapper').prepend(newDiv);
+  
+  // YouTube API ile player yükleme
   window.ytPlayer = new YT.Player('ytPlayerDiv', {
     videoId: vId, playerVars: { controls: 0, autoplay: 1, playsinline: 1 },
     events: { 
@@ -580,16 +556,11 @@ function initPlayer(vId) {
     }
   });
 }
+
 window.togglePlay = function() { window.ytPlayer.getPlayerState() === 1 ? window.ytPlayer.pauseVideo() : window.ytPlayer.playVideo(); };
 
 async function fetchVids(q) {
   const box = document.getElementById('homeFeed');
-  
-  if(uDailyWatched >= uDailyLimit) {
-      box.innerHTML = `<div class="empty-state"><span class="material-symbols-rounded" style="color:var(--accent);">hourglass_empty</span><p style="color:white; font-size:16px;">${i18n[currentLang].limitReachedMsg}</p></div>`;
-      return;
-  }
-
   box.innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner" style="margin:0 auto;"></div></div>`;
   try {
     const data = await (await fetch(`${API_URL}/api/videos?q=${encodeURIComponent(q||'trending')}`)).json();
@@ -629,7 +600,6 @@ async function fetchVids(q) {
 window.setCategory = (cat, el) => { document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active')); el.classList.add('active'); fetchVids(cat); };
 window.searchVideos = () => fetchVids(document.getElementById('searchInput').value);
 
-// KATI KİLİT SİSTEMİ (Tek Sayfa/Modal Açılışı)
 window.showPage = id => {
   closeAllModals(); closeSidebar();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -638,7 +608,6 @@ window.showPage = id => {
 };
 window.goBack = id => { showPage('pageHome'); };
 window.openWatch = vId => { 
-    if(uDailyWatched >= uDailyLimit) return tg.showAlert(i18n[currentLang].limitReachedMsg);
     showPage('pageWatch'); initPlayer(vId); 
 };
 
