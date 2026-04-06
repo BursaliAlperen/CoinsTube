@@ -18,7 +18,7 @@ app.use(express.static('public'));
 
 const TARGET_REWARD = 0.005; 
 const REF_PERCENTAGE = 0.10; 
-const ADMIN_ID = String(process.env.ADMIN_TG_ID); // String garantisi!
+const ADMIN_ID = String(process.env.ADMIN_TG_ID);
 
 // ==========================================
 // RENDER ÜCRETSİZ SÜRÜM UYKU ENGELLEYİCİ
@@ -30,25 +30,31 @@ setInterval(() => {
 app.get('/api/ping', (req, res) => res.send('pong'));
 
 // ==========================================
-// 1. KULLANICI GETİR
+// 1. KULLANICI GETİR & REFERANS
 // ==========================================
 app.get('/api/user/:id', async (req, res) => {
     const telegramId = String(req.params.id);
+    const inviterId = req.query.ref ? String(req.query.ref) : null;
+
     try {
         const userRef = db.collection('users').doc(telegramId);
         const doc = await userRef.get();
         let userData;
+
         if (!doc.exists) {
-            userData = { balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, createdAt: admin.firestore.FieldValue.serverTimestamp() };
+            userData = { balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, inviter: inviterId, createdAt: admin.firestore.FieldValue.serverTimestamp() };
             await userRef.set(userData);
+
+            if (inviterId && inviterId !== telegramId) {
+                const invRef = db.collection('users').doc(inviterId);
+                const invDoc = await invRef.get();
+                if (invDoc.exists) await invRef.update({ refCount: admin.firestore.FieldValue.increment(1) });
+            }
         } else {
             userData = doc.data();
         }
         
-        // ADMIN KONTROLÜ (Kesin çözüm)
-        const isAdmin = (telegramId === ADMIN_ID);
-        
-        res.json({ ...userData, isAdmin });
+        res.json({ ...userData, isAdmin: (telegramId === ADMIN_ID) });
     } catch (error) { res.status(500).json({ error: 'DB hatası' }); }
 });
 
@@ -71,6 +77,7 @@ app.post('/api/reward', async (req, res) => {
             }
             t.set(userRef, { balance: newBalance, totalEarned: newTotal }, { merge: true });
         });
+
         if (userInviter) {
             const inviterRef = db.collection('users').doc(userInviter);
             const refAmt = TARGET_REWARD * REF_PERCENTAGE;
@@ -83,8 +90,21 @@ app.post('/api/reward', async (req, res) => {
     } catch (error) { res.status(500).json({ error: 'İşlem hatası' }); }
 });
 
+app.get('/api/referrals/:id', async (req, res) => {
+    try {
+        const snap = await db.collection('users').where('inviter', '==', String(req.params.id)).get();
+        let refs = [];
+        snap.forEach(doc => {
+            const idStr = doc.id;
+            const hiddenId = idStr.length > 5 ? idStr.substring(0,3) + '***' + idStr.substring(idStr.length-3) : '***';
+            refs.push({ id: hiddenId, date: doc.data().createdAt });
+        });
+        res.json({ success: true, referrals: refs });
+    } catch (error) { res.status(500).json({ error: 'Referanslar alınamadı' }); }
+});
+
 // ==========================================
-// 3. PARA ÇEKME VE GEÇMİŞ
+// 3. ÇEKİM VE GEÇMİŞ
 // ==========================================
 app.post('/api/withdraw', async (req, res) => {
     const { telegramId, wallet, amount } = req.body;
@@ -117,23 +137,18 @@ app.get('/api/withdraw/history/:id', async (req, res) => {
 });
 
 // ==========================================
-// 4. ADMİN İŞLEMLERİ
+// 4. ADMİN
 // ==========================================
 app.get('/api/admin/stats', async (req, res) => {
     if (String(req.query.tgId) !== ADMIN_ID) return res.status(403).json({ error: 'Yetkisiz!' });
     try {
         const pendingSnap = await db.collection('withdraws').where('status', '==', 'pending').get();
         let requests = []; pendingSnap.forEach(doc => requests.push({ id: doc.id, ...doc.data() }));
-
         const usersSnap = await db.collection('users').orderBy('totalEarned', 'desc').limit(50).get();
         const totalUsers = (await db.collection('users').count().get()).data().count; 
-        
-        let usersList = [];
-        usersSnap.forEach(doc => usersList.push({ id: doc.id, ...doc.data() }));
-
+        let usersList = []; usersSnap.forEach(doc => usersList.push({ id: doc.id, ...doc.data() }));
         const approvedSnap = await db.collection('withdraws').where('status', '==', 'approved').get();
         let totalPaid = 0; approvedSnap.forEach(doc => { totalPaid += Number(doc.data().amount || 0); });
-
         res.json({ success: true, pendingWithdrawsCount: requests.length, requests, totalUsers, totalPaid: totalPaid.toFixed(4), users: usersList });
     } catch (error) { res.status(500).json({ error: 'Admin paneli hatası' }); }
 });
@@ -158,15 +173,57 @@ app.post('/api/admin/withdraw/:id', async (req, res) => {
 });
 
 // ==========================================
-// 5. YOUTUBE API (Sıralama eklendi)
+// 5. YOUTUBE API (Kanal Logosu + İzlenme Sayısı Güçlendirilmiş Modül)
 // ==========================================
 app.get('/api/videos', async (req, res) => {
     try {
+        const apiKey = process.env.YOUTUBE_API_KEY;
         const query = encodeURIComponent(req.query.q || 'trending');
-        const order = req.query.order || 'relevance'; // date, viewCount, relevance
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&order=${order}&key=${process.env.YOUTUBE_API_KEY}&q=${query}`;
-        res.json((await axios.get(url)).data);
-    } catch (error) { res.status(500).json({ error: 'API Hatası' }); }
+        const order = req.query.order || 'relevance'; 
+        
+        // 1. Videoları ara (Sadece ID, Başlık ve Thumbnail döner)
+        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&order=${order}&key=${apiKey}&q=${query}`;
+        const searchRes = await axios.get(searchUrl);
+        const items = searchRes.data.items || [];
+        
+        if (items.length === 0) return res.json({ items: [] });
+
+        // 2. Bulunan videoların ve kanalların ID'lerini topla
+        const videoIds = items.map(i => i.id.videoId).filter(Boolean).join(',');
+        const channelIds = [...new Set(items.map(i => i.snippet.channelId))].filter(Boolean).join(',');
+
+        // 3. İzlenme sayıları için ekstra istek
+        let videoStats = {};
+        if (videoIds) {
+            const statsUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${apiKey}`;
+            const statsRes = await axios.get(statsUrl);
+            (statsRes.data.items || []).forEach(v => { videoStats[v.id] = v.statistics?.viewCount || '0'; });
+        }
+
+        // 4. Kanal fotoğrafları için ekstra istek
+        let channelAvatars = {};
+        if (channelIds) {
+            const channelsUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${channelIds}&key=${apiKey}`;
+            const channelsRes = await axios.get(channelsUrl);
+            (channelsRes.data.items || []).forEach(c => { channelAvatars[c.id] = c.snippet?.thumbnails?.default?.url || ''; });
+        }
+
+        // 5. Bütün verileri birleştir
+        const enrichedItems = items.map(item => {
+            const vId = item.id.videoId;
+            const cId = item.snippet.channelId;
+            return {
+                ...item,
+                statistics: { viewCount: videoStats[vId] || '0' },
+                channelInfo: { avatar: channelAvatars[cId] || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.snippet.channelTitle)}&background=random` }
+            };
+        });
+
+        res.json({ items: enrichedItems });
+    } catch (error) { 
+        console.error(error?.response?.data || error);
+        res.status(500).json({ error: 'API Hatası' }); 
+    }
 });
 
 const PORT = process.env.PORT || 10000;
