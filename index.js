@@ -188,40 +188,52 @@ app.post('/api/admin/withdraw/:id', async (req, res) => {
 });
 
 // ==========================================
-// 5. YOUTUBE API (Akıllı API Anahtarı Rotasyonu)
+// 5. YOUTUBE API (Yerelleştirilmiş & İzlenmeye Göre Sıralı)
 // ==========================================
 app.get('/api/videos', async (req, res) => {
     try {
-        // Tanımlı olan tüm API Anahtarlarını listeye al
         const keys = [
             process.env.YOUTUBE_API_KEY, 
             process.env.YOUTUBE_API_KEY_2, 
             process.env.YOUTUBE_API_KEY_3
-        ].filter(Boolean); // Boş olanları (tanımlanmamış) siler
+        ].filter(Boolean);
 
         const query = encodeURIComponent(req.query.q || 'trending');
+        const lang = req.query.lang || 'tr'; 
         
+        // Dile göre bölge ve dil ayarı
+        let regionCode = 'US';
+        let relLang = 'en';
+        
+        if(lang === 'tr') { regionCode = 'TR'; relLang = 'tr'; }
+        else if(lang === 'ru') { regionCode = 'RU'; relLang = 'ru'; }
+        else if(lang === 'de') { regionCode = 'DE'; relLang = 'de'; }
+        else if(lang === 'es') { regionCode = 'ES'; relLang = 'es'; }
+
         let items = [];
         let success = false;
         let workingApiKey = '';
 
-        // API Anahtarlarını sırayla dene. Biri limit dolduysa diğerine geçer.
         for (let apiKey of keys) {
             try {
-                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&key=${apiKey}&q=${query}`;
+                // order=viewCount (İzlenmeye göre), regionCode ve relevanceLanguage (Yerel içerik)
+                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&order=viewCount&regionCode=${regionCode}&relevanceLanguage=${relLang}&key=${apiKey}&q=${query}`;
+                
                 const searchRes = await axios.get(searchUrl);
                 items = searchRes.data.items || [];
                 success = true;
-                workingApiKey = apiKey; // Çalışan anahtarı kaydet
-                break; // Başarılı olduysa döngüyü durdur
+                workingApiKey = apiKey;
+                break; // Başarılıysa döngüden çık
             } catch (err) {
-                console.warn(`API Anahtarı limiti dolmuş olabilir, diğerine geçiliyor...`);
+                // Google'ın gönderdiği gerçek API hata detayını logluyoruz. 
+                // Sunucu terminalinde bu loga bakarak asıl sorunun ne olduğunu anlayabilirsiniz.
+                const errorDetail = err.response?.data?.error?.message || err.message;
+                console.warn(`[API UYARISI] Anahtar başarısız: ${errorDetail}`);
             }
         }
 
-        // Eğer tüm anahtarlar tükendiyse
         if (!success) {
-            return res.status(500).json({ error: 'Tüm API limitleri doldu!' });
+            return res.status(500).json({ error: 'Tüm API limitleri doldu veya API Anahtarları hatalı!' });
         }
         
         if (items.length === 0) return res.json({ items: [] });
@@ -255,6 +267,7 @@ app.get('/api/videos', async (req, res) => {
 
         res.json({ items: enrichedItems });
     } catch (error) { 
+        console.error("Genel API Hatası:", error.message);
         res.status(500).json({ error: 'Genel API Hatası' }); 
     }
 });
