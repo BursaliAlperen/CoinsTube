@@ -19,8 +19,6 @@ app.use(express.static('public'));
 const TARGET_REWARD = 0.005; 
 const REF_PERCENTAGE = 0.10; 
 const ADMIN_ID = String(process.env.ADMIN_TG_ID);
-const DAILY_LIMIT = 15;
-const getTodayStr = () => new Date().toISOString().split('T')[0];
 
 // ==========================================
 // RENDER ÜCRETSİZ SÜRÜM UYKU ENGELLEYİCİ
@@ -37,7 +35,6 @@ app.get('/api/ping', (req, res) => res.send('pong'));
 app.get('/api/user/:id', async (req, res) => {
     const telegramId = String(req.params.id);
     const inviterId = req.query.ref ? String(req.query.ref) : null;
-    const today = getTodayStr();
 
     try {
         const userRef = db.collection('users').doc(telegramId);
@@ -47,7 +44,7 @@ app.get('/api/user/:id', async (req, res) => {
         if (!doc.exists) {
             userData = { 
                 balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, 
-                videosWatched: 0, dailyWatched: 0, lastWatchDate: today,
+                videosWatched: 0,
                 inviter: inviterId, createdAt: admin.firestore.FieldValue.serverTimestamp() 
             };
             await userRef.set(userData);
@@ -61,17 +58,15 @@ app.get('/api/user/:id', async (req, res) => {
             userData = doc.data();
         }
         
-        let currentDaily = userData.lastWatchDate === today ? (userData.dailyWatched || 0) : 0;
-        res.json({ ...userData, dailyWatched: currentDaily, dailyLimit: DAILY_LIMIT, isAdmin: (telegramId === ADMIN_ID) });
+        res.json({ ...userData, isAdmin: (telegramId === ADMIN_ID) });
     } catch (error) { res.status(500).json({ error: 'DB hatası' }); }
 });
 
 // ==========================================
-// 2. VİDEO ÖDÜLÜ & GÜNLÜK KOTA
+// 2. VİDEO ÖDÜLÜ (LİMİTSİZ İZLEME)
 // ==========================================
 app.post('/api/reward', async (req, res) => {
     const { telegramId } = req.body;
-    const today = getTodayStr();
 
     try {
         const userRef = db.collection('users').doc(String(telegramId));
@@ -82,9 +77,6 @@ app.post('/api/reward', async (req, res) => {
             if (!doc.exists) throw new Error('user_not_found');
 
             const data = doc.data();
-            let currentDaily = data.lastWatchDate === today ? (data.dailyWatched || 0) : 0;
-
-            if (currentDaily >= DAILY_LIMIT) throw new Error('limit_reached');
 
             let newBalance = (data.balance || 0) + TARGET_REWARD;
             let newTotal = (data.totalEarned || 0) + TARGET_REWARD;
@@ -93,9 +85,7 @@ app.post('/api/reward', async (req, res) => {
             t.set(userRef, { 
                 balance: newBalance, 
                 totalEarned: newTotal,
-                videosWatched: admin.firestore.FieldValue.increment(1),
-                dailyWatched: currentDaily + 1,
-                lastWatchDate: today
+                videosWatched: admin.firestore.FieldValue.increment(1)
             }, { merge: true });
         });
 
@@ -109,7 +99,6 @@ app.post('/api/reward', async (req, res) => {
         }
         res.json({ success: true, reward: TARGET_REWARD });
     } catch (error) { 
-        if (error.message === 'limit_reached') return res.status(403).json({ success: false, error: 'limit_reached' });
         res.status(500).json({ error: 'İşlem hatası' }); 
     }
 });
