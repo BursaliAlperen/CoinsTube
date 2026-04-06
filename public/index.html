@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>CoinsTube Premium</title>
   
-  <!-- Gerekli Scriptler -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- YOUTUBE IFRAME API (Siyah ekran sorununu çözen kod) -->
+  <!-- YOUTUBE IFRAME API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
   
-  <!-- Reklam Scriptleri -->
   <link rel="stylesheet" href="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.css" />
   <script src="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.js"></script>
   <script type="text/javascript" src="//cdn.runative-syndicate.com/sdk/v1/p.js" data-ts-spot="d67e6ef15c554c3388497f3f2f52d5b1" data-ts-mode="selective" async defer></script>
@@ -148,14 +146,12 @@
   <h2 style="color:white; margin-bottom:10px; font-weight:800;" data-i18n="mobileOnly">Mobil Cihaz Gerekli</h2>
 </div>
 
-<!-- SPLASH -->
 <div id="splashScreen">
   <img src="cointube.png" class="splash-logo-img">
   <div class="splash-title">CoinsTube</div>
   <div class="spinner"></div>
 </div>
 
-<!-- ANA SAYFA -->
 <div id="pageHome" class="page active">
   <div class="header">
     <div class="header-left">
@@ -200,7 +196,6 @@
   </div>
 </div>
 
-<!-- IZLEME SAYFASI -->
 <div id="pageWatch" class="page">
   <div class="header">
     <div class="header-left">
@@ -234,7 +229,6 @@
   </div>
 </div>
 
-<!-- SIDEBAR -->
 <div class="overlay" id="mainOverlay" onclick="closeSidebar()"></div>
 <div class="overlay" id="modalOverlay" onclick="closeAllModals()"></div>
 
@@ -264,7 +258,6 @@
   </div>
 </div>
 
-<!-- KANAL MODALI -->
 <div class="modal" id="channelModal">
   <div class="modal-header">
     <span data-i18n="channelInfo">Kanal Bilgisi</span>
@@ -277,10 +270,8 @@
   <button class="btn-main" id="cModalBtn"><span class="material-symbols-rounded" style="margin-right:8px;">open_in_new</span> <span data-i18n="visitChannel">YouTube'da Git</span></button>
 </div>
 
-<!-- DETAYLI STATS MODAL -->
 <div class="modal" id="statsModal">
   <div class="modal-header"><span data-i18n="menuStats">İstatistikler</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
-
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
     <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
       <div style="font-size:11px; color:var(--text-muted);" data-i18n="statTotal">Toplam Kazanç</div>
@@ -310,15 +301,12 @@
   <div style="width:100%; height:200px;"><canvas id="chartCanvas"></canvas></div>
 </div>
 
-<!-- REFERRAL MODAL -->
 <div class="modal" id="refModal">
   <div class="modal-header"><span data-i18n="menuRef">Referans Sistemi</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
-  
   <div class="withdraw-tabs">
     <div class="withdraw-tab active" onclick="switchRefTab('overview', this)" data-i18n="refOverviewTab">Özet & Grafik</div>
     <div class="withdraw-tab" onclick="switchRefTab('history', this)" data-i18n="refHistoryTab">Davet Geçmişi</div>
   </div>
-
   <div class="withdraw-panel active" id="refPanelOverview">
     <div style="display:flex; gap:10px; margin-bottom:15px;">
       <div style="flex:1; text-align:center; background:var(--bg-body); padding:15px; border-radius:12px; border:1px solid var(--border);">
@@ -334,13 +322,9 @@
     <input type="text" id="refLinkInput" class="input-box" readonly style="text-align:center; color:var(--accent);">
     <button class="btn-main" onclick="copyRefLink()"><span class="material-symbols-rounded" style="margin-right:8px;">content_copy</span> <span data-i18n="refCopy">Bağlantıyı Kopyala</span></button>
   </div>
-
-  <div class="withdraw-panel" id="refPanelHistory">
-    <div id="refHistoryList"></div>
-  </div>
+  <div class="withdraw-panel" id="refPanelHistory"><div id="refHistoryList"></div></div>
 </div>
 
-<!-- WITHDRAW MODAL -->
 <div class="modal" id="withdrawModal">
   <div class="modal-header"><span data-i18n="menuWithdraw">TON Çek</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
   <div class="withdraw-tabs">
@@ -350,28 +334,23 @@
   <div class="withdraw-panel active" id="panelNew">
     <input type="text" id="wWallet" class="input-box" placeholder="TON Cüzdan (EQ...)" data-i18n-placeholder="wdWallet">
     <input type="text" id="wMemo" class="input-box" placeholder="Memo / Tag (İsteğe bağlı)" data-i18n-placeholder="wdMemo">
-    
     <input type="number" id="wAmount" class="input-box" placeholder="Miktar (Min 0.10)">
-    
     <div class="perc-row">
       <button class="perc-btn" onclick="setAmountPerc(25)">25%</button>
       <button class="perc-btn" onclick="setAmountPerc(50)">50%</button>
       <button class="perc-btn" onclick="setAmountPerc(75)">75%</button>
       <button class="perc-btn" onclick="setAmountPerc(100)">MAX</button>
     </div>
-
     <button class="btn-main" onclick="reqWithdraw()"><span class="material-symbols-rounded" style="margin-right:8px;">send</span> <span data-i18n="wdSend">Gönder</span></button>
   </div>
   <div class="withdraw-panel" id="panelHistory"><div id="withdrawHistoryList"></div></div>
 </div>
 
-<!-- FAQ MODAL -->
 <div class="modal" id="faqModal">
   <div class="modal-header"><span data-i18n="navFaq">SSS</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
   <div id="faqContent"></div>
 </div>
 
-<!-- ADMIN MODAL -->
 <div class="modal" id="adminModal">
   <div class="modal-header"><span style="color:#a78bfa;">Admin Panel</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
   <div class="admin-page-tabs">
@@ -547,7 +526,6 @@ function initPlayer(vId) {
   const newDiv = document.createElement('div'); newDiv.id = 'ytPlayerDiv';
   document.getElementById('playerWrapper').prepend(newDiv);
   
-  // YouTube API ile player yükleme
   window.ytPlayer = new YT.Player('ytPlayerDiv', {
     videoId: vId, playerVars: { controls: 0, autoplay: 1, playsinline: 1 },
     events: { 
@@ -563,7 +541,9 @@ async function fetchVids(q) {
   const box = document.getElementById('homeFeed');
   box.innerHTML = `<div style="text-align:center; padding:40px;"><div class="spinner" style="margin:0 auto;"></div></div>`;
   try {
-    const data = await (await fetch(`${API_URL}/api/videos?q=${encodeURIComponent(q||'trending')}`)).json();
+    // Backend'e mevcut dili (currentLang) de parametre olarak gönderiyoruz
+    const fetchUrl = `${API_URL}/api/videos?q=${encodeURIComponent(q||'trending')}&lang=${currentLang}`;
+    const data = await (await fetch(fetchUrl)).json();
     
     if(!data.items || data.items.length === 0) {
       box.innerHTML = `<div class="empty-state"><span class="material-symbols-rounded">videocam_off</span><p>${i18n[currentLang].apiError}</p></div>`;
@@ -593,7 +573,7 @@ async function fetchVids(q) {
     });
     box.appendChild(grid);
   } catch(e) {
-    box.innerHTML = `<div class="empty-state"><span class="material-symbols-rounded">wifi_off</span><p>Bağlantı hatası!</p></div>`;
+    box.innerHTML = `<div class="empty-state"><span class="material-symbols-rounded">wifi_off</span><p>Bağlantı hatası veya API Limiti!</p></div>`;
   }
 }
 
