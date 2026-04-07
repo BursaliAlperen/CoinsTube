@@ -7,13 +7,10 @@
   
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  
   <script src="https://www.youtube.com/iframe_api"></script>
   
-  <!-- YENİ: MRMND (CLICKADILLA) INTERSTITIAL KODU -->
-  <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="4919fa43-46c7-4a61-bbac-49fe07d640ba"></script>
-  
-  <!-- YENİ: MRMND (CLICKADILLA) BANNER KODU -->
+  <!-- CLICKADILLA SCRIPTLERI -->
+  <script async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="435434"></script>
   <script async src="https://ss.mrmnd.com/banner.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -81,8 +78,8 @@
     .cat-chip { padding: 8px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
     .cat-chip.active { background: white; color: black; font-weight: 700; border-color: white; box-shadow: 0 2px 10px rgba(255,255,255,0.2); }
 
-    /* YENİ REKLAM KONTEYNERİ STİLİ */
-    .ad-banner-container { width: 100%; min-height: 50px; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); position: relative; margin-bottom:15px; overflow:hidden; }
+    /* CLICKADILLA REKLAM KONTEYNERİ */
+    .ad-banner-container { width: 100%; min-height: 90px; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); position: relative; margin-bottom:15px; overflow:hidden; }
     .ad-banner-container::after { content: "Advertisement"; position: absolute; top: 2px; left: 6px; font-size: 9px; color: #555; font-weight: bold; pointer-events: none; }
 
     .video-grid { display: flex; flex-direction: column; gap: 22px; padding: 18px 20px; }
@@ -104,7 +101,7 @@
     .progress-bar { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; cursor: pointer; }
     .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary-bright); box-shadow: 0 0 10px var(--primary-glow); }
 
-    /* YENİ BANNER İZLEME SAYACI (Sürekli Görünür) */
+    /* BANNER İZLEME SAYACI */
     .global-tracker { position: fixed; bottom: calc(var(--bottom-h) + 10px); left: 16px; right: 16px; background: rgba(19, 18, 8, 0.95); backdrop-filter: blur(10px); padding: 12px 16px; border-radius: 16px; border: 1px solid var(--primary); z-index: 400; box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; flex-direction: column; gap: 8px; }
     .global-tracker-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; }
     .tracker-bar { width: 100%; height: 8px; background: var(--card); border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
@@ -130,10 +127,6 @@
     .input-box { width: 100%; padding: 16px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; transition: 0.3s; }
     .input-box:focus { border-color: var(--accent); box-shadow: 0 0 12px var(--primary-glow); transform: translateY(-2px); }
 
-    .perc-row { display: flex; gap: 8px; margin-bottom: 15px; }
-    .perc-btn { flex: 1; background: var(--bg-body); border: 1px solid var(--border); color: white; padding: 12px 0; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .perc-btn:active { background: var(--primary); border-color: var(--primary); color: #000; transform: scale(0.9); }
-
     .withdraw-tabs, .admin-page-tabs { display: flex; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); padding: 4px; margin-bottom: 15px; gap: 4px; }
     .withdraw-tab, .admin-page-tab { flex: 1; padding: 12px 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 10px; color: var(--text-muted); transition: 0.3s; }
     .withdraw-tab.active, .admin-page-tab.active { background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; box-shadow: 0 2px 10px rgba(212,160,23,0.4); }
@@ -141,16 +134,14 @@
     .withdraw-panel.active, .admin-section.active { display: block; }
     
     .history-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 12px; padding: 14px 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-    .history-item:active { transform: scale(0.98); border-color: var(--primary); }
-
+    
     .faq-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: 0.2s; }
-    .faq-item:active { border-color: var(--primary); transform: scale(0.98); }
     .faq-q { font-weight: 700; color: #fff; margin-bottom: 8px; font-size: 14px; }
     .faq-a { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
     
     .modal-spinner { display: flex; justify-content: center; padding: 30px; }
     .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); animation: fadeIn 0.5s ease; }
-    .empty-state span { font-size: 54px; color: var(--primary); margin-bottom: 15px; display: block; opacity: 0.7; filter: drop-shadow(0 0 10px var(--primary-glow)); }
+    .empty-state span { font-size: 54px; color: var(--primary); margin-bottom: 15px; display: block; opacity: 0.7; }
   </style>
 </head>
 <body>
@@ -166,7 +157,7 @@
   <div class="spinner"></div>
 </div>
 
-<!-- YENİ BANNER İZLEME SAYACI -->
+<!-- BANNER İZLEME SAYACI -->
 <div class="global-tracker">
   <div class="global-tracker-header">
     <span style="color:var(--primary);" id="trackerStatusText" data-i18n="statusActive">Reklam Gösterimi: 0/50</span>
@@ -238,10 +229,10 @@
         </div>
     </div>
     
-    <!-- Video altında reklam yeri -->
+    <!-- CLICKADILLA BANNER (Video Altı) -->
     <div style="padding:15px;">
         <div class="ad-banner-container mrmnd-ad">
-            <div data-mndbanid="a2f8aafb-ca35-4490-8da9-4fe1ae3875f4"></div>
+            <div data-banner-id="1487272"></div>
         </div>
     </div>
   </div>
@@ -266,7 +257,7 @@
 
   <div class="sidebar-item" onclick="openModal('statsModal')"><span class="material-symbols-rounded" style="color:var(--accent);">bar_chart</span><span data-i18n="menuStats">İstatistikler</span></div>
   <div class="sidebar-item" onclick="openModal('refModal')"><span class="material-symbols-rounded" style="color:var(--primary);">group_add</span><span data-i18n="menuRef">Referans Sistemi</span></div>
-  <div class="sidebar-item" onclick="openWithdrawModal()"><span class="material-symbols-rounded" style="color:#10b981;">account_balance_wallet</span><span data-i18n="menuWithdraw">TON Çek</span></div>
+  <div class="sidebar-item" onclick="openWithdrawModal()"><span class="material-symbols-rounded" style="color:#10b981;">account_balance_wallet</span><span data-i18n="menuWithdraw">Cüzdan & Ödeme</span></div>
   <div class="sidebar-item" onclick="openModal('faqModal')"><span class="material-symbols-rounded" style="color:#60a5fa;">help</span><span data-i18n="navFaq">SSS</span></div>
   <div class="sidebar-item" id="adminSidebarItem" style="display:none; border-color:rgba(123,47,247,0.4); background:rgba(123,47,247,0.08);" onclick="openAdminPanel()"><span class="material-symbols-rounded" style="color:#a78bfa;">admin_panel_settings</span><span style="color:#a78bfa;">Admin Panel</span></div>
 
@@ -274,18 +265,6 @@
     <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;" data-i18n="menuBalance">Bakiye</div>
     <div style="display:flex; align-items:center; gap:8px;"><img src="toncoin.png" class="ton-inline-lg"><span id="sidebarBal" style="font-size:22px; font-weight:800; color:var(--accent);">0.0000</span></div>
   </div>
-</div>
-
-<div class="modal" id="channelModal">
-  <div class="modal-header">
-    <span data-i18n="channelInfo">Kanal Bilgisi</span>
-    <span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span>
-  </div>
-  <div style="text-align:center; margin-bottom:20px;">
-    <img id="cModalAvatar" src="" style="width:80px; height:80px; border-radius:50%; border:2px solid var(--primary); margin-bottom:10px;">
-    <h3 id="cModalName" style="color:white;">Kanal Adı</h3>
-  </div>
-  <button class="btn-main" id="cModalBtn"><span class="material-symbols-rounded" style="margin-right:8px;">open_in_new</span> <span data-i18n="visitChannel">YouTube'da Git</span></button>
 </div>
 
 <div class="modal" id="statsModal">
@@ -339,24 +318,28 @@
   <div class="withdraw-panel" id="refPanelHistory"><div id="refHistoryList"></div></div>
 </div>
 
+<!-- YENİ OTO ÖDEME EKRANI -->
 <div class="modal" id="withdrawModal">
-  <div class="modal-header"><span data-i18n="menuWithdraw">TON Çek</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
+  <div class="modal-header"><span data-i18n="menuWithdraw">Cüzdan & Ödeme</span><span class="close-btn material-symbols-rounded" onclick="closeAllModals()">close</span></div>
   <div class="withdraw-tabs">
-    <div class="withdraw-tab active" onclick="switchWithdrawTab('new', this)" data-i18n="wdNew">Yeni Çekim</div>
+    <div class="withdraw-tab active" onclick="switchWithdrawTab('new', this)" data-i18n="wdSettings">Ayarlar</div>
     <div class="withdraw-tab" onclick="switchWithdrawTab('history', this)" data-i18n="wdHistory">Geçmiş</div>
   </div>
+  
   <div class="withdraw-panel active" id="panelNew">
+    <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius:12px; padding:15px; margin-bottom:15px; text-align:center;">
+        <span class="material-symbols-rounded" style="color:#10b981; font-size:32px; margin-bottom:5px;">event_available</span>
+        <p style="font-size:12px; color:var(--text-main);" data-i18n="autoPayoutInfo">
+            Ödemeleriniz her <b>Cuma Günü</b> otomatik olarak kayıtlı cüzdanınıza yollanır. (Minimum 0.10 TON)
+        </p>
+    </div>
+    
     <input type="text" id="wWallet" class="input-box" placeholder="TON Cüzdan (EQ...)" data-i18n-placeholder="wdWallet">
     <input type="text" id="wMemo" class="input-box" placeholder="Memo / Tag (İsteğe bağlı)" data-i18n-placeholder="wdMemo">
-    <input type="number" id="wAmount" class="input-box" placeholder="Miktar (Min 0.10)">
-    <div class="perc-row">
-      <button class="perc-btn" onclick="setAmountPerc(25)">25%</button>
-      <button class="perc-btn" onclick="setAmountPerc(50)">50%</button>
-      <button class="perc-btn" onclick="setAmountPerc(75)">75%</button>
-      <button class="perc-btn" onclick="setAmountPerc(100)">MAX</button>
-    </div>
-    <button class="btn-main" onclick="reqWithdraw()"><span class="material-symbols-rounded" style="margin-right:8px;">send</span> <span data-i18n="wdSend">Gönder</span></button>
+    
+    <button class="btn-main" onclick="saveWallet()"><span class="material-symbols-rounded" style="margin-right:8px;">save</span> <span data-i18n="wdSave">Kaydet</span></button>
   </div>
+  
   <div class="withdraw-panel" id="panelHistory"><div id="withdrawHistoryList"></div></div>
 </div>
 
@@ -399,26 +382,28 @@ const i18n = {
   tr: {
     mobileOnly: "Mobil Cihaz Gerekli", searchPlaceholder: "Video ara...", 
     catAll: "Tümü", catAnime: "Anime", catComedy: "Eğlence", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber",
-    navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusActive: "Reklam Gösterimi:",
-    menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", menuBalance: "Mevcut Bakiye",
+    navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", statusActive: "Reklam Gösterimi:",
+    menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "Cüzdan Ayarları", menuBalance: "Mevcut Bakiye",
     channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", viewsText: "izlenme",
     statAdImpressions: "Görülen Banner", adminNoWithdraws: "Bekleyen çekim talebi yok!", apiError: "Video bulunamadı veya API limiti doldu.",
     refOverviewTab: "Özet & Grafik", refHistoryTab: "Davet Geçmişi", refPeople: "Davet Edilen", refEarnedText: "Kazanç", refCopy: "Bağlantıyı Kopyala", refJoined: "Katıldı",
-    wdNew: "Yeni Çekim", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdMemo: "Memo / Tag (İsteğe Bağlı)", wdSend: "Gönder",
+    wdSettings: "Ayarlar", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdMemo: "Memo / Tag (İsteğe Bağlı)", wdSave: "Kaydet",
+    autoPayoutInfo: "Ödemeleriniz her <b>Cuma Günü</b> otomatik olarak kayıtlı cüzdanınıza yollanır. (Minimum 0.10 TON)",
     faq1q: "Nasıl kazanırım?", faq1a: "Sayfalarda gezinirken karşılaştığınız her banner reklam sayılır. 50 banner gösterimine ulaştığınızda 0.001 TON kazanırsınız.",
-    faq2q: "Çekim limiti nedir?", faq2a: "Minimum 0.10 TON çekebilirsiniz.", faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız."
+    faq2q: "Nasıl ödeme alırım?", faq2a: "Cüzdan ayarlarınızı kaydedin. Bakiyeniz 0.10 TON olduğunda her Cuma otomatik ödenir.", faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız."
   },
   en: {
     mobileOnly: "Mobile Device Required", searchPlaceholder: "Search videos...", 
     catAll: "All", catAnime: "Anime", catComedy: "Comedy", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News",
-    navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusActive: "Ads Viewed:",
-    menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", menuBalance: "Current Balance",
+    navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", statusActive: "Ads Viewed:",
+    menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Wallet Settings", menuBalance: "Current Balance",
     channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", viewsText: "views",
     statAdImpressions: "Ads Viewed", adminNoWithdraws: "No pending requests!", apiError: "No videos found or API limit reached.",
     refOverviewTab: "Overview & Chart", refHistoryTab: "Invite History", refPeople: "Invited", refEarnedText: "Earned", refCopy: "Copy Link", refJoined: "Joined",
-    wdNew: "New Withdraw", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdMemo: "Memo / Tag (Optional)", wdSend: "Send",
-    faq1q: "How to earn?", faq1a: "Browse the app. Every banner ad you see counts. You earn 0.001 TON for every 50 banners viewed.",
-    faq2q: "Withdrawal limit?", faq2a: "Minimum withdrawal is 0.10 TON.", faq3q: "Referral system?", faq3a: "You get 10% of your invites' earnings."
+    wdSettings: "Settings", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdMemo: "Memo / Tag (Optional)", wdSave: "Save",
+    autoPayoutInfo: "Payments are processed automatically every <b>Friday</b> to your saved wallet. (Min 0.10 TON)",
+    faq1q: "How to earn?", faq1a: "Every banner ad you see counts. You earn 0.001 TON for every 50 banners viewed.",
+    faq2q: "How do I get paid?", faq2a: "Save your wallet settings. Payments are sent automatically every Friday if you have 0.10 TON.", faq3q: "Referral system?", faq3a: "You get 10% of your invites' earnings."
   }
 };
 
@@ -441,7 +426,7 @@ let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, uAds = 0, isAdmin = fal
 let targetAds = 50;
 
 // --- GÜVENLİ BANNER GÖSTERİM (IMPRESSION) TAKİBİ ---
-let currentSessionAdViews = 0; // Bu oturumda görülen banner sayısı
+let currentSessionAdViews = 0; 
 
 function updateTrackerUI() {
     const textPrefix = i18n[currentLang] ? i18n[currentLang].statusActive : "Ads Viewed:";
@@ -449,11 +434,10 @@ function updateTrackerUI() {
     document.getElementById('globalTrackerFill').style.width = `${Math.min((currentSessionAdViews/targetAds)*100, 100)}%`;
 }
 
-// Intersection Observer: Bir banner ekranda %50 oranında görünürse sayaç artar.
+// Banner göründüğünde sayaç artsın
 const adObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // Aynı reklamı sürekli saymasın diye class ekliyoruz
             if (!entry.target.classList.contains('viewed')) {
                 entry.target.classList.add('viewed');
                 currentSessionAdViews++;
@@ -465,7 +449,7 @@ const adObserver = new IntersectionObserver((entries) => {
             }
         }
     });
-}, { threshold: 0.5 }); // Ekranda en az %50'si görünmeli
+}, { threshold: 0.5 }); 
 
 function observeAds() {
     document.querySelectorAll('.mrmnd-ad').forEach(ad => {
@@ -487,10 +471,8 @@ async function triggerAdReward() {
         body: JSON.stringify({ telegramId, reportedAds }) 
     });
     
-    if(res.status === 429) {
-        console.warn("Çok hızlı işlem reddedildi.");
-        return;
-    }
+    if(res.status === 429) return console.warn("Anti-Cheat: Çok hızlı!");
+    
     const data = await res.json();
     if(data.success) { 
         tg.showAlert(`🎉 +0.001 TON kazandınız!`); 
@@ -513,6 +495,10 @@ async function loadUserData() {
     document.getElementById('statBal').innerText = uBal.toFixed(4);
     document.getElementById('statRefCount').innerText = uRefCount;
     document.getElementById('statAdViews').innerText = uAds;
+    
+    // Kayıtlı cüzdanı göster
+    if(res.wallet) document.getElementById('wWallet').value = res.wallet;
+    if(res.memo) document.getElementById('wMemo').value = res.memo;
     
     document.getElementById('rCount').innerText = uRefCount; document.getElementById('rEarned').innerText = uRefEarned.toFixed(4);
     document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
@@ -584,10 +570,10 @@ async function fetchVids(q) {
 
     box.innerHTML = ''; const grid = document.createElement('div'); grid.className = 'video-grid';
     
-    // İlk reklamı en tepeye koy
+    // CLICKADILLA İlk Reklamı Tepeye Koy
     grid.innerHTML += `
     <div class="ad-banner-container mrmnd-ad">
-        <div data-mndbanid="a2f8aafb-ca35-4490-8da9-4fe1ae3875f4"></div>
+        <div data-banner-id="1487272"></div>
     </div>`;
 
     data.items.forEach((item, idx) => {
@@ -608,17 +594,17 @@ async function fetchVids(q) {
         </div>
       </div>`;
       
-      // Her 3 videoda bir reklam yerleştir
+      // Her 3 videoda bir Clickadilla Banner ekle
       if((idx+1)%3===0) {
         grid.innerHTML += `
         <div class="ad-banner-container mrmnd-ad">
-            <div data-mndbanid="a2f8aafb-ca35-4490-8da9-4fe1ae3875f4"></div>
+            <div data-banner-id="1487272"></div>
         </div>`;
       }
     });
     box.appendChild(grid);
     
-    // Reklamları gözlemlemeye başla
+    // Eklenen reklamların görünürlüğünü takip etmeye başla
     setTimeout(observeAds, 500); 
 
   } catch(e) {
@@ -671,9 +657,15 @@ window.switchWithdrawTab = (tab, el) => {
   if(tab==='history') loadWithdrawHistory();
 };
 
-window.setAmountPerc = (perc) => {
-    const val = uBal * (perc / 100);
-    document.getElementById('wAmount').value = val > 0 ? val.toFixed(4) : '';
+window.saveWallet = async () => {
+  const w = document.getElementById('wWallet').value.trim();
+  const memo = document.getElementById('wMemo').value.trim();
+  if(!w) return tg.showAlert('Lütfen bir cüzdan adresi girin!');
+  try {
+    const res = await fetch(`${API_URL}/api/user/wallet`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({telegramId, wallet:w, memo:memo}) });
+    const data = await res.json();
+    if(data.success) { tg.showAlert('✅ Cüzdan kaydedildi! Cuma günü ödemeniz otomatik yapılacaktır.'); }
+  } catch(e) {}
 };
 
 async function loadWithdrawHistory() {
@@ -681,21 +673,9 @@ async function loadWithdrawHistory() {
   try {
     const res = await (await fetch(`${API_URL}/api/withdraw/history/${telegramId}`)).json();
     if(!res.history?.length) return list.innerHTML = `<div style="text-align:center; padding:20px; color:#aaa;">Geçmiş yok</div>`;
-    list.innerHTML = res.history.map(i => `<div class="history-item"><div><div style="font-size:12px; color:#aaa;">${i.wallet.substring(0,8)}...</div><span style="font-size:10px; color:white;">${i.status}</span></div><div style="font-weight:bold; color:var(--accent);"><img src="toncoin.png" class="ton-inline"> ${parseFloat(i.amount).toFixed(4)}</div></div>`).join('');
+    list.innerHTML = res.history.map(i => `<div class="history-item"><div><div style="font-size:12px; color:#aaa;">${i.wallet.substring(0,8)}...</div><span style="font-size:10px; color:white;">${i.status} ${i.autoFriday ? '(Oto)' : ''}</span></div><div style="font-weight:bold; color:var(--accent);"><img src="toncoin.png" class="ton-inline"> ${parseFloat(i.amount).toFixed(4)}</div></div>`).join('');
   } catch(e) {}
 }
-
-window.reqWithdraw = async () => {
-  const w = document.getElementById('wWallet').value;
-  const memo = document.getElementById('wMemo').value;
-  const a = parseFloat(document.getElementById('wAmount').value);
-  if(!w || isNaN(a) || a < 0.10 || a > uBal) return tg.showAlert('Geçersiz işlem veya yetersiz bakiye!');
-  try {
-    if((await (await fetch(`${API_URL}/api/withdraw`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({telegramId, wallet:w, memo:memo, amount:a}) })).json()).success) {
-      tg.showAlert('Talebiniz alındı!'); closeAllModals(); loadUserData();
-    }
-  } catch(e) {}
-};
 
 window.switchRefTab = (tab, el) => {
   document.getElementById('refModal').querySelectorAll('.withdraw-tab').forEach(t => t.classList.remove('active'));
