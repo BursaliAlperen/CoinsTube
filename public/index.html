@@ -7,22 +7,24 @@
   
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- YOUTUBE IFRAME API -->
+  
   <script src="https://www.youtube.com/iframe_api"></script>
   
+  <!-- YENİ: MRMND (CLICKADILLA) INTERSTITIAL KODU -->
+  <script async src="https://ss.mrmnd.com/interstitial.js" data-mndintid="4919fa43-46c7-4a61-bbac-49fe07d640ba"></script>
+  
+  <!-- YENİ: MRMND (CLICKADILLA) BANNER KODU -->
+  <script async src="https://ss.mrmnd.com/banner.js"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
-  
-  <link rel="stylesheet" href="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.css" />
-  <script src="//cdn.runative-syndicate.com/sdk/v1/interstitial.ts.js"></script>
-  <script type="text/javascript" src="//cdn.runative-syndicate.com/sdk/v1/p.js" data-ts-spot="d67e6ef15c554c3388497f3f2f52d5b1" data-ts-mode="selective" async defer></script>
 
   <style>
     :root { 
         --bg-body: #080807; --surface: #131208; --card: #1e1c0d; 
         --text-main: #f5f0d8; --text-muted: #9a9270; 
         --primary: #d4a017; --primary-bright: #f0c040; --accent: #f5d44a; 
-        --primary-glow: rgba(245, 212, 74, 0.3);
+        --primary-glow: rgba(245, 212, 74, 0.35);
         --border: #2e2a12; --header-h: 65px; --bottom-h: 65px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -31,15 +33,19 @@
     #desktopBlocker { display: none; position: fixed; inset: 0; background: #000; z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
     @media (min-width: 1024px) { body > * { display: none !important; } #desktopBlocker { display: flex !important; } }
 
-    .icon-btn, .cat-chip, .lang-btn, .sidebar-item, .withdraw-tab, .admin-page-tab, .perc-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-    .icon-btn:active, .cat-chip:active, .lang-btn:active, .withdraw-tab:active, .admin-page-tab:active { background: var(--primary-glow) !important; border-color: var(--accent) !important; color: var(--accent) !important; transform: scale(0.92); }
-    .sidebar-item:active { background: var(--primary-glow); transform: translateX(5px); }
-    .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-    .btn-main:active { background: #fff !important; color: #000 !important; box-shadow: 0 0 25px rgba(255,255,255,0.7); transform: scale(0.95); }
+    @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes scalePop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+    .icon-btn, .cat-chip, .lang-btn, .sidebar-item, .withdraw-tab, .admin-page-tab, .perc-btn { transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .icon-btn:active, .cat-chip:active, .lang-btn:active, .withdraw-tab:active, .admin-page-tab:active { background: var(--primary-glow) !important; border-color: var(--accent) !important; color: var(--accent) !important; transform: scale(0.88); }
+    .sidebar-item:active { background: var(--primary-glow); transform: translateX(8px); }
+    .btn-main { width: 100%; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(212,160,23,0.2); }
+    .btn-main:active { background: #fff !important; color: #000 !important; box-shadow: 0 0 30px rgba(255,255,255,0.8); transform: scale(0.94); }
 
     #splashScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #1a1800 0%, #080807 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; transition: opacity 0.5s ease; }
-    .splash-logo-img { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 0 40px rgba(212,160,23,0.5); }
-    .splash-title { font-size: 32px; font-weight: 800; color: white; }
+    .splash-logo-img { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 0 40px rgba(212,160,23,0.5); animation: scalePop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .splash-title { font-size: 32px; font-weight: 800; color: white; animation: slideUpFade 0.8s ease forwards 0.2s; opacity: 0; }
     .spinner { width: 45px; height: 45px; border: 4px solid rgba(255,255,255,0.05); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -47,10 +53,9 @@
     .ton-inline-lg { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; display: inline-block; flex-shrink: 0; }
 
     .page { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-body); z-index: 10; display: none; flex-direction: column; }
-    .page.active { display: flex; z-index: 20; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .page.active { display: flex; z-index: 20; animation: slideUpFade 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
     
-    .scroll-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--bottom-h) + 10px); }
+    .scroll-content { flex: 1; overflow-y: auto; padding-bottom: calc(var(--bottom-h) + 60px); scroll-behavior: smooth; }
     .scroll-content::-webkit-scrollbar { display: none; }
 
     .header { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: rgba(10,10,12,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 500; }
@@ -58,88 +63,94 @@
     .header-right { display: flex; align-items: center; gap: 8px; }
     .header-logo-text { font-weight: 800; font-size: 20px; background: linear-gradient(135deg, var(--primary-bright), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
-    /* MENÜ BUTONU (|||) TAŞMA VE KARELEŞME ÇÖZÜMÜ: min-width ve min-height eklendi */
-    .icon-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; justify-content:center; cursor: pointer; }
+    .icon-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); color: white; display:flex; align-items:center; justify-content:center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     
-    .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 13px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
-    .balance-chip:active { transform: scale(0.95); border-color: var(--accent); }
+    .balance-chip { background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(212,160,23,0.06)); border: 1px solid rgba(212,160,23,0.4); padding: 7px 14px; border-radius: 30px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #f5f0d8; cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; box-shadow: 0 2px 10px rgba(212,160,23,0.1); }
+    .balance-chip:active { transform: scale(0.92); border-color: var(--accent); box-shadow: 0 0 15px var(--primary-glow); }
     
     .bottom-nav { position:fixed; bottom:0; width: 100%; height: var(--bottom-h); background: rgba(24,24,27,0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 500; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .nav-item.active { color: var(--primary); transform: translateY(-2px); }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .nav-item.active { color: var(--primary); transform: translateY(-4px) scale(1.05); filter: drop-shadow(0 2px 5px var(--primary-glow)); }
 
     .search-box { display: flex; padding: 16px 20px 10px; gap: 10px; }
-    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; font-size: 14px; }
-    .search-input:focus { border-color: var(--primary); }
+    .search-input { flex: 1; background: var(--surface); border: 1px solid var(--border); padding: 13px 18px; border-radius: 16px; color: white; outline: none; font-size: 14px; transition: border-color 0.3s; }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
     
-    .categories { display: flex; gap: 10px; padding: 0 20px 14px; overflow-x: auto; border-bottom: 1px solid var(--border); }
+    .categories { display: flex; gap: 10px; padding: 0 20px 14px; overflow-x: auto; border-bottom: 1px solid var(--border); scroll-behavior: smooth; }
     .categories::-webkit-scrollbar { display: none; }
     .cat-chip { padding: 8px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
-    .cat-chip.active { background: white; color: black; font-weight: 700; border-color: white; }
+    .cat-chip.active { background: white; color: black; font-weight: 700; border-color: white; box-shadow: 0 2px 10px rgba(255,255,255,0.2); }
 
-    .ad-728-container { width: 100%; height: 60px; overflow: hidden; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); position: relative; margin-bottom:15px; }
-    .ad-728-container::after { content: "Advertisement"; position: absolute; top: 2px; left: 6px; font-size: 9px; color: #555; font-weight: bold; }
-    .ad-728-wrapper { transform: scale(0.45); transform-origin: center; width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; }
-    
+    /* YENİ REKLAM KONTEYNERİ STİLİ */
+    .ad-banner-container { width: 100%; min-height: 50px; display: flex; justify-content: center; align-items: center; background: var(--surface); border-radius: 12px; border: 1px dashed var(--border); position: relative; margin-bottom:15px; overflow:hidden; }
+    .ad-banner-container::after { content: "Advertisement"; position: absolute; top: 2px; left: 6px; font-size: 9px; color: #555; font-weight: bold; pointer-events: none; }
+
     .video-grid { display: flex; flex-direction: column; gap: 22px; padding: 18px 20px; }
-    .video-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
-    .v-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
-    .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .video-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; opacity: 0; animation: slideUpFade 0.5s ease forwards; }
+    .video-card:active { transform: scale(0.97); opacity: 0.8; transition: 0.1s; }
+    .v-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+    .v-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .video-card:hover .v-thumb img { transform: scale(1.05); }
     .v-info { display: flex; padding: 0 4px; gap: 12px; align-items:center; }
     .v-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); z-index:2; transition:0.2s; }
-    .v-avatar:active { transform: scale(0.9); border-color:var(--accent); }
+    .v-avatar:active { transform: scale(0.85); border-color:var(--accent); }
     .v-meta { flex: 1; min-width: 0; }
     .v-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .v-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; display:flex; align-items:center; gap:5px; margin-top:2px; }
 
-    .player-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
+    .player-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; border-bottom: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     #ytPlayerDiv { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-    .custom-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent); padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; z-index: 15; }
-    .progress-bar { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; }
-    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary-bright); }
-    .reward-box { background: var(--surface); padding: 18px; margin: 16px 18px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
-    .tracker-bar { width: 100%; height: 11px; background: var(--card); border-radius: 6px; overflow: hidden; }
-    .tracker-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--primary-bright)); transition: width 1s linear; }
+    .custom-controls { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.95), transparent); padding: 14px 18px; display: flex; flex-direction: column; gap: 8px; z-index: 15; }
+    .progress-bar { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; cursor: pointer; }
+    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--primary-bright); box-shadow: 0 0 10px var(--primary-glow); }
 
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; opacity: 0; pointer-events: none; transition: 0.4s; backdrop-filter: blur(4px); }
+    /* YENİ BANNER İZLEME SAYACI (Sürekli Görünür) */
+    .global-tracker { position: fixed; bottom: calc(var(--bottom-h) + 10px); left: 16px; right: 16px; background: rgba(19, 18, 8, 0.95); backdrop-filter: blur(10px); padding: 12px 16px; border-radius: 16px; border: 1px solid var(--primary); z-index: 400; box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; flex-direction: column; gap: 8px; }
+    .global-tracker-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; }
+    .tracker-bar { width: 100%; height: 8px; background: var(--card); border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+    .tracker-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--primary-bright)); transition: width 0.3s ease; box-shadow: 0 0 10px var(--primary-glow); }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; opacity: 0; pointer-events: none; transition: 0.4s ease; backdrop-filter: blur(4px); }
     .overlay.active { opacity: 1; pointer-events: all; }
-    .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.4s; border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-    .sidebar.open { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
+    .sidebar { position: fixed; top: 0; left: -300px; width: 300px; height: 100vh; background: var(--surface); z-index: 1000; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+    .sidebar.open { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.7); }
     .sidebar-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); cursor: pointer; margin:0 18px 10px; }
     
     .lang-row { display: flex; gap: 10px; padding: 0 20px 18px; overflow-x: auto; margin-top:20px; }
-    .lang-btn { width: 42px; height: 30px; background: transparent; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; flex-shrink:0; }
+    .lang-btn { width: 42px; height: 32px; min-width: 42px; background: transparent; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding:0; flex-shrink:0; }
     .lang-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .lang-btn.active { border: 2px solid var(--primary); transform: scale(1.1); box-shadow: 0 0 10px rgba(212,160,23,0.5); }
+    .lang-btn.active { border: 2px solid var(--primary); transform: scale(1.15); box-shadow: 0 0 15px rgba(212,160,23,0.5); }
 
-    .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 28px 28px 0 0; z-index: 2000; transition: 0.5s; padding: 28px 22px; max-height: 90vh; overflow-y: auto; border-top: 1px solid var(--border); }
+    .modal { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--surface); border-radius: 32px 32px 0 0; z-index: 2000; transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); padding: 28px 22px; max-height: 90vh; overflow-y: auto; border-top: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
     .modal.open { bottom: 0; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: 20px; font-weight: 800; }
-    .close-btn { background: var(--card); padding: 8px; border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor:pointer; }
+    .close-btn { background: var(--card); padding: 8px; border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor:pointer; transition: 0.2s; }
+    .close-btn:active { transform: scale(0.8); background: #333; color: white; }
     
-    .input-box { width: 100%; padding: 14px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; }
-    .input-box:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--primary-glow); }
+    .input-box { width: 100%; padding: 16px 18px; background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; color: white; margin-bottom: 14px; outline: none; transition: 0.3s; }
+    .input-box:focus { border-color: var(--accent); box-shadow: 0 0 12px var(--primary-glow); transform: translateY(-2px); }
 
     .perc-row { display: flex; gap: 8px; margin-bottom: 15px; }
-    .perc-btn { flex: 1; background: var(--bg-body); border: 1px solid var(--border); color: white; padding: 10px 0; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .perc-btn:active { background: var(--primary); border-color: var(--primary); color: #000; }
+    .perc-btn { flex: 1; background: var(--bg-body); border: 1px solid var(--border); color: white; padding: 12px 0; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .perc-btn:active { background: var(--primary); border-color: var(--primary); color: #000; transform: scale(0.9); }
 
     .withdraw-tabs, .admin-page-tabs { display: flex; background: var(--bg-body); border-radius: 14px; border: 1px solid var(--border); padding: 4px; margin-bottom: 15px; gap: 4px; }
-    .withdraw-tab, .admin-page-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 10px; color: var(--text-muted); }
-    .withdraw-tab.active, .admin-page-tab.active { background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; }
-    .withdraw-panel, .admin-section { display: none; }
+    .withdraw-tab, .admin-page-tab { flex: 1; padding: 12px 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 10px; color: var(--text-muted); transition: 0.3s; }
+    .withdraw-tab.active, .admin-page-tab.active { background: linear-gradient(135deg, var(--primary-bright), var(--primary)); color: #0a0800; box-shadow: 0 2px 10px rgba(212,160,23,0.4); }
+    .withdraw-panel, .admin-section { display: none; animation: fadeIn 0.4s ease; }
     .withdraw-panel.active, .admin-section.active { display: block; }
     
-    .history-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .history-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 12px; padding: 14px 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+    .history-item:active { transform: scale(0.98); border-color: var(--primary); }
 
-    .faq-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 10px; }
-    .faq-q { font-weight: 700; color: #fff; margin-bottom: 7px; font-size: 14px; }
+    .faq-item { background: var(--bg-body); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; transition: 0.2s; }
+    .faq-item:active { border-color: var(--primary); transform: scale(0.98); }
+    .faq-q { font-weight: 700; color: #fff; margin-bottom: 8px; font-size: 14px; }
     .faq-a { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
     
     .modal-spinner { display: flex; justify-content: center; padding: 30px; }
-    
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
-    .empty-state span { font-size: 48px; color: var(--primary); margin-bottom: 10px; display: block; opacity: 0.8; }
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); animation: fadeIn 0.5s ease; }
+    .empty-state span { font-size: 54px; color: var(--primary); margin-bottom: 15px; display: block; opacity: 0.7; filter: drop-shadow(0 0 10px var(--primary-glow)); }
   </style>
 </head>
 <body>
@@ -153,6 +164,15 @@
   <img src="cointube.png" class="splash-logo-img">
   <div class="splash-title">CoinsTube</div>
   <div class="spinner"></div>
+</div>
+
+<!-- YENİ BANNER İZLEME SAYACI -->
+<div class="global-tracker">
+  <div class="global-tracker-header">
+    <span style="color:var(--primary);" id="trackerStatusText" data-i18n="statusActive">Reklam Gösterimi: 0/50</span>
+    <span style="display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"> 0.001 TON</span>
+  </div>
+  <div class="tracker-bar"><div class="tracker-fill" id="globalTrackerFill"></div></div>
 </div>
 
 <div id="pageHome" class="page active">
@@ -208,26 +228,21 @@
   </div>
 
   <div class="scroll-content">
-    <div class="player-wrapper" id="playerWrapper">
-      <div id="ytPlayerDiv"></div>
-      <div class="custom-controls">
+    <div class="player-wrapper" id="playerWrapper"></div>
+    
+    <div style="padding: 0 18px; margin-top:15px; display: flex; flex-direction: column; gap: 10px;">
         <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0">
         <div style="display:flex; gap:16px; align-items:center;">
-          <span class="material-symbols-rounded" style="color:#fff; font-size:32px; cursor:pointer;" id="playPauseBtn" onclick="togglePlay()">pause</span>
-          <span style="color:#fff; font-size:12px; font-family:monospace;" id="timeText">0:00 / 0:00</span>
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:38px; cursor:pointer; transition:0.2s;" id="playPauseBtn" onclick="togglePlay()">play_circle</span>
+          <span style="color:var(--text-muted); font-size:13px; font-family:monospace; font-weight:600;" id="timeText">0:00 / 0:00</span>
         </div>
-      </div>
     </div>
-
-    <div style="padding:15px;"><div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div></div>
-
-    <div class="reward-box">
-      <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700;">
-        <span style="color:var(--primary);" data-i18n="nextReward">Sonraki Ödül</span>
-        <span style="display:flex; align-items:center; gap:5px;"><img src="toncoin.png" class="ton-inline"> 0.005 TON</span>
-      </div>
-      <div class="tracker-bar"><div class="tracker-fill" id="trackerFill"></div></div>
-      <div style="font-size:12px; text-align:center; color:var(--text-muted);" id="trackerStatus" data-i18n="statusPlaying">Oynatılıyor...</div>
+    
+    <!-- Video altında reklam yeri -->
+    <div style="padding:15px;">
+        <div class="ad-banner-container mrmnd-ad">
+            <div data-mndbanid="a2f8aafb-ca35-4490-8da9-4fe1ae3875f4"></div>
+        </div>
     </div>
   </div>
 </div>
@@ -292,13 +307,9 @@
       <div style="font-size:11px; color:var(--text-muted);" data-i18n="refPeople">Davet Edilen</div>
       <div style="font-size:20px; font-weight:800; color:white; display:flex; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">group</span><span id="statRefCount">0</span></div>
     </div>
-    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
-      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statVids">İzlenen Video</div>
-      <div style="font-size:20px; font-weight:800; color:white; display:flex; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">play_circle</span><span id="statVids">0</span></div>
-    </div>
-    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px;">
-      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statMins">İzleme Süresi</div>
-      <div style="font-size:20px; font-weight:800; color:white; display:flex; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">timer</span><span id="statMins">0 dk</span></div>
+    <div style="background:var(--bg-body); border:1px solid var(--border); padding:15px; border-radius:12px; grid-column: span 2; text-align:center;">
+      <div style="font-size:11px; color:var(--text-muted);" data-i18n="statAdImpressions">Görülen Banner Reklam</div>
+      <div style="font-size:20px; font-weight:800; color:white; display:flex; justify-content:center; align-items:center; gap:5px;"><span class="material-symbols-rounded" style="color:var(--primary);">ad</span><span id="statAdViews">0</span></div>
     </div>
   </div>
   <div style="width:100%; height:200px;"><canvas id="chartCanvas"></canvas></div>
@@ -388,92 +399,120 @@ const i18n = {
   tr: {
     mobileOnly: "Mobil Cihaz Gerekli", searchPlaceholder: "Video ara...", 
     catAll: "Tümü", catAnime: "Anime", catComedy: "Eğlence", catMusic: "Müzik", catGaming: "Oyun", catCrypto: "Kripto", catTech: "Teknoloji", catNews: "Haber",
-    navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusPlaying: "Oynatılıyor...", statusPaused: "Duraklatıldı",
+    navHome: "Ana Sayfa", navFaq: "SSS", watchTitle: "Video İzle", nextReward: "Sonraki Ödül", statusActive: "Reklam Gösterimi:",
     menuStats: "İstatistikler", menuRef: "Referans Sistemi", menuWithdraw: "TON Çek", menuBalance: "Mevcut Bakiye",
     channelInfo: "Kanal Bilgisi", visitChannel: "YouTube'da Git", statTotal: "Toplam Kazanç", statRef: "Ref Kazancı", viewsText: "izlenme",
-    statVids: "İzlenen Video", statMins: "İzleme Süresi", adminNoWithdraws: "Bekleyen çekim talebi yok!", apiError: "Video bulunamadı veya API limiti doldu.",
+    statAdImpressions: "Görülen Banner", adminNoWithdraws: "Bekleyen çekim talebi yok!", apiError: "Video bulunamadı veya API limiti doldu.",
     refOverviewTab: "Özet & Grafik", refHistoryTab: "Davet Geçmişi", refPeople: "Davet Edilen", refEarnedText: "Kazanç", refCopy: "Bağlantıyı Kopyala", refJoined: "Katıldı",
     wdNew: "Yeni Çekim", wdHistory: "Geçmiş", wdWallet: "TON Cüzdan (EQ...)", wdMemo: "Memo / Tag (İsteğe Bağlı)", wdSend: "Gönder",
-    faq1q: "Nasıl kazanırım?", faq1a: "Videoyu 5 dakika kesintisiz izleyin. Süre dolduğunda 0.005 TON kazanırsınız.",
+    faq1q: "Nasıl kazanırım?", faq1a: "Sayfalarda gezinirken karşılaştığınız her banner reklam sayılır. 50 banner gösterimine ulaştığınızda 0.001 TON kazanırsınız.",
     faq2q: "Çekim limiti nedir?", faq2a: "Minimum 0.10 TON çekebilirsiniz.", faq3q: "Referans kazancı nedir?", faq3a: "Davet ettiğiniz kişilerin kazançlarından %10 komisyon alırsınız."
   },
   en: {
     mobileOnly: "Mobile Device Required", searchPlaceholder: "Search videos...", 
     catAll: "All", catAnime: "Anime", catComedy: "Comedy", catMusic: "Music", catGaming: "Gaming", catCrypto: "Crypto", catTech: "Tech", catNews: "News",
-    navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusPlaying: "Playing...", statusPaused: "Paused",
+    navHome: "Home", navFaq: "FAQ", watchTitle: "Watch Video", nextReward: "Next Reward", statusActive: "Ads Viewed:",
     menuStats: "Statistics", menuRef: "Referral System", menuWithdraw: "Withdraw TON", menuBalance: "Current Balance",
     channelInfo: "Channel Info", visitChannel: "Open in YouTube", statTotal: "Total Earned", statRef: "Ref Earnings", viewsText: "views",
-    statVids: "Videos Watched", statMins: "Watch Time", adminNoWithdraws: "No pending requests!", apiError: "No videos found or API limit reached.",
+    statAdImpressions: "Ads Viewed", adminNoWithdraws: "No pending requests!", apiError: "No videos found or API limit reached.",
     refOverviewTab: "Overview & Chart", refHistoryTab: "Invite History", refPeople: "Invited", refEarnedText: "Earned", refCopy: "Copy Link", refJoined: "Joined",
     wdNew: "New Withdraw", wdHistory: "History", wdWallet: "TON Wallet (EQ...)", wdMemo: "Memo / Tag (Optional)", wdSend: "Send",
-    faq1q: "How to earn?", faq1a: "Watch a video for 5 minutes without interruption to earn 0.005 TON.",
+    faq1q: "How to earn?", faq1a: "Browse the app. Every banner ad you see counts. You earn 0.001 TON for every 50 banners viewed.",
     faq2q: "Withdrawal limit?", faq2a: "Minimum withdrawal is 0.10 TON.", faq3q: "Referral system?", faq3a: "You get 10% of your invites' earnings."
-  },
-  ru: {
-    mobileOnly: "Требуется мобильное", searchPlaceholder: "Поиск видео...",
-    catAll: "Все", catAnime: "Аниме", catComedy: "Комедия", catMusic: "Музыка", catGaming: "Игры", catCrypto: "Крипто", catTech: "Техно", catNews: "Новости",
-    navHome: "Главная", navFaq: "FAQ", watchTitle: "Смотреть", nextReward: "След. награда", statusPlaying: "Воспроизведение...", statusPaused: "Пауза",
-    menuStats: "Статистика", menuRef: "Рефералы", menuWithdraw: "Вывод TON", menuBalance: "Текущий Баланс",
-    channelInfo: "О канале", visitChannel: "В YouTube", statTotal: "Всего заработано", statRef: "Доход от реф.", viewsText: "просмотров",
-    statVids: "Видео просм.", statMins: "Время просм.", adminNoWithdraws: "Нет ожидающих запросов!", apiError: "Видео не найдено или лимит API исчерпан.",
-    refOverviewTab: "Обзор и График", refHistoryTab: "История реф.", refPeople: "Приглашенные", refEarnedText: "Доход", refCopy: "Копировать", refJoined: "Присоединился",
-    wdNew: "Новый вывод", wdHistory: "История", wdWallet: "TON Кошелек (EQ...)", wdMemo: "Memo / Тег (Необяз.)", wdSend: "Отправить",
-    faq1q: "Как заработать?", faq1a: "Смотрите видео 5 минут, чтобы получить 0.005 TON.",
-    faq2q: "Лимит на вывод?", faq2a: "Минимум 0.10 TON.", faq3q: "Рефералы?", faq3a: "Вы получаете 10% от заработка приглашенных."
-  },
-  es: {
-    mobileOnly: "Móvil Requerido", searchPlaceholder: "Buscar videos...", 
-    catAll: "Todo", catAnime: "Anime", catComedy: "Comedia", catMusic: "Música", catGaming: "Juegos", catCrypto: "Cripto", catTech: "Tecnología", catNews: "Noticias",
-    navHome: "Inicio", navFaq: "FAQ", watchTitle: "Ver Video", nextReward: "Sig. Recompensa", statusPlaying: "Reproduciendo...", statusPaused: "Pausado",
-    menuStats: "Estadísticas", menuRef: "Referidos", menuWithdraw: "Retirar TON", menuBalance: "Balance Actual",
-    channelInfo: "Info del Canal", visitChannel: "En YouTube", statTotal: "Total Ganado", statRef: "Ganancias Ref", viewsText: "vistas",
-    statVids: "Videos Vistos", statMins: "Tiempo Visto", adminNoWithdraws: "¡No hay retiros pendientes!", apiError: "No se encontraron videos o límite de API.",
-    refOverviewTab: "Resumen y Gráfico", refHistoryTab: "Historial", refPeople: "Invitados", refEarnedText: "Ganancias", refCopy: "Copiar Enlace", refJoined: "Se unió",
-    wdNew: "Nuevo Retiro", wdHistory: "Historia", wdWallet: "Billetera TON (EQ...)", wdMemo: "Memo / Tag (Opcional)", wdSend: "Enviar",
-    faq1q: "¿Cómo ganar?", faq1a: "Mira un video durante 5 min para ganar 0.005 TON.", faq2q: "¿Límite?", faq2a: "Mínimo 0.10 TON.", faq3q: "¿Referidos?", faq3a: "10% de ganancias."
-  },
-  de: {
-    mobileOnly: "Mobilgerät Erforderlich", searchPlaceholder: "Videos suchen...", 
-    catAll: "Alle", catAnime: "Anime", catComedy: "Komödie", catMusic: "Musik", catGaming: "Spiele", catCrypto: "Krypto", catTech: "Technik", catNews: "News",
-    navHome: "Startseite", navFaq: "FAQ", watchTitle: "Video ansehen", nextReward: "Nächste Belohnung", statusPlaying: "Spielt...", statusPaused: "Pausiert",
-    menuStats: "Statistiken", menuRef: "Empfehlungen", menuWithdraw: "Auszahlen", menuBalance: "Guthaben",
-    channelInfo: "Kanalinfo", visitChannel: "Auf YouTube", statTotal: "Gesamt", statRef: "Ref-Einnahmen", viewsText: "Aufrufe",
-    statVids: "Videos gesehen", statMins: "Wiedergabezeit", adminNoWithdraws: "Keine offenen Auszahlungen!", apiError: "Keine Videos gefunden oder API-Limit.",
-    refOverviewTab: "Übersicht & Chart", refHistoryTab: "Verlauf", refPeople: "Eingeladene", refEarnedText: "Verdient", refCopy: "Link kopieren", refJoined: "Beigetreten",
-    wdNew: "Neue Auszahlung", wdHistory: "Verlauf", wdWallet: "TON Wallet (EQ...)", wdMemo: "Memo / Tag (Optional)", wdSend: "Senden",
-    faq1q: "Wie verdiene ich?", faq1a: "Schauen Sie ein Video 5 Minuten.", faq2q: "Limit?", faq2a: "Mindestens 0.10 TON.", faq3q: "Referrals?", faq3a: "10% Provision."
   }
 };
 
 let currentLang = localStorage.getItem('appLang') || 'tr';
 
 function applyLang(lang) {
+  if(!i18n[lang]) lang = 'en';
   currentLang = lang; localStorage.setItem('appLang', lang);
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`btnLang${lang.toUpperCase()}`)?.classList.add('active');
-  const d = i18n[lang] || i18n['en'];
+  const d = i18n[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => el.innerText = d[el.getAttribute('data-i18n')] || el.innerText);
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => el.placeholder = d[el.getAttribute('data-i18n-placeholder')] || el.placeholder);
   document.getElementById('faqContent').innerHTML = `<div class="faq-item"><div class="faq-q">${d.faq1q}</div><div class="faq-a">${d.faq1a}</div></div><div class="faq-item"><div class="faq-q">${d.faq2q}</div><div class="faq-a">${d.faq2a}</div></div><div class="faq-item"><div class="faq-q">${d.faq3q}</div><div class="faq-a">${d.faq3a}</div></div>`;
+  updateTrackerUI();
 }
 window.changeLang = applyLang;
 
-let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, uVideos = 0, isAdmin = false;
-let globalWatchSeconds = 0, watchTimerInterval = null, videoProgressInterval = null;
+let uBal = 0, uTotal = 0, uRefCount = 0, uRefEarned = 0, uAds = 0, isAdmin = false;
+let targetAds = 50;
+
+// --- GÜVENLİ BANNER GÖSTERİM (IMPRESSION) TAKİBİ ---
+let currentSessionAdViews = 0; // Bu oturumda görülen banner sayısı
+
+function updateTrackerUI() {
+    const textPrefix = i18n[currentLang] ? i18n[currentLang].statusActive : "Ads Viewed:";
+    document.getElementById('trackerStatusText').innerText = `${textPrefix} ${currentSessionAdViews}/${targetAds}`;
+    document.getElementById('globalTrackerFill').style.width = `${Math.min((currentSessionAdViews/targetAds)*100, 100)}%`;
+}
+
+// Intersection Observer: Bir banner ekranda %50 oranında görünürse sayaç artar.
+const adObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Aynı reklamı sürekli saymasın diye class ekliyoruz
+            if (!entry.target.classList.contains('viewed')) {
+                entry.target.classList.add('viewed');
+                currentSessionAdViews++;
+                updateTrackerUI();
+                
+                if (currentSessionAdViews >= targetAds) {
+                    triggerAdReward();
+                }
+            }
+        }
+    });
+}, { threshold: 0.5 }); // Ekranda en az %50'si görünmeli
+
+function observeAds() {
+    document.querySelectorAll('.mrmnd-ad').forEach(ad => {
+        adObserver.observe(ad);
+    });
+}
+
+async function triggerAdReward() {
+  const reportedAds = currentSessionAdViews;
+  currentSessionAdViews = 0; 
+  updateTrackerUI();
+  // Geçici kilit
+  document.querySelectorAll('.mrmnd-ad.viewed').forEach(ad => ad.classList.remove('viewed'));
+  
+  try {
+    const res = await fetch(`${API_URL}/api/reward`, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ telegramId, reportedAds }) 
+    });
+    
+    if(res.status === 429) {
+        console.warn("Çok hızlı işlem reddedildi.");
+        return;
+    }
+    const data = await res.json();
+    if(data.success) { 
+        tg.showAlert(`🎉 +0.001 TON kazandınız!`); 
+        await loadUserData(); 
+    }
+  } catch(e) {}
+}
+// ----------------------------------------------
 
 async function loadUserData() {
   try {
     const res = await (await fetch(`${API_URL}/api/user/${telegramId}${inviterId ? `?ref=${inviterId}` : ''}`)).json();
     uBal = res.balance || 0; uTotal = res.totalEarned || 0; uRefCount = res.refCount || 0; uRefEarned = res.refEarned || 0; 
-    uVideos = res.videosWatched || Math.floor(uTotal / 0.005); 
+    uAds = res.adImpressions || 0; 
     isAdmin = res.isAdmin === true;
+    targetAds = res.targetAds || 50;
     
     document.getElementById('uiBal').innerText = uBal.toFixed(4); document.getElementById('sidebarBal').innerText = uBal.toFixed(4);
     document.getElementById('statTotal').innerText = uTotal.toFixed(4); document.getElementById('statRefEarned').innerText = uRefEarned.toFixed(4);
     document.getElementById('statBal').innerText = uBal.toFixed(4);
     document.getElementById('statRefCount').innerText = uRefCount;
-    document.getElementById('statVids').innerText = uVideos;
-    document.getElementById('statMins').innerText = (uVideos * 5) + " dk";
+    document.getElementById('statAdViews').innerText = uAds;
     
     document.getElementById('rCount').innerText = uRefCount; document.getElementById('rEarned').innerText = uRefEarned.toFixed(4);
     document.getElementById('refLinkInput').value = `https://t.me/CoinsTubeBot?start=ref_${telegramId}`;
@@ -492,68 +531,44 @@ function formatViews(views) {
   return num.toString();
 }
 
-function startWatchTracker() {
-  clearInterval(watchTimerInterval); clearInterval(videoProgressInterval);
-  watchTimerInterval = setInterval(() => {
-    if(window.ytPlayer && window.ytPlayer.getPlayerState() === 1) {
-      globalWatchSeconds++;
-      document.getElementById('trackerFill').style.width = `${Math.min((globalWatchSeconds/300)*100, 100)}%`;
-      document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPlaying;
-      if(globalWatchSeconds >= 300) triggerAutoReward();
-    } else { document.getElementById('trackerStatus').innerText = i18n[currentLang].statusPaused; }
-  }, 1000);
-  videoProgressInterval = setInterval(() => {
-    if(window.ytPlayer?.getCurrentTime) {
-      const c = window.ytPlayer.getCurrentTime()||0, t = window.ytPlayer.getDuration()||0;
-      if(t>0){ document.getElementById('timeText').innerText = `${formatTime(c)} / ${formatTime(t)}`; document.getElementById('progressBar').value = (c/t)*100; }
-    }
-  }, 1000);
-}
+let videoProgressInterval = null;
 
-document.getElementById('progressBar').addEventListener('input', e => { if(window.ytPlayer?.seekTo) window.ytPlayer.seekTo((e.target.value/100) * window.ytPlayer.getDuration(), true); });
-
-async function triggerAutoReward() {
-  globalWatchSeconds = 0; document.getElementById('trackerFill').style.width = '0%';
-  try {
-    const res = await (await fetch(`${API_URL}/api/reward`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ telegramId }) })).json();
-    if(res.success) { 
-        tg.showAlert(`🎉 +0.005 TON!`); 
-        await loadUserData(); 
-    }
-  } catch(e) {}
-}
-
-// YOUTUBE PLAYER - ESKİ V2 KODUNDAKİ HATASIZ AYARLARLA BİREBİR AYNI YAPILDI
 function initPlayer(vId) {
-  if(window.ytPlayer && typeof window.ytPlayer.destroy === 'function') window.ytPlayer.destroy();
   const wrapper = document.getElementById('playerWrapper');
-  const oldDiv = document.getElementById('ytPlayerDiv');
-  if(oldDiv) oldDiv.remove();
-  const newDiv = document.createElement('div'); newDiv.id = 'ytPlayerDiv';
-  wrapper.insertBefore(newDiv, wrapper.firstChild);
+  wrapper.innerHTML = '<div id="ytPlayerDiv"></div>';
+
+  const siteOrigin = window.location.origin || 'https://telegram.org';
 
   window.ytPlayer = new YT.Player('ytPlayerDiv', {
     videoId: vId, 
-    height: '100%', 
-    width: '100%',
-    playerVars: { 
-      controls: 0, 
-      rel: 0, 
-      modestbranding: 1, 
-      playsinline: 1, 
-      autoplay: 1, 
-      fs: 0 
-    },
-    events: {
-      onReady: e => { e.target.playVideo(); startWatchTracker(); },
-      onStateChange: e => {
-        document.getElementById('playPauseBtn').innerText = e.data === 1 ? 'pause' : 'play_arrow';
+    playerVars: { controls: 0, autoplay: 0, playsinline: 1, rel: 0, modestbranding: 1, origin: siteOrigin, widget_referrer: siteOrigin },
+    events: { 
+      onReady: e => { e.target.playVideo(); },
+      onStateChange: e => { 
+        const btn = document.getElementById('playPauseBtn');
+        if(e.data === 1) {
+            btn.innerText = 'pause_circle'; btn.style.color = '#fff';
+            clearInterval(videoProgressInterval);
+            videoProgressInterval = setInterval(() => {
+                if(window.ytPlayer?.getCurrentTime) {
+                  const c = window.ytPlayer.getCurrentTime()||0, t = window.ytPlayer.getDuration()||0;
+                  if(t>0){ document.getElementById('timeText').innerText = `${formatTime(c)} / ${formatTime(t)}`; document.getElementById('progressBar').value = (c/t)*100; }
+                }
+            }, 1000);
+        } else {
+            btn.innerText = 'play_circle'; btn.style.color = 'var(--primary)';
+        }
       }
     }
   });
 }
 
-window.togglePlay = function() { window.ytPlayer.getPlayerState() === 1 ? window.ytPlayer.pauseVideo() : window.ytPlayer.playVideo(); };
+window.togglePlay = function() { 
+    if(!window.ytPlayer) return;
+    window.ytPlayer.getPlayerState() === 1 ? window.ytPlayer.pauseVideo() : window.ytPlayer.playVideo(); 
+};
+
+document.getElementById('progressBar').addEventListener('input', e => { if(window.ytPlayer?.seekTo) window.ytPlayer.seekTo((e.target.value/100) * window.ytPlayer.getDuration(), true); });
 
 async function fetchVids(q) {
   const box = document.getElementById('homeFeed');
@@ -568,15 +583,21 @@ async function fetchVids(q) {
     }
 
     box.innerHTML = ''; const grid = document.createElement('div'); grid.className = 'video-grid';
-    grid.innerHTML += `<div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div>`;
     
+    // İlk reklamı en tepeye koy
+    grid.innerHTML += `
+    <div class="ad-banner-container mrmnd-ad">
+        <div data-mndbanid="a2f8aafb-ca35-4490-8da9-4fe1ae3875f4"></div>
+    </div>`;
+
     data.items.forEach((item, idx) => {
       const vId = item.id?.videoId; if(!vId) return;
       const avatar = item.channelInfo?.avatar; 
       const views = formatViews(item.statistics?.viewCount);
       const viewsText = i18n[currentLang].viewsText; 
+      const delay = (idx * 0.05).toFixed(2);
 
-      grid.innerHTML += `<div class="video-card" onclick="openWatch('${vId}')">
+      grid.innerHTML += `<div class="video-card" style="animation-delay: ${delay}s;" onclick="openWatch('${vId}')">
         <div class="v-thumb"><img src="${item.snippet.thumbnails?.high?.url}"></div>
         <div class="v-info">
           <img src="${avatar}" class="v-avatar" onclick="event.stopPropagation(); openChannelModal('${item.snippet.channelId}', '${item.snippet.channelTitle.replace(/'/g, "\\'")}', '${avatar}')">
@@ -586,9 +607,20 @@ async function fetchVids(q) {
           </div>
         </div>
       </div>`;
-      if((idx+1)%4===0) grid.innerHTML += `<div class="ad-728-container"><div class="ad-728-wrapper"><iframe width="728" height="90" frameborder="0" scrolling="no" src="//runative-syndicate.com/iframes2/d8a662664cd24ac4898699f0106312f4.html"></iframe></div></div>`;
+      
+      // Her 3 videoda bir reklam yerleştir
+      if((idx+1)%3===0) {
+        grid.innerHTML += `
+        <div class="ad-banner-container mrmnd-ad">
+            <div data-mndbanid="a2f8aafb-ca35-4490-8da9-4fe1ae3875f4"></div>
+        </div>`;
+      }
     });
     box.appendChild(grid);
+    
+    // Reklamları gözlemlemeye başla
+    setTimeout(observeAds, 500); 
+
   } catch(e) {
     box.innerHTML = `<div class="empty-state"><span class="material-symbols-rounded">wifi_off</span><p>Bağlantı hatası veya API Limiti!</p></div>`;
   }
@@ -605,7 +637,8 @@ window.showPage = id => {
 };
 window.goBack = id => { showPage('pageHome'); };
 window.openWatch = vId => { 
-    showPage('pageWatch'); initPlayer(vId); 
+    showPage('pageWatch'); 
+    setTimeout(() => { initPlayer(vId); observeAds(); }, 400); 
 };
 
 window.openSidebar = () => { closeAllModals(); document.getElementById('sidebar').classList.add('open'); document.getElementById('mainOverlay').classList.add('active'); };
