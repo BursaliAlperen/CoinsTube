@@ -16,22 +16,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-const TARGET_REWARD = 0.005; 
+// --- YENİ ÖDÜL VE GÜVENLİK AYARLARI ---
+const TARGET_REWARD = 0.001; // 50 banner için verilecek ödül
+const TARGET_ADS = 50;       // Kaç banner görülünce ödül verilecek
 const REF_PERCENTAGE = 0.10; 
 const ADMIN_ID = String(process.env.ADMIN_TG_ID);
+// GÜVENLİK: Normal bir insan 50 banner'ı en hızlı 20-30 saniyede görebilir. 
+// Eğer 20 saniyeden daha kısa sürede bir daha 50 banner gördüğünü iddia ederse reddet!
+const MIN_COOLDOWN_SECONDS = 20; 
 
-// ==========================================
-// RENDER ÜCRETSİZ SÜRÜM UYKU ENGELLEYİCİ
-// ==========================================
 const RENDER_URL = process.env.RENDER_EXTERNAL_URL || 'http://localhost:10000';
-setInterval(() => {
-    axios.get(`${RENDER_URL}/api/ping`).catch(() => {});
-}, 14 * 60 * 1000);
+setInterval(() => { axios.get(`${RENDER_URL}/api/ping`).catch(() => {}); }, 14 * 60 * 1000);
 app.get('/api/ping', (req, res) => res.send('pong'));
 
-// ==========================================
 // 1. KULLANICI GETİR & REFERANS
-// ==========================================
 app.get('/api/user/:id', async (req, res) => {
     const telegramId = String(req.params.id);
     const inviterId = req.query.ref ? String(req.query.ref) : null;
@@ -44,7 +42,8 @@ app.get('/api/user/:id', async (req, res) => {
         if (!doc.exists) {
             userData = { 
                 balance: 0, totalEarned: 0, refCount: 0, refEarned: 0, 
-                videosWatched: 0,
+                adImpressions: 0, // Toplam görülen banner sayısı
+                lastRewardTime: admin.firestore.Timestamp.fromMillis(0), // Güvenlik için son ödül zamanı
                 inviter: inviterId, createdAt: admin.firestore.FieldValue.serverTimestamp() 
             };
             await userRef.set(userData);
@@ -58,15 +57,16 @@ app.get('/api/user/:id', async (req, res) => {
             userData = doc.data();
         }
         
-        res.json({ ...userData, isAdmin: (telegramId === ADMIN_ID) });
+        res.json({ ...userData, isAdmin: (telegramId === ADMIN_ID), targetAds: TARGET_ADS });
     } catch (error) { res.status(500).json({ error: 'DB hatası' }); }
 });
 
-// ==========================================
-// 2. VİDEO ÖDÜLÜ (LİMİTSİZ İZLEME)
-// ==========================================
+// 2. YENİ GÜVENLİ ÖDÜL SİSTEMİ (Anti-Cheat Korumalı)
 app.post('/api/reward', async (req, res) => {
-    const { telegramId } = req.body;
+    const { telegramId, reportedAds } = req.body;
+
+    // Frontend'den gelen değer 50'den küçükse reddet
+    if (reportedAds < TARGET_ADS) return res.status(400).json({ success: false, error: 'Yetersiz gösterim.' });
 
     try {
         const userRef = db.collection('users').doc(String(telegramId));
@@ -77,6 +77,14 @@ app.post('/api/reward', async (req, res) => {
             if (!doc.exists) throw new Error('user_not_found');
 
             const data = doc.data();
+            const now = admin.firestore.Timestamp.now();
+            const lastReward = data.lastRewardTime || admin.firestore.Timestamp.fromMillis(0);
+            
+            // GÜVENLİK KONTROLÜ (COOLDOWN): 50 banner görmek zaman alır. Hızlı istekleri engelle.
+            const secondsSinceLastReward = now.seconds - lastReward.seconds;
+            if (secondsSinceLastReward < MIN_COOLDOWN_SECONDS) {
+                throw new Error('cooldown_active'); // Hile girişimi, reddet
+            }
 
             let newBalance = (data.balance || 0) + TARGET_REWARD;
             let newTotal = (data.totalEarned || 0) + TARGET_REWARD;
@@ -85,10 +93,12 @@ app.post('/api/reward', async (req, res) => {
             t.set(userRef, { 
                 balance: newBalance, 
                 totalEarned: newTotal,
-                videosWatched: admin.firestore.FieldValue.increment(1)
+                adImpressions: (data.adImpressions || 0) + TARGET_ADS,
+                lastRewardTime: now // Yeni zamanı kaydet
             }, { merge: true });
         });
 
+        // Referans Ödülü
         if (userInviter) {
             const inviterRef = db.collection('users').doc(userInviter);
             const refAmt = TARGET_REWARD * REF_PERCENTAGE;
@@ -99,10 +109,14 @@ app.post('/api/reward', async (req, res) => {
         }
         res.json({ success: true, reward: TARGET_REWARD });
     } catch (error) { 
-        res.status(500).json({ error: 'İşlem hatası' }); 
+        if (error.message === 'cooldown_active') {
+            return res.status(429).json({ success: false, error: 'Hile şüphesi: Çok hızlı istek atıyorsunuz!' });
+        }
+        res.status(500).json({ success: false, error: 'İşlem hatası' }); 
     }
 });
 
+// Referans, Çekim ve Admin işlemleri birebir aynı...
 app.get('/api/referrals/:id', async (req, res) => {
     try {
         const snap = await db.collection('users').where('inviter', '==', String(req.params.id)).get();
@@ -116,9 +130,6 @@ app.get('/api/referrals/:id', async (req, res) => {
     } catch (error) { res.status(500).json({ error: 'Referanslar alınamadı' }); }
 });
 
-// ==========================================
-// 3. ÇEKİM VE GEÇMİŞ (Memo Desteğiyle)
-// ==========================================
 app.post('/api/withdraw', async (req, res) => {
     const { telegramId, wallet, memo, amount } = req.body;
     if (!telegramId || !wallet || amount < 0.10) return res.status(400).json({ success: false });
@@ -133,9 +144,7 @@ app.post('/api/withdraw', async (req, res) => {
             }
         });
         if (isSuccess) {
-            await db.collection('withdraws').add({ 
-                telegramId: String(telegramId), wallet, memo: memo || '', amount, status: 'pending', date: admin.firestore.FieldValue.serverTimestamp() 
-            });
+            await db.collection('withdraws').add({ telegramId: String(telegramId), wallet, memo: memo || '', amount, status: 'pending', date: admin.firestore.FieldValue.serverTimestamp() });
             res.json({ success: true });
         } else { res.status(400).json({ success: false, error: 'Yetersiz bakiye' }); }
     } catch (error) { res.status(500).json({ success: false }); }
@@ -151,9 +160,6 @@ app.get('/api/withdraw/history/:id', async (req, res) => {
     } catch (error) { res.status(500).json({ error: 'Geçmiş alınamadı' }); }
 });
 
-// ==========================================
-// 4. ADMİN
-// ==========================================
 app.get('/api/admin/stats', async (req, res) => {
     if (String(req.query.tgId) !== ADMIN_ID) return res.status(403).json({ error: 'Yetkisiz!' });
     try {
@@ -187,55 +193,31 @@ app.post('/api/admin/withdraw/:id', async (req, res) => {
     } catch (error) { res.status(500).json({ error: 'İşlem hatası' }); }
 });
 
-// ==========================================
-// 5. YOUTUBE API (Yerelleştirilmiş & İzlenmeye Göre Sıralı)
-// ==========================================
 app.get('/api/videos', async (req, res) => {
     try {
-        const keys = [
-            process.env.YOUTUBE_API_KEY, 
-            process.env.YOUTUBE_API_KEY_2, 
-            process.env.YOUTUBE_API_KEY_3
-        ].filter(Boolean);
-
+        const keys = [ process.env.YOUTUBE_API_KEY, process.env.YOUTUBE_API_KEY_2, process.env.YOUTUBE_API_KEY_3 ].filter(Boolean);
         const query = encodeURIComponent(req.query.q || 'trending');
         const lang = req.query.lang || 'tr'; 
         
-        // Dile göre bölge ve dil ayarı
-        let regionCode = 'US';
-        let relLang = 'en';
-        
+        let regionCode = 'US'; let relLang = 'en';
         if(lang === 'tr') { regionCode = 'TR'; relLang = 'tr'; }
         else if(lang === 'ru') { regionCode = 'RU'; relLang = 'ru'; }
         else if(lang === 'de') { regionCode = 'DE'; relLang = 'de'; }
         else if(lang === 'es') { regionCode = 'ES'; relLang = 'es'; }
 
-        let items = [];
-        let success = false;
-        let workingApiKey = '';
+        let items = []; let success = false; let workingApiKey = '';
 
         for (let apiKey of keys) {
             try {
-                // order=viewCount (İzlenmeye göre), regionCode ve relevanceLanguage (Yerel içerik)
                 const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&type=video&order=viewCount&regionCode=${regionCode}&relevanceLanguage=${relLang}&key=${apiKey}&q=${query}`;
-                
                 const searchRes = await axios.get(searchUrl);
                 items = searchRes.data.items || [];
-                success = true;
-                workingApiKey = apiKey;
-                break; // Başarılıysa döngüden çık
-            } catch (err) {
-                // Google'ın gönderdiği gerçek API hata detayını logluyoruz. 
-                // Sunucu terminalinde bu loga bakarak asıl sorunun ne olduğunu anlayabilirsiniz.
-                const errorDetail = err.response?.data?.error?.message || err.message;
-                console.warn(`[API UYARISI] Anahtar başarısız: ${errorDetail}`);
-            }
+                success = true; workingApiKey = apiKey;
+                break; 
+            } catch (err) {}
         }
 
-        if (!success) {
-            return res.status(500).json({ error: 'Tüm API limitleri doldu veya API Anahtarları hatalı!' });
-        }
-        
+        if (!success) return res.status(500).json({ error: 'API limitleri doldu!' });
         if (items.length === 0) return res.json({ items: [] });
 
         const videoIds = items.map(i => i.id.videoId).filter(Boolean).join(',');
@@ -256,20 +238,15 @@ app.get('/api/videos', async (req, res) => {
         }
 
         const enrichedItems = items.map(item => {
-            const vId = item.id.videoId;
-            const cId = item.snippet.channelId;
             return {
                 ...item,
-                statistics: { viewCount: videoStats[vId] || '0' },
-                channelInfo: { avatar: channelAvatars[cId] || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.snippet.channelTitle)}&background=random` }
+                statistics: { viewCount: videoStats[item.id.videoId] || '0' },
+                channelInfo: { avatar: channelAvatars[item.snippet.channelId] || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.snippet.channelTitle)}&background=random` }
             };
         });
 
         res.json({ items: enrichedItems });
-    } catch (error) { 
-        console.error("Genel API Hatası:", error.message);
-        res.status(500).json({ error: 'Genel API Hatası' }); 
-    }
+    } catch (error) { res.status(500).json({ error: 'Genel API Hatası' }); }
 });
 
 const PORT = process.env.PORT || 10000;
